@@ -17,6 +17,7 @@ DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').split(',')
 
 INSTALLED_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -27,12 +28,12 @@ INSTALLED_APPS = [
     # Third party packages
     'rest_framework',
     'corsheaders',
+    'channels',
     
     # Local apps
     'apps.users.apps.UsersConfig',
     'apps.warehouses.apps.WarehousesConfig',
     'apps.zones.apps.ZonesConfig',
-    'apps.racks.apps.RacksConfig',
     'apps.bins.apps.BinsConfig',
     'apps.products.apps.ProductsConfig',
     'apps.inventory.apps.InventoryConfig',
@@ -42,6 +43,7 @@ INSTALLED_APPS = [
     'apps.recommendations.apps.RecommendationsConfig',
     'apps.dashboards.apps.DashboardsConfig',
     'apps.audit_logs.apps.AuditLogsConfig',
+    'apps.routes.apps.RoutesConfig',
 ]
 
 MIDDLEWARE = [
@@ -75,6 +77,15 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 ASGI_APPLICATION = 'config.asgi.application'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [(os.getenv('REDIS_HOST', '127.0.0.1'), 6379)],
+        },
+    },
+}
 
 DATABASES = {
     'default': {
@@ -164,3 +175,14 @@ AI_SERVICE_SETTINGS = {
     'BASE_URL': os.getenv('AI_SERVICE_URL', 'http://localhost:8001'),
     'API_KEY': os.getenv('AI_SERVICE_API_KEY', ''),
 }
+
+# Media File Storage Settings
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# Celery Settings
+CELERY_BROKER_URL = os.getenv('REDIS_URL', 'redis://127.0.0.1:6379/1')
+CELERY_RESULT_BACKEND = os.getenv('REDIS_URL', 'redis://127.0.0.1:6379/1')
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+

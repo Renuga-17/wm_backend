@@ -4,7 +4,7 @@ import django
 from datetime import datetime
 
 # Set up Django environment
-sys.path.append("c:\\Users\\vidhyaadaran\\wm_backend")
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 django.setup()
 
@@ -17,14 +17,14 @@ def load_spatial_lookup():
     with connection.cursor() as cursor:
         cursor.execute("""
             SELECT 
-                b.id AS bin_id,
-                r.id AS rack_id,
-                z.id AS zone_id,
+                b.bin_id AS bin_id,
+                r.rack_id AS rack_id,
+                z.zone_id AS zone_id,
                 z.warehouse_id AS warehouse_id
             FROM bins b
-            JOIN shelves s ON b.shelf_id = s.id
-            JOIN racks r ON s.rack_id = r.id
-            JOIN zones z ON r.zone_id = z.id
+            JOIN shelves s ON b.shelf_id = s.shelf_id
+            JOIN racks r ON s.rack_id = r.rack_id
+            JOIN zones z ON r.zone_id = z.zone_id
         """)
         rows = cursor.fetchall()
         for row in rows:
@@ -35,6 +35,7 @@ def load_spatial_lookup():
             }
     print(f"Loaded spatial lookup mapping for {len(lookup)} bins.")
     return lookup
+
 
 def ingest_data():
     spatial_lookup = load_spatial_lookup()

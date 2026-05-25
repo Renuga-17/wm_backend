@@ -1,0 +1,34 @@
+$kind: http-example
+request:
+  url: http://127.0.0.1:8000/api/users/login/
+  method: POST
+  body:
+    type: json
+    content: "{\r
+
+      \  \"username\": \"admin\",\r
+
+      \  \"password\": \"admin@123\"\r
+
+      }\r\n"
+response:
+  statusCode: 200
+  statusText: OK
+  headers:
+    content-type: application/json
+    vary: Accept, origin
+    allow: POST, OPTIONS
+    x-frame-options: DENY
+    content-length: "582"
+    x-content-type-options: nosniff
+    referrer-policy: same-origin
+    cross-origin-opener-policy: same-origin
+    server: daphne
+  body:
+    type: json
+    content: |-
+      {
+        "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc3OTc4ODY2MiwiaWF0IjoxNzc5NzAyMjYyLCJqdGkiOiJlMWJhOTE4ZmIwNTQ0MzhkYjU2Y2U1OGE5ZTk2ZTNlZCIsInVzZXJfaWQiOiI1YzI0MGFhMi0yMTU1LTQ2YjQtYjZkOC01ZDhkODYyODJhMTUifQ.mFzJUgH7HcCwC_nN7bUMVoqRPchNo1sOJdWpoCVHk0s",
+        "access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc5NzAyNTYyLCJpYXQiOjE3Nzk3MDIyNjIsImp0aSI6ImVhZWQ2YjFmY2E0NjRjNTdhM2Y0ZTRhY2JmZTRjNjNiIiwidXNlcl9pZCI6IjVjMjQwYWEyLTIxNTUtNDZiNC1iNmQ4LTVkOGQ4NjI4MmExNSJ9.6HTp47iYjYtSANsBXFkTJaaOEJ52eG3DZiylGHwycW0"
+      }
+order: 1779702313278

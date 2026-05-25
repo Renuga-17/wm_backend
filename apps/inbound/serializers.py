@@ -1,7 +1,7 @@
 from rest_framework import serializers
-from .models import Inbound
+from .models import InboundShipment
 
 class InboundSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Inbound
+        model = InboundShipment
         fields = '__all__'

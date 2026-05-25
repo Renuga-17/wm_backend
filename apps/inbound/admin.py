@@ -1,6 +1,7 @@
 from django.contrib import admin
-from .models import Inbound
+from .models import InboundShipment
 
-@admin.register(Inbound)
+@admin.register(InboundShipment)
 class InboundAdmin(admin.ModelAdmin):
     pass
+

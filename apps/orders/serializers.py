@@ -1,7 +1,8 @@
 from rest_framework import serializers
-from .models import Order
+from .models import OutboundShipment
 
 class OrderSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Order
+        model = OutboundShipment
         fields = '__all__'
+

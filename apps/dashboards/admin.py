@@ -1,6 +1,11 @@
 from django.contrib import admin
-from .models import Dashboard
+from .models import RobotTask, RouteOptimization
 
-@admin.register(Dashboard)
-class DashboardAdmin(admin.ModelAdmin):
+@admin.register(RobotTask)
+class RobotTaskAdmin(admin.ModelAdmin):
     pass
+
+@admin.register(RouteOptimization)
+class RouteOptimizationAdmin(admin.ModelAdmin):
+    pass
+

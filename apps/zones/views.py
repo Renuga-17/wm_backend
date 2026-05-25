@@ -1,7 +1,13 @@
 from rest_framework import viewsets
-from .models import Zone
-from .serializers import ZoneSerializer
+from .models import Zone, ZoneBoundary
+from .serializers import ZoneSerializer, ZoneBoundarySerializer
 
 class ZoneViewSet(viewsets.ModelViewSet):
-    queryset = Zone.objects.all()
+    queryset = Zone.objects.all().order_by('id')
     serializer_class = ZoneSerializer
+
+class ZoneBoundaryViewSet(viewsets.ModelViewSet):
+    queryset = ZoneBoundary.objects.all().order_by('id')
+    serializer_class = ZoneBoundarySerializer
+
+

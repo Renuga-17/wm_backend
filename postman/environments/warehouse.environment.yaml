@@ -1,0 +1,9 @@
+name: warehouse
+values:
+  - key: baseurl
+    value: ''
+  - key: token
+    value: ''
+  - key: refreshtoken
+    value: ''
+color: 72

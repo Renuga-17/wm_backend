@@ -1,7 +1,12 @@
 from rest_framework import viewsets
-from .models import Movement
-from .serializers import MovementSerializer
+from .models import StockMovement, StorageAllocation
+from .serializers import MovementSerializer, StorageAllocationSerializer
 
 class MovementViewSet(viewsets.ModelViewSet):
-    queryset = Movement.objects.all()
+    queryset = StockMovement.objects.all()
     serializer_class = MovementSerializer
+
+class StorageAllocationViewSet(viewsets.ModelViewSet):
+    queryset = StorageAllocation.objects.all()
+    serializer_class = StorageAllocationSerializer
+

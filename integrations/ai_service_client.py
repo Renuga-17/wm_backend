@@ -45,3 +45,26 @@ class AIServiceClient:
                 "optimized_movements": [],
                 "reasoning": "Fallback due to AI Service unavailability"
             }
+
+    def analyze_layout(self, file_path, file_type):
+        url = f"{self.base_url}/api/v1/layout/analyze"
+        try:
+            import os
+            # Omit Content-Type from headers for multipart uploads so requests sets the boundary
+            multipart_headers = {
+                'X-API-Key': self.config.get('API_KEY', '')
+            }
+            with open(file_path, 'rb') as f:
+                files = {'file': (os.path.basename(file_path), f)}
+                data = {'file_type': file_type}
+                response = requests.post(url, files=files, data=data, headers=multipart_headers, timeout=30)
+                response.raise_for_status()
+                return response.json()
+        except Exception as e:
+            logger.error(f"AI Service layout analysis request failed: {e}")
+            return {
+                "success": False,
+                "error": str(e),
+                "entities": []
+            }
+

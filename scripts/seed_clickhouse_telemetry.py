@@ -5,7 +5,7 @@ import random
 from datetime import datetime, timedelta
 
 # Set up Django environment
-sys.path.append("c:\\Users\\vidhyaadaran\\wm_backend")
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 django.setup()
 
@@ -19,17 +19,17 @@ def get_warehouse_structure():
     
     with connection.cursor() as cursor:
         # Get all zones
-        cursor.execute("SELECT id, warehouse_id, zone_name, zone_type FROM zones;")
+        cursor.execute("SELECT zone_id, warehouse_id, zone_name, zone_type FROM zones;")
         zones = cursor.fetchall()
         
         # Get count of bins grouped by zone_id
         cursor.execute("""
-            SELECT z.id, COUNT(b.id) 
+            SELECT z.zone_id, COUNT(b.bin_id) 
             FROM bins b
-            JOIN shelves s ON b.shelf_id = s.id
-            JOIN racks r ON s.rack_id = r.id
-            JOIN zones z ON r.zone_id = z.id
-            GROUP BY z.id;
+            JOIN shelves s ON b.shelf_id = s.shelf_id
+            JOIN racks r ON s.rack_id = r.rack_id
+            JOIN zones z ON r.zone_id = z.zone_id
+            GROUP BY z.zone_id;
         """)
         counts = cursor.fetchall()
         for zid, count in counts:
@@ -37,6 +37,7 @@ def get_warehouse_structure():
             
     print(f"Retrieved {len(zones)} zones from PostgreSQL.")
     return zones, bin_counts
+
 
 def seed_telemetry():
     zones, bin_counts = get_warehouse_structure()

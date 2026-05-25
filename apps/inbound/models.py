@@ -1,9 +1,16 @@
+import uuid
 from django.db import models
 
-class Inbound(models.Model):
-    # Placeholder model for inbound
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+class InboundShipment(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, db_column='inbound_id')
+    shipment_code = models.CharField(max_length=100, unique=True)
+    supplier_name = models.CharField(max_length=200)
+    expected_arrival = models.DateTimeField()
+    status = models.CharField(max_length=50)
+
+    class Meta:
+        db_table = 'inbound_shipments'
 
     def __str__(self):
-        return f"Inbound #{self.pk}"
+        return f"{self.shipment_code} - {self.supplier_name}"
+

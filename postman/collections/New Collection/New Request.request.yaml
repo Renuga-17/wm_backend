@@ -1,0 +1,17 @@
+$kind: http-request
+name: New Request
+url: http://127.0.0.1:8000/api/users/login/
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \  \"username\": \"admin\",\r
+
+    \  \"password\": \"admin@123\"\r
+
+    }"
+auth:
+  type: bearer
+examples: .resources/New Request.resources/examples
+order: 1779702226902

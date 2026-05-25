@@ -1,6 +1,11 @@
 from django.contrib import admin
-from .models import Movement
+from .models import StockMovement, StorageAllocation
 
-@admin.register(Movement)
+@admin.register(StockMovement)
 class MovementAdmin(admin.ModelAdmin):
     pass
+
+@admin.register(StorageAllocation)
+class StorageAllocationAdmin(admin.ModelAdmin):
+    pass
+

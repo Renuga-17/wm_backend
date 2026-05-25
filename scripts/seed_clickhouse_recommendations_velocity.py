@@ -6,7 +6,7 @@ import uuid
 from datetime import datetime, date, timedelta
 
 # Set up Django environment
-sys.path.append("c:\\Users\\vidhyaadaran\\wm_backend")
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 django.setup()
 
@@ -21,13 +21,13 @@ def fetch_master_data():
     
     with connection.cursor() as cursor:
         # Fetch categories
-        cursor.execute("SELECT id, name FROM product_categories;")
+        cursor.execute("SELECT category_id, category_name FROM product_categories;")
         cat_rows = cursor.fetchall()
         for cid, name in cat_rows:
             product_categories[cid] = name
             
         # Fetch products
-        cursor.execute("SELECT id, sku, category_id FROM products;")
+        cursor.execute("SELECT product_id, sku, category_id FROM products;")
         prod_rows = cursor.fetchall()
         for pid, sku, cat_id in prod_rows:
             products.append({
@@ -38,13 +38,14 @@ def fetch_master_data():
             })
             
         # Fetch bins
-        cursor.execute("SELECT id FROM bins;")
+        cursor.execute("SELECT bin_id FROM bins;")
         bin_rows = cursor.fetchall()
         for brow in bin_rows:
             bins.append(str(brow[0]))
             
     print(f"Retrieved {len(products)} products, {len(product_categories)} categories, and {len(bins)} bins from PostgreSQL.")
     return products, bins
+
 
 def seed_recommendations(products, bins, client):
     print("Generating AI Recommendation Events...")
