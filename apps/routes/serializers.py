@@ -25,3 +25,7 @@ class RouteOptimizeRequestSerializer(serializers.Serializer):
         required=True,
         min_length=1
     )
+class GenerateRouteRequestSerializer(serializers.Serializer):
+    source_bin_id = serializers.UUIDField(required=True, help_text="Source Bin UUID")
+    destination_bin_id = serializers.UUIDField(required=True, help_text="Destination Bin UUID")
+

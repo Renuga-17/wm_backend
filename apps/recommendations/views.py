@@ -13,8 +13,11 @@ from apps.warehouses.models import WarehouseLayout
 from integrations.ai_service_client import AIServiceClient
 from apps.recommendations.ai_engine.ml_slotting import AISlottingEngine
 from apps.recommendations.ai_engine.hotspot_prevention import HotspotPreventionEngine
-from apps.recommendations.ai_engine.operational_scoring import OperationalScoringEngine
+from apps.recommendations.services.slotting_service import SlottingService
+from django.db import transaction
+from apps.movements.models import StorageAllocation
 from apps.recommendations.ai_engine.feedback_loop import AIFeedbackLoop
+from apps.recommendations.ai_engine.operational_scoring import OperationalScoringEngine
 
 class RecommendationViewSet(viewsets.ModelViewSet):
     queryset = Recommendation.objects.all()
@@ -97,6 +100,63 @@ class RecommendationViewSet(viewsets.ModelViewSet):
             "confidence_score": float(recommendation.confidence_score),
             "reasoning": reasoning_text
         })
+
+    @action(detail=False, methods=['post'], url_path='allocate')
+    def allocate(self, request):
+        product_id = request.data.get('product_id')
+        quantity = request.data.get('quantity')
+
+        if not product_id or quantity is None:
+            return Response({"error": "product_id and quantity are required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            quantity = int(quantity)
+            if quantity <= 0:
+                return Response({"error": "Quantity must be > 0"}, status=status.HTTP_400_BAD_REQUEST)
+        except ValueError:
+            return Response({"error": "Quantity must be an integer"}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Validate product exists
+        try:
+            product = Product.objects.get(id=product_id)
+        except Product.DoesNotExist:
+            return Response({"error": "Product not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        # Smart slotting recommendation
+        try:
+            allocation_data = SlottingService.recommend_storage_location(product_id, quantity)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Validate recommended bin exists
+        try:
+            bin_obj = Bin.objects.get(id=allocation_data['bin'])
+        except Bin.DoesNotExist:
+            return Response({"error": "Recommended bin not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        # Create allocation atomically
+        with transaction.atomic():
+            allocation = StorageAllocation.objects.create(
+                product=product,
+                bin=bin_obj,
+                quantity=quantity
+            )
+            # Placeholder for future occupancy update
+            self.update_bin_occupancy(bin_obj)
+
+        return Response({
+            "allocation_id": str(allocation.id),
+            "product_id": str(product.id),
+            "zone": allocation_data['zone'],
+            "rack": allocation_data['rack'],
+            "shelf": allocation_data['shelf'],
+            "bin": allocation_data['bin'],
+            "quantity": quantity
+        }, status=status.HTTP_201_CREATED)
+
+    def update_bin_occupancy(self, bin_obj):
+        """Placeholder for future Digital Twin occupancy update."""
+        pass
 
 
 class AIRecommendationViewSet(viewsets.GenericViewSet):

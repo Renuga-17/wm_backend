@@ -1,6 +1,8 @@
 import logging
 from django.core.cache import cache
 from apps.recommendations.models import AIDecision, SlottingHistory
+from apps.zones.models import Zone
+from apps.bins.models import Bin
 
 logger = logging.getLogger(__name__)
 
