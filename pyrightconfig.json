@@ -1,0 +1,10 @@
+{
+  "reportMissingImports": false,
+  "executionEnvironments": [
+    {
+      "root": ".",
+      "extraPaths": ["."]
+    }
+  ],
+  "include": ["apps"]
+}
