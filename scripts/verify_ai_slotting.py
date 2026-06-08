@@ -13,7 +13,7 @@ from apps.warehouse.infrastructure.persistence.models import Zone
 from apps.warehouse.infrastructure.persistence.models import Shelf, Bin
 from apps.inventory.infrastructure.persistence.models import Product, ProductCategory
 from apps.inventory.infrastructure.persistence.models import StockMovement
-from apps.inventory.ai_engine.ml_slotting import AISlottingEngine
+from apps.inventory.application.ai.ml_slotting import AISlottingEngine
 from apps.inventory.infrastructure.persistence.models import DemandForecast, CongestionPrediction, SlottingScore, AllocationRecommendation
 
 def run_verification():

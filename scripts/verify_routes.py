@@ -27,7 +27,7 @@ def create_table_if_not_exists():
 create_table_if_not_exists()
 
 from apps.warehouse.infrastructure.persistence.models import Warehouse, NavigationNode
-from apps.warehouse.services.pathfinding import PathfindingService
+from apps.warehouse.application.services.pathfinding import PathfindingService
 
 def test_routes():
     warehouse = Warehouse.objects.first()

@@ -55,6 +55,19 @@ def batch_insert(cursor, table, columns, records):
         else:
             flat_args.extend(r)
             
+    if connection.vendor == 'sqlite':
+        import uuid as uuid_mod
+        def clean_uuid(val):
+            if isinstance(val, uuid_mod.UUID):
+                return val.hex
+            if isinstance(val, str) and len(val) == 36 and val.count('-') == 4:
+                try:
+                    return uuid_mod.UUID(val).hex
+                except ValueError:
+                    pass
+            return val
+        flat_args = [clean_uuid(arg) for arg in flat_args]
+            
     query = f"INSERT INTO {table} ({col_str}) VALUES {placeholders}"
     cursor.execute(query, flat_args)
 
