@@ -41,3 +41,32 @@ Authorization: Bearer <your_token>
       "reasoning": "Product has high turnover velocity; placing close to the dispatch zone (Zone A)."
     }
     ```
+
+### Products
+- `GET /api/products/` - List products.
+- `POST /api/products/` - Create product.
+- `GET /api/products/{id}/` - Retrieve product.
+- `PUT /api/products/{id}/` - Update product.
+- `PATCH /api/products/{id}/` - Partially update product.
+- `DELETE /api/products/{id}/` - Delete product.
+
+### Routes & Navigation
+- Route Generation API
+- Pathfinding API
+- Navigation APIs
+
+### Digital Twin
+- `GET /api/twin/layout/{layout_id}/` - Get Layout Data
+- `GET /api/twin/racks` - List racks in layout
+- `GET /api/twin/zones` - List zones
+- `GET /api/twin/occupancy` - Get space occupancy
+
+### Analytics
+- `GET /api/dashboards/analytics/heatmaps/` - Spatial Heatmaps
+- `GET /api/dashboards/analytics/routes/` - Route Efficiency
+- `GET /api/dashboards/analytics/telemetry/` - Sensor Telemetry
+- `GET /api/dashboards/analytics/throughput/` - Inventory Throughput
+*(Note: Analytics endpoints require `warehouse_id` query parameter)*
+
+---
+**Verification Status**: Phase 1 APIs (Users, Authentication, Warehouses, Zones, Products, Routes, Recommendations, Bins, Inventory, Orders, Digital Twin, Analytics) have been fully verified.

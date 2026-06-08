@@ -19,6 +19,7 @@ urlpatterns = [
     path('api/dashboards/', include('apps.dashboards.urls')),
     path('api/audit-logs/', include('apps.audit_logs.urls')),
     path('api/routes/', include('apps.routes.urls')),
+    path('api/ocr/', include('apps.ocr.urls')),
 ]
 
 from django.conf import settings

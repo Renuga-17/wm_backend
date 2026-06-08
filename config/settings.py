@@ -16,7 +16,7 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-default-secret-key-
 
 DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').split(',')
+ALLOWED_HOSTS = ['testserver', 'localhost', '127.0.0.1']
 
 INSTALLED_APPS = [
     'daphne',
@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'apps.dashboards.apps.DashboardsConfig',
     'apps.audit_logs.apps.AuditLogsConfig',
     'apps.routes.apps.RoutesConfig',
+    'apps.ocr.apps.OcrConfig',
 ]
 
 MIDDLEWARE = [
@@ -169,11 +170,12 @@ MONGODB_SETTINGS = {
 
 # ClickHouse Settings
 CLICKHOUSE_SETTINGS = {
-    'HOST': os.getenv('CLICKHOUSE_HOST', 'localhost'),
-    'PORT': int(os.getenv('CLICKHOUSE_PORT', '8123')),
-    'USERNAME': os.getenv('CLICKHOUSE_USER', 'default'),
-    'PASSWORD': os.getenv('CLICKHOUSE_PASSWORD', ''),
-    'DATABASE': os.getenv('CLICKHOUSE_DB', 'wm_clickhouse'),
+    "HOST": "jj8tk9yx2g.ap-south-1.aws.clickhouse.cloud",
+    "PORT": 8443,
+    "USERNAME": "default",
+    "PASSWORD": "YOUR_ACTUAL_PASSWORD",
+    "DATABASE": "wm_clickhouse",
+    "SECURE": True,
 }
 
 # Qdrant Settings
@@ -184,8 +186,13 @@ QDRANT_SETTINGS = {
 
 # FastAPI AI Service settings
 AI_SERVICE_SETTINGS = {
-    'BASE_URL': os.getenv('AI_SERVICE_URL', 'http://localhost:8001'),
+    'BASE_URL': os.getenv('AI_SERVICE_URL', 'http://localhost:8002'),
     'API_KEY': os.getenv('AI_SERVICE_API_KEY', ''),
+}
+
+# OCR Microservice settings
+OCR_SERVICE_SETTINGS = {
+    'BASE_URL': os.getenv('OCR_SERVICE_URL', 'http://localhost:8002'),
 }
 
 # Media File Storage Settings

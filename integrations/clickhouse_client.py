@@ -12,13 +12,17 @@ class ClickHouseClient:
     def connect(self):
         if not self.client:
             try:
+                # Debug: show the entire config dict
+                print("Debug: self.config =", self.config)
                 self.client = clickhouse_connect.get_client(
                     host=self.config.get('HOST', 'localhost'),
                     port=self.config.get('PORT', 8123),
                     username=self.config.get('USERNAME', 'default'),
                     password=self.config.get('PASSWORD', ''),
-                    database=self.config.get('DATABASE', 'default')
+                    database=self.config.get('DATABASE', 'default'),
+                    secure=self.config.get('SECURE', False)
                 )
+                print("✅ ClickHouse connection successful")
             except Exception as e:
                 logger.error(f"Failed to connect to ClickHouse: {e}")
                 raise e

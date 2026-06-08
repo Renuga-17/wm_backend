@@ -1,4 +1,5 @@
 from qdrant_client import QdrantClient as PyQdrantClient
+from qdrant_client.http import models
 from django.conf import settings
 import logging
 
@@ -21,14 +22,34 @@ class QdrantClientWrapper:
                 raise e
         return self.client
 
-    def search_similar_vectors(self, collection_name, query_vector, limit=5):
+    def ensure_collection(self, collection_name, vector_size):
         client = self.connect()
-        try:
-            return client.search(
+        if not client.collection_exists(collection_name):
+            client.create_collection(
                 collection_name=collection_name,
-                query_vector=query_vector,
-                limit=limit
+                vectors_config=models.VectorParams(
+                    size=vector_size,
+                    distance=models.Distance.COSINE,
+                ),
             )
-        except Exception as e:
-            logger.error(f"Qdrant vector search failed: {e}")
-            return []
+            # Create payload indexes; ignore errors if already exist
+            for field in ["metadata.document_type", "metadata.warehouse_id", "metadata.ocr_document_id"]:
+                try:
+                    client.create_payload_index(
+                        collection_name=collection_name,
+                        field_name=field,
+                        field_schema=models.PayloadSchemaType.KEYWORD,
+                    )
+                except Exception as e:
+                    logger.debug(f"Payload index for {field} may already exist or failed: {e}")
+        # If collection exists, ensure indexes exist (idempotent check)
+        else:
+            for field in ["metadata.document_type", "metadata.warehouse_id", "metadata.ocr_document_id"]:
+                try:
+                    client.create_payload_index(
+                        collection_name=collection_name,
+                        field_name=field,
+                        field_schema=models.PayloadSchemaType.KEYWORD,
+                    )
+                except Exception:
+                    pass

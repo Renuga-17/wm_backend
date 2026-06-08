@@ -1,7 +1,7 @@
 from django.urls import path
 from .twin_views import (
     WarehouseTwinDetailView, TwinRacksView, TwinZonesView,
-    TwinOccupancyView, TwinPathsView
+    TwinOccupancyView, TwinPathsView, TwinSummaryView
 )
 
 urlpatterns = [
@@ -10,4 +10,5 @@ urlpatterns = [
     path('zones', TwinZonesView.as_view(), name='twin-zones'),
     path('occupancy', TwinOccupancyView.as_view(), name='twin-occupancy'),
     path('paths', TwinPathsView.as_view(), name='twin-paths'),
+    path('summary', TwinSummaryView.as_view(), name='twin-summary'),
 ]
