@@ -8,9 +8,9 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 django.setup()
 
-from apps.warehouses.models import Warehouse, NavigationNode, NavigationEdge
-from apps.routes.models import OptimizedRoute, RouteSegment
-from apps.routes.services.pathfinding import PathfindingService
+from apps.warehouse.infrastructure.persistence.models import Warehouse, NavigationNode, NavigationEdge
+from apps.warehouse.infrastructure.persistence.models import OptimizedRoute, RouteSegment
+from apps.warehouse.services.pathfinding import PathfindingService
 
 def run_verification():
     print("======================================================================")

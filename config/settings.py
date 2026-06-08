@@ -33,20 +33,12 @@ INSTALLED_APPS = [
     'channels',
     
     # Local apps
-    'apps.users.apps.UsersConfig',
-    'apps.warehouses.apps.WarehousesConfig',
-    'apps.zones.apps.ZonesConfig',
-    'apps.bins.apps.BinsConfig',
-    'apps.products.apps.ProductsConfig',
+    'apps.identity.apps.IdentityConfig',
+    'apps.warehouse.apps.WarehouseConfig',
     'apps.inventory.apps.InventoryConfig',
-    'apps.inbound.apps.InboundConfig',
     'apps.orders.apps.OrdersConfig',
-    'apps.movements.apps.MovementsConfig',
-    'apps.recommendations.apps.RecommendationsConfig',
-    'apps.dashboards.apps.DashboardsConfig',
-    'apps.audit_logs.apps.AuditLogsConfig',
-    'apps.routes.apps.RoutesConfig',
-    'apps.ocr.apps.OcrConfig',
+    'apps.inbound.apps.InboundConfig',
+    'apps.outbound.apps.OutboundConfig',
 ]
 
 MIDDLEWARE = [
@@ -90,16 +82,26 @@ CHANNEL_LAYERS = {
     },
 }
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DB_NAME', 'wm_db'),
-        'USER': os.getenv('DB_USER', 'postgres'),
-        'PASSWORD': os.getenv('DB_PASSWORD', 'postgres'),
-        'HOST': os.getenv('DB_HOST', 'localhost'),
-        'PORT': os.getenv('DB_PORT', '5432'),
+DB_ENGINE = os.getenv('DB_ENGINE', 'sqlite' if not os.getenv('DB_HOST') else 'postgresql')
+
+if DB_ENGINE == 'sqlite':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.getenv('DB_NAME', 'wm_db'),
+            'USER': os.getenv('DB_USER', 'postgres'),
+            'PASSWORD': os.getenv('DB_PASSWORD', 'postgres'),
+            'HOST': os.getenv('DB_HOST', 'localhost'),
+            'PORT': os.getenv('DB_PORT', '5432'),
+        }
+    }
 
 CACHES = {
     'default': {
@@ -126,7 +128,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-AUTH_USER_MODEL = 'users.User'
+AUTH_USER_MODEL = 'identity.User'
 
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
@@ -212,4 +214,14 @@ SIMPLE_JWT = {
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': False,
     'UPDATE_LAST_LOGIN': False,
+}
+
+# Redirect Django migrations to the Clean Architecture Infrastructure layer
+MIGRATION_MODULES = {
+    'identity': 'apps.identity.infrastructure.persistence.migrations',
+    'warehouse': 'apps.warehouse.infrastructure.persistence.migrations',
+    'inventory': 'apps.inventory.infrastructure.persistence.migrations',
+    'orders': 'apps.orders.infrastructure.persistence.migrations',
+    'inbound': 'apps.inbound.infrastructure.persistence.migrations',
+    'outbound': 'apps.outbound.infrastructure.persistence.migrations',
 }

@@ -1,9 +1,9 @@
 import pytest
 from rest_framework import status
 from django.urls import reverse
-from apps.warehouses.models import Warehouse, Rack
-from apps.zones.models import Zone
-from apps.users.models import User
+from apps.warehouse.infrastructure.persistence.models import Warehouse, Rack
+from apps.warehouse.infrastructure.persistence.models import Zone
+from apps.identity.infrastructure.persistence.models import User
 
 @pytest.mark.django_db
 class TestSpatialAPI:

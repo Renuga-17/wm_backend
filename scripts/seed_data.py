@@ -7,7 +7,7 @@ import json
 from datetime import datetime, timedelta
 
 # Set up Django environment
-sys.path.append("c:\\Users\\vidhyaadaran\\wm_backend")
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 django.setup()
 
@@ -16,6 +16,33 @@ from django.db import connection
 def batch_insert(cursor, table, columns, records):
     if not records:
         return
+        
+    from django.db import connection
+    db_cols = connection.introspection.get_table_description(cursor, table)
+    
+    # Auto-fill missing NOT NULL columns that do not have database-level defaults
+    for col_info in db_cols:
+        col_name = col_info.name
+        if col_name not in columns and not col_info.null_ok and col_info.default is None:
+            # Decide sensible default value based on type or column name
+            name_lower = col_name.lower()
+            val = ""
+            if "date" in name_lower or "time" in name_lower or "joined" in name_lower:
+                val = datetime.utcnow()
+            elif "is_" in name_lower or name_lower in ["active", "staff", "superuser"]:
+                val = 0
+            elif "int" in name_lower or "qty" in name_lower or "quantity" in name_lower:
+                val = 0
+            elif col_info.type_code in ["integer", "real", "numeric"] or "int" in str(col_info.type_code).lower():
+                val = 0
+                
+            columns.append(col_name)
+            for i, r in enumerate(records):
+                if isinstance(r, dict):
+                    r[col_name] = val
+                else:
+                    records[i] = list(r) + [val]
+                    
     col_str = ",".join(columns)
     row_placeholder = "(" + ",".join(["%s"] * len(columns)) + ")"
     placeholders = ",".join([row_placeholder] * len(records))
@@ -492,8 +519,13 @@ def seed_db():
     # ==========================================
     with connection.cursor() as cursor:
         try:
-            print("Clearing tables to prevent key violations (if any data existed)...")
-            cursor.execute("TRUNCATE TABLE audit_logs, users, robot_tasks, scan_logs, ai_predictions, ai_models, warehouse_heatmaps, route_optimizations, allocation_recommendations, storage_allocations, stock_movements, outbound_shipments, inbound_shipments, inventory, product_storage_rules, product_dimensions, products, product_categories, ml_extractions, cad_objects, bins, shelves, racks, zones, warehouse_layouts, warehouses CASCADE;")
+            print("Clearing tables to prevent key violations...")
+            if connection.vendor == 'sqlite':
+                tables = ["audit_logs", "users", "robot_tasks", "scan_logs", "ai_predictions", "ai_models", "warehouse_heatmaps", "route_optimizations", "allocation_recommendations", "storage_allocations", "stock_movements", "outbound_shipments", "inbound_shipments", "inventory", "product_storage_rules", "product_dimensions", "products", "product_categories", "ml_extractions", "cad_objects", "bins", "shelves", "racks", "zones", "warehouse_layouts", "warehouses"]
+                for t in tables:
+                    cursor.execute(f"DELETE FROM {t};")
+            else:
+                cursor.execute("TRUNCATE TABLE audit_logs, users, robot_tasks, scan_logs, ai_predictions, ai_models, warehouse_heatmaps, route_optimizations, allocation_recommendations, storage_allocations, stock_movements, outbound_shipments, inbound_shipments, inventory, product_storage_rules, product_dimensions, products, product_categories, ml_extractions, cad_objects, bins, shelves, racks, zones, warehouse_layouts, warehouses CASCADE;")
             
             # 1. Warehouses
             print("Inserting Warehouse...")
@@ -615,8 +647,20 @@ def seed_db():
                 
             # 25. Users
             print("Inserting Users...")
-            batch_insert(cursor, "users", ["user_id", "full_name", "email", "role"],
-                         [[u["id"], u["full_name"], u["email"], u["role"]] for u in users])
+            user_records = []
+            for u in users:
+                username = u["email"].split('@')[0]
+                password = "pbkdf2_sha256$260000$dummy$dummy"
+                is_superuser = 0
+                is_staff = 0
+                is_active = 1
+                user_records.append([
+                    u["id"], u["full_name"], u["email"], u["role"],
+                    username, password, is_superuser, is_staff, is_active
+                ])
+            batch_insert(cursor, "users", 
+                         ["user_id", "full_name", "email", "role", "username", "password", "is_superuser", "is_staff", "is_active"],
+                         user_records)
                 
             # 26. Audit Logs
             print("Inserting Audit Logs...")

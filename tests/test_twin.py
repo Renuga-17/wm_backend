@@ -1,10 +1,10 @@
 import pytest
 from rest_framework import status
 from django.urls import reverse
-from apps.warehouses.models import Warehouse, WarehouseLayout, Rack, SpatialEntity, WarehousePath, NavigationNode
-from apps.zones.models import Zone, ZoneBoundary
-from apps.bins.models import Shelf, Bin
-from apps.users.models import User
+from apps.warehouse.infrastructure.persistence.models import Warehouse, WarehouseLayout, Rack, SpatialEntity, WarehousePath, NavigationNode
+from apps.warehouse.infrastructure.persistence.models import Zone, ZoneBoundary
+from apps.warehouse.infrastructure.persistence.models import Shelf, Bin
+from apps.identity.infrastructure.persistence.models import User
 
 @pytest.mark.django_db
 class TestTwinAPI:

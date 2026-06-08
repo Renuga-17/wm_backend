@@ -1,10 +1,10 @@
 from django.urls import re_path
-from apps.warehouses.consumers import OccupancyConsumer
-from apps.routes.consumers import RouteConsumer
-from apps.recommendations.consumers import (
+from apps.warehouse.presentation.consumers import OccupancyConsumer
+from apps.warehouse.presentation.route_consumers import RouteConsumer
+from apps.inventory.presentation.recommendation_consumers import (
     RecommendationConsumer, CongestionConsumer, SlottingConsumer, AlertConsumer
 )
-from apps.inventory.consumers import InventoryConsumer
+from apps.inventory.presentation.consumers import InventoryConsumer
 
 websocket_urlpatterns = [
     re_path(r'ws/occupancy/$', OccupancyConsumer.as_asgi()),

@@ -8,19 +8,19 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 django.setup()
 
-from apps.warehouses.models import Warehouse, NavigationNode, Rack
-from apps.zones.models import Zone
-from apps.bins.models import Shelf, Bin
-from apps.products.models import Product, ProductCategory
-from apps.recommendations.models import DemandForecast, CongestionPrediction, SlottingScore, SystemAlert
-from apps.recommendations.ai_engine.ml_slotting import AISlottingEngine
-from apps.recommendations.ai_engine.hotspot_prevention import HotspotPreventionEngine
-from apps.recommendations.ai_engine.operational_scoring import OperationalScoringEngine
-from apps.recommendations.ai_engine.feedback_loop import AIFeedbackLoop
+from apps.warehouse.infrastructure.persistence.models import Warehouse, NavigationNode, Rack
+from apps.warehouse.infrastructure.persistence.models import Zone
+from apps.warehouse.infrastructure.persistence.models import Shelf, Bin
+from apps.inventory.infrastructure.persistence.models import Product, ProductCategory
+from apps.inventory.infrastructure.persistence.models import DemandForecast, CongestionPrediction, SlottingScore, SystemAlert
+from apps.inventory.ai_engine.ml_slotting import AISlottingEngine
+from apps.inventory.ai_engine.hotspot_prevention import HotspotPreventionEngine
+from apps.inventory.ai_engine.operational_scoring import OperationalScoringEngine
+from apps.inventory.ai_engine.feedback_loop import AIFeedbackLoop
 
 from rest_framework.test import APIRequestFactory, force_authenticate
-from apps.recommendations.views import AIRecommendationViewSet
-from apps.users.models import User
+from apps.inventory.presentation.api.views import AIRecommendationViewSet
+from apps.identity.infrastructure.persistence.models import User
 
 def run_verification():
     print("======================================================================")

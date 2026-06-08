@@ -8,13 +8,13 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 django.setup()
 
-from apps.warehouses.models import Warehouse, NavigationNode, Rack
-from apps.zones.models import Zone
-from apps.bins.models import Shelf, Bin
-from apps.products.models import Product, ProductCategory
-from apps.movements.models import StockMovement
-from apps.recommendations.ai_engine.ml_slotting import AISlottingEngine
-from apps.recommendations.models import DemandForecast, CongestionPrediction, SlottingScore, AllocationRecommendation
+from apps.warehouse.infrastructure.persistence.models import Warehouse, NavigationNode, Rack
+from apps.warehouse.infrastructure.persistence.models import Zone
+from apps.warehouse.infrastructure.persistence.models import Shelf, Bin
+from apps.inventory.infrastructure.persistence.models import Product, ProductCategory
+from apps.inventory.infrastructure.persistence.models import StockMovement
+from apps.inventory.ai_engine.ml_slotting import AISlottingEngine
+from apps.inventory.infrastructure.persistence.models import DemandForecast, CongestionPrediction, SlottingScore, AllocationRecommendation
 
 def run_verification():
     print("======================================================================")

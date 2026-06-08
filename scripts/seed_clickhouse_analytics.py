@@ -12,10 +12,10 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 django.setup()
 
 from django.db import connection
-from apps.products.models import Product
-from apps.warehouses.models import Warehouse
-from apps.zones.models import Zone
-from apps.bins.models import Bin
+from apps.inventory.infrastructure.persistence.models import Product
+from apps.warehouse.infrastructure.persistence.models import Warehouse
+from apps.warehouse.infrastructure.persistence.models import Zone
+from apps.warehouse.infrastructure.persistence.models import Bin
 from integrations.clickhouse_client import ClickHouseClient
 
 def seed_clickhouse():
