@@ -5,7 +5,7 @@ PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(PROJECT_ROOT)
 
 # Load Django settings
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'wm_backend.config.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 django.setup()
 
 from django.contrib.auth import get_user_model
