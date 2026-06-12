@@ -222,11 +222,50 @@ class OCRProcessingService:
         # Step G: Send to RAG ingestion if text is available
         try:
             from apps.inbound.application.services.rag_service import send_to_rag
+            
+            sku_val = None
+            prod_id_val = None
+            cat_val = None
+            zone_val = None
+            rack_val = None
+            shelf_val = None
+            bin_val = None
+            wh_val = "WH001"
+
+            if products_list:
+                first_sku = next((p.get('sku') for p in products_list if p.get('sku')), None)
+                if first_sku:
+                    sku_val = first_sku
+                    try:
+                        product_obj = Product.objects.filter(sku=sku_val).first()
+                        if product_obj:
+                            prod_id_val = str(product_obj.id)
+                            if product_obj.category:
+                                cat_val = product_obj.category.category_name
+                            
+                            from apps.recommendations.models.bin_allocation import BinAllocation
+                            alloc = BinAllocation.objects.filter(product=product_obj).first()
+                            if alloc:
+                                wh_val = str(alloc.zone.warehouse_id)
+                                zone_val = alloc.zone.zone_name
+                                rack_val = alloc.rack.rack_code
+                                shelf_val = str(alloc.shelf.shelf_number)
+                                bin_val = alloc.bin.bin_code
+                    except Exception as db_err:
+                        logger.warning("OCRProcessingService: Failed to resolve database metadata for RAG: %s", db_err)
+
             send_to_rag(
                 ocr_document_id=str(ocr_doc.id),
                 document_type="OCRDocument",
-                warehouse_id="WH001",
+                warehouse_id=wh_val,
                 text=ocr_doc.raw_text,
+                sku=sku_val,
+                product_id=prod_id_val,
+                category=cat_val,
+                zone=zone_val,
+                rack=rack_val,
+                shelf=shelf_val,
+                bin=bin_val,
             )
         except Exception as rag_err:
             logger.warning("OCRProcessingService: RAG ingestion trigger failed: %s", rag_err)

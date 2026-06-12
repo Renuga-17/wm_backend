@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'apps.inbound.apps.InboundConfig',
     'apps.outbound.apps.OutboundConfig',
     'apps.recommendations.apps.RecommendationsConfig',
+    'apps.ai.apps.AIConfig',
 ]
 
 MIDDLEWARE = [
@@ -197,6 +198,14 @@ AI_SERVICE_SETTINGS = {
 OCR_SERVICE_SETTINGS = {
     'BASE_URL': os.getenv('OCR_SERVICE_URL', 'http://localhost:8002'),
 }
+
+# RAG Microservice settings
+RAG_BASE_URL = os.getenv('RAG_BASE_URL', 'http://localhost:8001')
+try:
+    RAG_TIMEOUT = int(os.getenv('RAG_TIMEOUT', '30'))
+except ValueError:
+    RAG_TIMEOUT = 30
+
 
 # Media File Storage Settings
 MEDIA_URL = '/media/'

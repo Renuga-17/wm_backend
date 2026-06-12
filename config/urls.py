@@ -17,6 +17,7 @@ urlpatterns = [
     path('api/inventory/', include('apps.inventory.presentation.api.inventory_urls')),
     path('api/movements/', include('apps.inventory.presentation.api.movement_urls')),
     path('api/recommendations/', include('apps.inventory.presentation.api.recommendation_urls')),
+    path('api/ai/', include('apps.ai.presentation.api.urls')),
     path('api/ai/', include('apps.inventory.presentation.api.ai_urls')),
     path('api/dashboards/', include('apps.inventory.presentation.api.dashboard_urls')),
     

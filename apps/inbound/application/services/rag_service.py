@@ -12,8 +12,15 @@ def send_to_rag(
     document_type: str = "OCRDocument",
     warehouse_id: Optional[str] = None,
     text: str = "",
+    sku: Optional[str] = None,
+    product_id: Optional[str] = None,
+    category: Optional[str] = None,
+    zone: Optional[str] = None,
+    rack: Optional[str] = None,
+    shelf: Optional[str] = None,
+    bin: Optional[str] = None,
 ) -> bool:
-    """Send OCR text to the RAG ingestion endpoint.
+    """Send OCR text and metadata to the RAG ingestion endpoint.
 
     Returns True on success, False on any failure.
     """
@@ -22,6 +29,13 @@ def send_to_rag(
         "document_type": document_type,
         "warehouse_id": warehouse_id or "WH001",
         "text": text,
+        "sku": sku,
+        "product_id": product_id,
+        "category": category,
+        "zone": zone,
+        "rack": rack,
+        "shelf": shelf,
+        "bin": bin,
     }
     try:
         response = requests.post(RAG_ENDPOINT, json=payload, timeout=TIMEOUT_SECONDS)

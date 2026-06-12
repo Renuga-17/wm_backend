@@ -122,12 +122,20 @@ class OCRIntegrationTestCase(TestCase):
             }
         }
 
-    @patch('apps.inbound.services.ocr_client.requests.post')
+    @patch('requests.post')
     def test_upload_success_and_downstream_pipeline(self, mock_post):
         """Test file upload triggers OCR client, saves document, and processes downstream WMS pipeline."""
-        # 1. Mock requests.post to return the successful payload
-        mock_post.return_value.status_code = 200
-        mock_post.return_value.json.return_value = self.mock_success_payload
+        def mock_post_side_effect(url, *args, **kwargs):
+            # Resolve response object dynamically based on target URL
+            from unittest.mock import MagicMock
+            mock_res = MagicMock()
+            mock_res.status_code = 200
+            if 'ocr/extract' in url:
+                mock_res.json.return_value = self.mock_success_payload
+            else:
+                mock_res.json.return_value = {"status": "SUCCESS"}
+            return mock_res
+        mock_post.side_effect = mock_post_side_effect
 
         # 2. Perform upload
         file_content = b"fake invoice image binary data"
@@ -190,6 +198,29 @@ class OCRIntegrationTestCase(TestCase):
         self.assertEqual(placement.position_x, Decimal('0.00'))
         self.assertEqual(placement.position_y, Decimal('0.00'))
         self.assertEqual(placement.position_z, Decimal('0.00'))
+
+        # Verify that RAG ingestion was called with correct metadata
+        self.assertEqual(mock_post.call_count, 2)
+        
+        # Second call is the RAG ingestion call
+        rag_call_args = mock_post.call_args_list[1]
+        rag_url = rag_call_args[0][0]
+        rag_kwargs = rag_call_args[1]
+        
+        self.assertIn("api/rag/ingest", rag_url)
+        payload = rag_kwargs.get("json")
+        self.assertIsNotNone(payload)
+        
+        self.assertEqual(payload["ocr_document_id"], str(doc_id))
+        self.assertEqual(payload["document_type"], "OCRDocument")
+        self.assertEqual(payload["sku"], "SKU-MOUSE-01")
+        self.assertEqual(payload["product_id"], str(product.id))
+        self.assertEqual(payload["category"], "Electronics")
+        self.assertEqual(payload["warehouse_id"], str(self.warehouse.id))
+        self.assertEqual(payload["zone"], self.zone.zone_name)
+        self.assertEqual(payload["rack"], self.rack.rack_code)
+        self.assertEqual(payload["shelf"], str(self.shelf.shelf_number))
+        self.assertEqual(payload["bin"], self.bin.bin_code)
 
     @patch('apps.inbound.services.ocr_client.requests.post')
     def test_duplicate_upload_detection(self, mock_post):

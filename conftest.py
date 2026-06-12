@@ -1,5 +1,15 @@
 import pytest
 from django.conf import settings
+import django.template.context
+
+def monkeypatched_copy(self):
+    cls = self.__class__
+    duplicate = cls.__new__(cls)
+    duplicate.__dict__.update(self.__dict__)
+    duplicate.dicts = self.dicts[:]
+    return duplicate
+
+django.template.context.BaseContext.__copy__ = monkeypatched_copy
 
 @pytest.fixture(scope='session')
 def django_db_setup(
