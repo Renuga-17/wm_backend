@@ -1,0 +1,228 @@
+{
+  "info": {
+    "_postman_id": "8c2c8fde-dc99-4dbe-8452-9ef8cf3112bd",
+    "name": "Storage Recommendation Engine",
+    "description": "API endpoints for the Storage Recommendation Engine to assign products to ZoneGroups and Zones based on rules and ML models.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Generate Storage Recommendation",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}",
+            "description": "JWT Access Token obtained from /api/users/login/",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"product_id\": \"58aa84e7-4def-42f8-9562-0c1510255b6c\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/recommendations/storage/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "recommendations",
+            "storage",
+            ""
+          ]
+        },
+        "description": "Submits a product ID to retrieve a recommended ZoneGroup and Zone assignment based on movement/storage classification and warehouse capacity constraints."
+      },
+      "response": [
+        {
+          "name": "Successful Recommendation (Rule Engine)",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"product_id\": \"58aa84e7-4def-42f8-9562-0c1510255b6c\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8000/api/recommendations/storage/",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "recommendations",
+                "storage",
+                ""
+              ]
+            }
+          },
+          "status": "Created",
+          "code": 201,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"zone_group\": \"FAST_MOVING_STORAGE\",\n  \"zone\": \"A2\",\n  \"recommendation_reason\": \"Rule Engine path: movement_type=FAST, storage_type=GENERAL. Zone free capacity is 80.00%\",\n  \"recommendation_score\": 0.95,\n  \"recommendation_source\": \"RULE_ENGINE\",\n  \"recommendation_version\": \"v1\"\n}"
+        },
+        {
+          "name": "Successful Recommendation (ML Model)",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"product_id\": \"58aa84e7-4def-42f8-9562-0c1510255b6c\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8000/api/recommendations/storage/",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "recommendations",
+                "storage",
+                ""
+              ]
+            }
+          },
+          "status": "Created",
+          "code": 201,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"zone_group\": \"FAST_MOVING_STORAGE\",\n  \"zone\": \"A2\",\n  \"recommendation_reason\": \"ML model suggests high affinity placement based on seasonal turnover patterns\",\n  \"recommendation_score\": 0.98,\n  \"recommendation_source\": \"ML_MODEL\",\n  \"recommendation_version\": \"v1-ml-stub\"\n}"
+        },
+        {
+          "name": "Product Not Found",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"product_id\": \"00000000-0000-0000-0000-000000000000\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8000/api/recommendations/storage/",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "recommendations",
+                "storage",
+                ""
+              ]
+            }
+          },
+          "status": "Not Found",
+          "code": 404,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"error\": \"Product not found for ID: 00000000-0000-0000-0000-000000000000\"\n}"
+        },
+        {
+          "name": "Classification Not Found",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"product_id\": \"58aa84e7-4def-42f8-9562-0c1510255b6c\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8000/api/recommendations/storage/",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "recommendations",
+                "storage",
+                ""
+              ]
+            }
+          },
+          "status": "Not Found",
+          "code": 404,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"error\": \"Product classification does not exist for product: SKU-MONITOR-001\"\n}"
+        }
+      ]
+    }
+  ]
+}

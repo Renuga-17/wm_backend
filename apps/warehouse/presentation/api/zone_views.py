@@ -1,7 +1,14 @@
 from rest_framework import viewsets
-from apps.warehouse.infrastructure.persistence.models import Zone, ZoneBoundary
-from .serializers import ZoneSerializer, ZoneBoundarySerializer
+from apps.warehouse.infrastructure.persistence.models import Zone, ZoneBoundary, ZoneGroup, Aisle
+from .serializers import ZoneSerializer, ZoneBoundarySerializer, ZoneGroupSerializer, AisleSerializer
 
+class ZoneGroupViewSet(viewsets.ModelViewSet):
+    queryset = ZoneGroup.objects.all().order_by('id')
+    serializer_class = ZoneGroupSerializer
+
+class AisleViewSet(viewsets.ModelViewSet):
+    queryset = Aisle.objects.all().order_by('id')
+    serializer_class = AisleSerializer
 class ZoneViewSet(viewsets.ModelViewSet):
     queryset = Zone.objects.all().order_by('id')
     serializer_class = ZoneSerializer

@@ -22,6 +22,9 @@ class Bin(models.Model):
     bin_code = models.CharField(max_length=50, unique=True)
     max_capacity = models.DecimalField(max_digits=10, decimal_places=2)
     current_capacity = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    length = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    width  = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    height = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     is_occupied = models.BooleanField(default=False)
 
     class Meta:
@@ -29,4 +32,3 @@ class Bin(models.Model):
 
     def __str__(self):
         return self.bin_code
-

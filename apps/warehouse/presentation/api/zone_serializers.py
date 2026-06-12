@@ -1,7 +1,17 @@
 from rest_framework import serializers
-from apps.warehouse.infrastructure.persistence.models import Zone, ZoneBoundary, WarehouseHeatmap
+from apps.warehouse.infrastructure.persistence.models import Zone, ZoneBoundary, WarehouseHeatmap, ZoneGroup, Aisle
 from apps.inventory.infrastructure.persistence.models import CongestionPrediction, SlottingScore
 from apps.warehouse.infrastructure.persistence.models import Bin
+
+class ZoneGroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ZoneGroup
+        fields = '__all__'
+
+class AisleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Aisle
+        fields = '__all__'
 
 class ZoneSerializer(serializers.ModelSerializer):
     congestion_risk = serializers.SerializerMethodField()
@@ -12,7 +22,7 @@ class ZoneSerializer(serializers.ModelSerializer):
     class Meta:
         model = Zone
         fields = [
-            'id', 'warehouse', 'zone_name', 'zone_type', 
+            'id', 'warehouse', 'zone_group', 'zone_name', 'zone_type', 
             'x', 'y', 'z', 'width', 'height', 'depth',
             'congestion_risk', 'activity_score', 'predictive_occupancy', 'ai_slotting_scores'
         ]

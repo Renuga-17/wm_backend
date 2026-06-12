@@ -66,6 +66,7 @@ class MLExtraction(models.Model):
 class Rack(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, db_column='rack_id')
     zone = models.ForeignKey('warehouse.Zone', on_delete=models.CASCADE, db_column='zone_id', related_name='racks')
+    aisle = models.ForeignKey('warehouse.Aisle', on_delete=models.SET_NULL, null=True, blank=True, db_column='aisle_id', related_name='racks')
     rack_code = models.CharField(max_length=50, unique=True)
     max_weight = models.DecimalField(max_digits=10, decimal_places=2)
     x = models.DecimalField(max_digits=10, decimal_places=4)

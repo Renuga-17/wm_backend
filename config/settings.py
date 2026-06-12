@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'apps.orders.apps.OrdersConfig',
     'apps.inbound.apps.InboundConfig',
     'apps.outbound.apps.OutboundConfig',
+    'apps.recommendations.apps.RecommendationsConfig',
 ]
 
 MIDDLEWARE = [
@@ -225,3 +226,8 @@ MIGRATION_MODULES = {
     'inbound': 'apps.inbound.infrastructure.persistence.migrations',
     'outbound': 'apps.outbound.infrastructure.persistence.migrations',
 }
+
+# Storage Recommendation Settings
+WAREHOUSE_MIN_FREE_CAPACITY = int(os.getenv('WAREHOUSE_MIN_FREE_CAPACITY', 10))
+WAREHOUSE_RECOMMENDATION_USE_ML = os.getenv('WAREHOUSE_RECOMMENDATION_USE_ML', 'False') == 'True'
+ML_MODEL_PATH = os.getenv('ML_MODEL_PATH', '')

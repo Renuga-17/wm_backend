@@ -22,6 +22,9 @@ urlpatterns = [
     
     path('api/orders/', include('apps.orders.presentation.api.order_urls')),
     
+    path('api/product-classifications/', include('apps.recommendations.presentation.api.classification_urls')),
+    path('api/product-dimensions/', include('apps.inventory.presentation.api.dimension_urls')),
+    
     path('api/inbound/', include('apps.inbound.presentation.api.inbound_urls')),
     path('api/ocr/', include('apps.inbound.presentation.api.ocr_urls')),
 ]
