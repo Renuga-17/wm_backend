@@ -1,11 +1,12 @@
 from django.contrib import admin
-from .models import OCRDocument
+from .ocr_models import OCRDocument
 
 
 @admin.register(OCRDocument)
 class OCRDocumentAdmin(admin.ModelAdmin):
-    list_display = ('document_name', 'document_type', 'status', 'created_at', 'updated_at')
-    list_filter = ('status', 'document_type')
-    search_fields = ('document_name', 'document_url')
-    readonly_fields = ('id', 'extracted_text', 'structured_data', 'created_at', 'updated_at')
+    list_display = ('file_name', 'document_type', 'processing_status', 'confidence_score', 'created_at')
+    list_filter = ('processing_status', 'document_type')
+    search_fields = ('file_name', 'file_path', 'document_hash')
+    readonly_fields = ('id', 'created_at', 'updated_at')
     ordering = ('-created_at',)
+

@@ -1,11 +1,12 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import OCRExtractView, OCRHistoryViewSet
+from .views import OCRUploadView, OCRDocumentViewSet
 
 router = DefaultRouter()
-router.register(r'history', OCRHistoryViewSet, basename='ocr-history')
+router.register(r'documents', OCRDocumentViewSet, basename='ocr-documents')
 
 urlpatterns = [
-    path('extract/', OCRExtractView.as_view(), name='ocr-extract'),
+    path('upload/', OCRUploadView.as_view(), name='ocr-upload'),
     path('', include(router.urls)),
 ]
+

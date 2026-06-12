@@ -1,7 +1,7 @@
 import uuid
 from typing import List, Dict
 
-from ...warehouses.models import (
+from ...models import (
     StorageLocationNodeMap,
     Bin,
     Shelf,

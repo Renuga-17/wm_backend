@@ -3,36 +3,29 @@ from django.db import models
 
 
 class OCRDocument(models.Model):
-    class Status(models.TextChoices):
-        PENDING = 'PENDING', 'Pending'
+    class ProcessingStatus(models.TextChoices):
+        UPLOADED = 'UPLOADED', 'Uploaded'
         PROCESSING = 'PROCESSING', 'Processing'
         COMPLETED = 'COMPLETED', 'Completed'
         FAILED = 'FAILED', 'Failed'
-
-    class DocumentType(models.TextChoices):
-        INVOICE = 'invoice', 'Invoice'
-        PURCHASE_ORDER = 'po', 'Purchase Order'
-        MANIFEST = 'manifest', 'Manifest'
-        OTHER = 'other', 'Other'
+        REVIEW_REQUIRED = 'REVIEW_REQUIRED', 'Review Required'
 
     id = models.UUIDField(
         primary_key=True,
         default=uuid.uuid4,
         db_column='ocr_id'
     )
-    document_name = models.CharField(max_length=200)
-    document_type = models.CharField(
+    file_name = models.CharField(max_length=255)
+    file_path = models.CharField(max_length=512)
+    document_type = models.CharField(max_length=100)
+    document_hash = models.CharField(max_length=64, blank=True, null=True)
+    raw_text = models.TextField(blank=True, default='')
+    extracted_json = models.JSONField(null=True, blank=True)
+    confidence_score = models.FloatField(null=True, blank=True)
+    processing_status = models.CharField(
         max_length=50,
-        choices=DocumentType.choices,
-        default=DocumentType.OTHER
-    )
-    document_url = models.URLField()
-    extracted_text = models.TextField(blank=True, default='')
-    structured_data = models.JSONField(null=True, blank=True)
-    status = models.CharField(
-        max_length=20,
-        choices=Status.choices,
-        default=Status.PENDING
+        choices=ProcessingStatus.choices,
+        default=ProcessingStatus.UPLOADED
     )
     error_message = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -43,4 +36,5 @@ class OCRDocument(models.Model):
         ordering = ['-created_at']
 
     def __str__(self):
-        return f"{self.document_name} [{self.status}]"
+        return f"{self.file_name} [{self.processing_status}]"
+
