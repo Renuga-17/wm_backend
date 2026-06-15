@@ -11,6 +11,7 @@ class OCRDocumentSerializer(serializers.ModelSerializer):
         fields = [
             'document_id',
             'status',
+            'processing_status',
             'file_name',
             'file_path',
             'document_type',
@@ -19,17 +20,26 @@ class OCRDocumentSerializer(serializers.ModelSerializer):
             'extracted_json',
             'confidence_score',
             'error_message',
+            'rejection_reason',
             'created_at',
             'updated_at',
         ]
         read_only_fields = (
             'document_id',
             'status',
+            'processing_status',
             'raw_text',
             'extracted_json',
             'confidence_score',
             'error_message',
+            'rejection_reason',
             'created_at',
             'updated_at',
         )
+
+
+
+class OCRDocumentApprovalSerializer(serializers.Serializer):
+    extracted_json = serializers.JSONField(required=False)
+
 

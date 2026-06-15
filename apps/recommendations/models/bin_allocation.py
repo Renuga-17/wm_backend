@@ -5,6 +5,11 @@ class BinAllocation(models.Model):
     class AllocationSource(models.TextChoices):
         RULE_ENGINE = 'RULE_ENGINE', 'Rule Engine'
 
+    class StorageStatus(models.TextChoices):
+        ALLOCATED = 'ALLOCATED', 'Allocated'
+        IN_PROGRESS = 'IN_PROGRESS', 'In Progress'
+        STORED = 'STORED', 'Stored'
+
     product = models.ForeignKey('inventory.Product', on_delete=models.CASCADE, related_name='bin_allocations')
     zone_group = models.ForeignKey('warehouse.ZoneGroup', on_delete=models.PROTECT, related_name='bin_allocations')
     zone = models.ForeignKey('warehouse.Zone', on_delete=models.PROTECT, related_name='bin_allocations')
@@ -18,6 +23,13 @@ class BinAllocation(models.Model):
     allocation_version = models.CharField(max_length=10, default='v1')
     selected_orientation = models.CharField(max_length=50)
     
+    navigation_instructions = models.TextField(blank=True, null=True)
+    placement_instructions = models.TextField(blank=True, null=True)
+    
+    storage_status = models.CharField(max_length=20, choices=StorageStatus.choices, default=StorageStatus.ALLOCATED)
+    stored_at = models.DateTimeField(blank=True, null=True)
+    operator = models.CharField(max_length=150, blank=True, null=True)
+    
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -29,4 +41,4 @@ class BinAllocation(models.Model):
         ]
 
     def __str__(self):
-        return f"BinAllocation for {self.product_id} -> Bin {self.bin_id} (Score: {self.allocation_score})"
+        return f"BinAllocation for {self.product.id} -> Bin {self.bin.id} (Score: {self.allocation_score})"

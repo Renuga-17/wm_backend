@@ -12,14 +12,14 @@ class ProductDimensionSerializer(serializers.ModelSerializer):
         fields = ['id', 'product', 'length', 'width', 'height', 'box_length', 'box_width', 'box_height']
         read_only_fields = ['id']
 
-    def validate(self, data):
+    def validate(self, attrs):
         dimension_fields = ['length', 'width', 'height', 'box_length', 'box_width', 'box_height']
         for field in dimension_fields:
-            if field in data:
-                val = data[field]
+            if field in attrs:
+                val = attrs[field]
                 if val is not None and val <= 0:
                     raise serializers.ValidationError({field: f"{field.replace('_', ' ').capitalize()} must be a positive value greater than 0."})
-        return data
+        return attrs
 
 class ProductStorageRuleSerializer(serializers.ModelSerializer):
     class Meta:

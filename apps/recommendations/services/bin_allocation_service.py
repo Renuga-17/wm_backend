@@ -74,8 +74,64 @@ class BinAllocationService:
                 selected_orientation=orientation
             )
 
+            # 6. Evaluate 3D placement optimization
+            from .three_d_optimization_service import ThreeDOptimizationService
+            three_d_service = ThreeDOptimizationService()
+            placement_3d = three_d_service.evaluate_placement(allocation)
+
+            # 7. Compute route optimization
+            from apps.warehouse.application.services.route_optimizer import RouteOptimizer
+            from apps.warehouse.infrastructure.persistence.models import NavigationNode
+            
+            start_location = "DOCK_A"
+            docks = NavigationNode.objects.filter(warehouse=zone.warehouse, node_type__iexact='DOCK')
+            dock = docks.first()
+            if dock is not None:
+                start_location = dock.node_name
+                
+            try:
+                route_data = RouteOptimizer.compute_route(
+                    warehouse_id=zone.warehouse.id,
+                    start_location=start_location,
+                    target_location=bin_obj.bin_code
+                )
+            except Exception as e:
+                logger.warning("Route calculation failed: %s. Using fallback node.", str(e))
+                route_data = {
+                    "start_location": start_location,
+                    "distance": 0.0,
+                    "path": []
+                }
+
+            # 8. Generate navigation guidance (automatic, deterministic first)
+            from .ai_navigation_guidance_service import AINavigationGuidanceService
+            nav_service = AINavigationGuidanceService()
+            route_data["start_location"] = start_location
+            nav_instructions = nav_service.generate_instructions(
+                zone=zone,
+                rack=bin_obj.shelf.rack,
+                shelf=bin_obj.shelf,
+                bin_obj=bin_obj,
+                route_data=route_data
+            )
+
+            # 9. Generate placement guidance (automatic, deterministic first)
+            from .ai_placement_guidance_service import AIPlacementGuidanceService
+            placement_service = AIPlacementGuidanceService()
+            placement_instructions = placement_service.generate_instructions(
+                product_dim=product_dimension,
+                selected_orientation=allocation.selected_orientation,
+                placement_3d=placement_3d,
+                bin_obj=bin_obj
+            )
+
+            # 10. Cache instructions on the allocation model
+            allocation.navigation_instructions = nav_instructions
+            allocation.placement_instructions = placement_instructions
+            allocation.save()
+
         logger.info(
-            "BinAllocationService: Successfully persisted BinAllocation %s (Score: %.4f, Bin: %s) for product %s",
-            allocation.id, score, bin_obj.bin_code, product.sku
+            "BinAllocationService: Successfully persisted BinAllocation %s (Score: %.4f, Bin: %s) for product %s with navigation and placement guidance.",
+            allocation.id, score, bin_obj.bin_code, product.sku  # type: ignore
         )
         return allocation

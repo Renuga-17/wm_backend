@@ -1,7 +1,9 @@
+from typing import cast
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 from rest_framework.test import APIClient
 from rest_framework import status
+from rest_framework.response import Response
 from decimal import Decimal
 
 from apps.warehouse.models import Warehouse, ZoneGroup, Zone, Rack, Shelf, Bin
@@ -15,7 +17,7 @@ User = get_user_model()
 class BinAllocationTestCase(TestCase):
     def setUp(self):
         self.client = APIClient()
-        self.user = User.objects.create_user(
+        self.user = User.objects.create_user(  # type: ignore
             username='test_wms_user',
             password='test_wms_password',
             email='test_wms@warehouse.com',
@@ -111,9 +113,10 @@ class BinAllocationTestCase(TestCase):
     def test_bin_allocation_success(self):
         """Test happy path for bin allocation API."""
         url = '/api/recommendations/bin-allocation/'
-        response = self.client.post(url, {'product_id': str(self.product.id)}, format='json')
+        response = cast(Response, self.client.post(url, {'product_id': str(self.product.id)}, format='json'))
         
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        assert response.data is not None
         data = response.data
         self.assertEqual(data['product_id'], str(self.product.id))
         self.assertEqual(data['zone_group'], 'A')
@@ -129,6 +132,7 @@ class BinAllocationTestCase(TestCase):
         # Check persistence
         self.assertEqual(BinAllocation.objects.count(), 1)
         alloc = BinAllocation.objects.first()
+        assert alloc is not None
         self.assertEqual(alloc.product, self.product)
         self.assertEqual(alloc.bin, self.bin)
         self.assertEqual(alloc.selected_orientation, '40x30x20')
@@ -139,9 +143,10 @@ class BinAllocationTestCase(TestCase):
         ProductDimension.objects.filter(product=self.product).delete()
 
         url = '/api/recommendations/bin-allocation/'
-        response = self.client.post(url, {'product_id': str(self.product.id)}, format='json')
+        response = cast(Response, self.client.post(url, {'product_id': str(self.product.id)}, format='json'))
         
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        assert response.data is not None
         self.assertIn("dimensions not found", response.data['error'].lower())
 
     def test_dimension_mismatch(self):
@@ -153,9 +158,10 @@ class BinAllocationTestCase(TestCase):
         self.dimension.save()
 
         url = '/api/recommendations/bin-allocation/'
-        response = self.client.post(url, {'product_id': str(self.product.id)}, format='json')
+        response = cast(Response, self.client.post(url, {'product_id': str(self.product.id)}, format='json'))
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        assert response.data is not None
         self.assertIn("no candidate bins met dimension and capacity constraints", response.data['error'].lower())
 
     def test_orientation_selection(self):
@@ -175,13 +181,15 @@ class BinAllocationTestCase(TestCase):
         # But rotated as 20x40x30: 20 <= 25, 40 <= 45, 30 <= 35 -> fits!
         
         url = '/api/recommendations/bin-allocation/'
-        response = self.client.post(url, {'product_id': str(self.product.id)}, format='json')
+        response = cast(Response, self.client.post(url, {'product_id': str(self.product.id)}, format='json'))
         
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        assert response.data is not None
         data = response.data
         self.assertEqual(data['selected_orientation'], '20x40x30')
         
         alloc = BinAllocation.objects.first()
+        assert alloc is not None
         self.assertEqual(alloc.selected_orientation, '20x40x30')
 
     def test_weight_exceeds_rack_capacity(self):
@@ -191,9 +199,10 @@ class BinAllocationTestCase(TestCase):
         self.rack.save()
 
         url = '/api/recommendations/bin-allocation/'
-        response = self.client.post(url, {'product_id': str(self.product.id)}, format='json')
+        response = cast(Response, self.client.post(url, {'product_id': str(self.product.id)}, format='json'))
         
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        assert response.data is not None
         self.assertIn("weight capacity exceeded", response.data['error'].lower())
 
     def test_weight_exceeds_shelf_capacity(self):
@@ -203,9 +212,10 @@ class BinAllocationTestCase(TestCase):
         self.shelf.save()
 
         url = '/api/recommendations/bin-allocation/'
-        response = self.client.post(url, {'product_id': str(self.product.id)}, format='json')
+        response = cast(Response, self.client.post(url, {'product_id': str(self.product.id)}, format='json'))
         
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        assert response.data is not None
         self.assertIn("weight capacity exceeded", response.data['error'].lower())
 
     def test_bin_capacity_exceeded(self):
@@ -215,9 +225,10 @@ class BinAllocationTestCase(TestCase):
         self.bin.save()
 
         url = '/api/recommendations/bin-allocation/'
-        response = self.client.post(url, {'product_id': str(self.product.id)}, format='json')
+        response = cast(Response, self.client.post(url, {'product_id': str(self.product.id)}, format='json'))
         
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        assert response.data is not None
         self.assertIn("no candidate bins met dimension and capacity constraints", response.data['error'].lower())
 
     def test_verify_latest_recommendation_used(self):
@@ -268,9 +279,10 @@ class BinAllocationTestCase(TestCase):
         )
 
         url = '/api/recommendations/bin-allocation/'
-        response = self.client.post(url, {'product_id': str(self.product.id)}, format='json')
+        response = cast(Response, self.client.post(url, {'product_id': str(self.product.id)}, format='json'))
         
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        assert response.data is not None
         data = response.data
         self.assertEqual(data['zone'], 'B4')
         self.assertEqual(data['bin']['code'], 'BIN-B4-1-01')

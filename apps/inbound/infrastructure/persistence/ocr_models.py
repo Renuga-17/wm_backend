@@ -9,6 +9,8 @@ class OCRDocument(models.Model):
         COMPLETED = 'COMPLETED', 'Completed'
         FAILED = 'FAILED', 'Failed'
         REVIEW_REQUIRED = 'REVIEW_REQUIRED', 'Review Required'
+        APPROVED = 'APPROVED', 'Approved'
+        REJECTED = 'REJECTED', 'Rejected'
 
     id = models.UUIDField(
         primary_key=True,
@@ -28,6 +30,7 @@ class OCRDocument(models.Model):
         default=ProcessingStatus.UPLOADED
     )
     error_message = models.TextField(null=True, blank=True)
+    rejection_reason = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

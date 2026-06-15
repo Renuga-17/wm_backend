@@ -1,4 +1,5 @@
 import uuid
+from decimal import Decimal
 from django.db import models
 
 class Warehouse(models.Model):
@@ -174,9 +175,10 @@ class NavigationEdge(models.Model):
 
     def save(self, *args, **kwargs):
         if self.is_blocked:
-            self.dynamic_cost = 999999.9999
+            self.dynamic_cost = Decimal('999999.9999')
         else:
-            self.dynamic_cost = float(self.edge_weight) * (1.0 + float(self.congestion_score)) + 0.1 * float(self.travel_time)
+            cost_val = float(self.edge_weight) * (1.0 + float(self.congestion_score)) + 0.1 * float(self.travel_time)
+            self.dynamic_cost = Decimal(f"{cost_val:.4f}")
         super().save(*args, **kwargs)
 
     def __str__(self):

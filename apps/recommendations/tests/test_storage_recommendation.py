@@ -1,7 +1,9 @@
+from typing import cast
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 from rest_framework.test import APIClient
 from rest_framework import status
+from rest_framework.response import Response
 from django.conf import settings
 from decimal import Decimal
 
@@ -21,7 +23,7 @@ User = get_user_model()
 class StorageRecommendationTestCase(TestCase):
     def setUp(self):
         self.client = APIClient()
-        self.user = User.objects.create_user(
+        self.user = User.objects.create_user(  # type: ignore
             username='test_user',
             password='test_password',
             email='test@warehouse.com',
@@ -116,7 +118,7 @@ class StorageRecommendationTestCase(TestCase):
     def test_recommendation_rule_creation(self):
         self.assertEqual(RecommendationRule.objects.count(), 1)
         self.assertEqual(self.rule.zone_group_type, 'GENERAL_STORAGE')
-        self.assertEqual(str(self.rule), f"Rule {self.rule.id}: FAST/GENERAL → GENERAL_STORAGE")
+        self.assertEqual(str(self.rule), f"Rule {self.rule.id}: FAST/GENERAL → GENERAL_STORAGE")  # type: ignore
 
     def test_product_classification_creation(self):
         self.assertEqual(ProductClassification.objects.count(), 1)
@@ -199,23 +201,24 @@ class StorageRecommendationTestCase(TestCase):
         self.assertEqual(StorageRecommendation.objects.count(), 1)
 
     def test_api_recommendation_success(self):
-        response = self.client.post(
+        response = cast(Response, self.client.post(
             '/api/recommendations/storage/',
             {'product_id': str(self.product.id)},
             format='json'
-        )
+        ))
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        assert response.data is not None
         self.assertEqual(response.data['zone_group'], 'A')
         self.assertEqual(response.data['zone'], 'A2')
         self.assertEqual(response.data['recommendation_source'], 'RULE_ENGINE')
         self.assertTrue(response.data['recommendation_score'] > 0.0)
 
     def test_api_recommendation_invalid_product(self):
-        response = self.client.post(
+        response = cast(Response, self.client.post(
             '/api/recommendations/storage/',
             {'product_id': '00000000-0000-0000-0000-000000000000'},
             format='json'
-        )
+        ))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_api_recommendation_missing_classification(self):
@@ -228,9 +231,9 @@ class StorageRecommendationTestCase(TestCase):
             is_fragile=False,
             is_hazardous=False
         )
-        response = self.client.post(
+        response = cast(Response, self.client.post(
             '/api/recommendations/storage/',
             {'product_id': str(other_product.id)},
             format='json'
-        )
+        ))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)

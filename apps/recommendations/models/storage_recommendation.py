@@ -29,4 +29,4 @@ class StorageRecommendation(models.Model):
         ordering = ['-created_at']
 
     def __str__(self):
-        return f"StorageRecommendation for {self.product_id} -> {self.zone_group_id}/{self.zone_id} (score={self.recommendation_score})"
+        return f"StorageRecommendation for {self.product.id} -> {self.zone_group.id}/{self.zone.id} (score={self.recommendation_score})"

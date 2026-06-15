@@ -11,6 +11,7 @@ class StockMovement(models.Model):
     quantity = models.IntegerField()
     movement_type = models.CharField(max_length=50)
     moved_at = models.DateTimeField(auto_now_add=True)
+    operator = models.CharField(max_length=150, blank=True, null=True)
 
     class Meta:
         db_table = 'stock_movements'

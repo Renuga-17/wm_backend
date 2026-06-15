@@ -6,8 +6,9 @@ from django.core.files.storage import default_storage
 from rest_framework import status, viewsets, permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.decorators import action
 from apps.inbound.infrastructure.persistence.models import OCRDocument
-from .ocr_serializers import OCRDocumentSerializer
+from .ocr_serializers import OCRDocumentSerializer, OCRDocumentApprovalSerializer
 from ...tasks import process_ocr_document_task
 
 logger = logging.getLogger(__name__)
@@ -112,10 +113,111 @@ class OCRDocumentViewSet(viewsets.ReadOnlyModelViewSet):
             instance = self.get_object()
             return Response({
                 "document_id": str(instance.id),
+                "id": str(instance.id),
                 "status": instance.processing_status,
+                "processing_status": instance.processing_status,
                 "document_type": instance.document_type,
-                "confidence_score": instance.confidence_score
+                "confidence_score": instance.confidence_score,
+                "raw_text": instance.raw_text,
+                "extracted_json": instance.extracted_json,
+                "file_name": instance.file_name,
+                "file_path": instance.file_path,
+                "rejection_reason": instance.rejection_reason,
+                "error_message": instance.error_message,
+                "created_at": instance.created_at,
+                "updated_at": instance.updated_at
             }, status=status.HTTP_200_OK)
         except Exception as e:
             logger.error("OCRDocumentViewSet: Retrieve failed: %s", e)
             return Response({"error": "Document not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    @action(detail=False, methods=['get'], url_path='review-queue')
+    def review_queue(self, request):
+        """GET /api/ocr/review-queue/"""
+        queryset = self.get_queryset().filter(processing_status=OCRDocument.ProcessingStatus.REVIEW_REQUIRED)
+        page = self.paginate_queryset(queryset)
+        
+        def format_doc(doc):
+            return {
+                "id": str(doc.id),
+                "document_type": doc.document_type,
+                "confidence_score": doc.confidence_score,
+                "processing_status": doc.processing_status,
+                "created_at": doc.created_at.isoformat() if doc.created_at else None
+            }
+
+        if page is not None:
+            data = [format_doc(doc) for doc in page]
+            return self.get_paginated_response(data)
+            
+        data = [format_doc(doc) for doc in queryset]
+        return Response(data, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=['post'], url_path='approve')
+    def approve(self, request, pk=None):
+        """POST /api/ocr/documents/{id}/approve/"""
+        ocr_doc = self.get_object()
+        
+        if ocr_doc.processing_status not in [OCRDocument.ProcessingStatus.REVIEW_REQUIRED, OCRDocument.ProcessingStatus.FAILED]:
+            return Response(
+                {"error": f"Cannot approve document in status: {ocr_doc.processing_status}"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+            
+        custom_payload = request.data.get('extracted_json')
+        if not custom_payload and 'extracted_data' in request.data:
+            custom_payload = request.data
+            
+        if custom_payload:
+            ocr_doc.extracted_json = custom_payload
+            ocr_doc.save()
+
+        # Update status to APPROVED
+        ocr_doc.processing_status = OCRDocument.ProcessingStatus.APPROVED
+        ocr_doc.save()
+
+        # Orchestrate downstream ingestion
+        from apps.inbound.application.services.inbound_orchestrator_service import InboundOrchestratorService
+        orchestrator = InboundOrchestratorService()
+        
+        try:
+            shipment = orchestrator.orchestrate_inbound(ocr_doc)
+            return Response({
+                "success": True,
+                "message": "OCR Document approved and downstream ingestion completed successfully.",
+                "document_id": str(ocr_doc.id),
+                "processing_status": ocr_doc.processing_status,
+                "shipment_code": shipment.shipment_code
+            }, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response(
+                {"error": f"Orchestrator failed: {str(e)}"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+    @action(detail=True, methods=['post'], url_path='reject')
+    def reject(self, request, pk=None):
+        """POST /api/ocr/documents/{id}/reject/"""
+        ocr_doc = self.get_object()
+        
+        if ocr_doc.processing_status not in [OCRDocument.ProcessingStatus.REVIEW_REQUIRED, OCRDocument.ProcessingStatus.FAILED]:
+            return Response(
+                {"error": f"Cannot reject document in status: {ocr_doc.processing_status}"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+            
+        reason = request.data.get('reason')
+        if not reason:
+            return Response({"error": "reason is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        ocr_doc.processing_status = OCRDocument.ProcessingStatus.REJECTED
+        ocr_doc.rejection_reason = reason
+        ocr_doc.save()
+        
+        return Response({
+            "success": True,
+            "message": "OCR Document rejected successfully.",
+            "document_id": str(ocr_doc.id),
+            "processing_status": ocr_doc.processing_status
+        }, status=status.HTTP_200_OK)
+

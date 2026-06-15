@@ -1,14 +1,16 @@
 import uuid
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, UserManager
 
 class User(AbstractUser):
+    objects = UserManager()
+
     ROLE_CHOICES = (
         ('ADMIN', 'Warehouse Admin'),
         ('MANAGER', 'Warehouse Manager'),
         ('STAFF', 'Warehouse Staff'),
     )
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, db_column='user_id')
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, db_column='user_id')  # type: ignore
     full_name = models.CharField(max_length=100, db_column='full_name', blank=True, null=True)
     role = models.CharField(max_length=50, choices=ROLE_CHOICES, default='STAFF', db_column='role')
     warehouse = models.ForeignKey(
@@ -20,7 +22,7 @@ class User(AbstractUser):
         db_column='warehouse_id'
     )
 
-    class Meta:
+    class Meta(AbstractUser.Meta):
         db_table = 'users'
 
     def __str__(self):

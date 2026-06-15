@@ -1,5 +1,6 @@
 import logging
 import os
+from typing import Optional
 from django.conf import settings
 
 logger = logging.getLogger(__name__)
@@ -32,7 +33,7 @@ class MLRecommendationService:
         self.model = "STUB_LOADED_MODEL"
         logger.info("MLRecommendationService: Model successfully loaded.")
 
-    def predict(self, product, zone_group, zone) -> dict:
+    def predict(self, product, zone_group, zone) -> Optional[dict]:
         """Performs mock inference on a product, returning score and description.
         """
         if not self.use_ml:
