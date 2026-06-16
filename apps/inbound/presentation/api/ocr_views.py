@@ -138,13 +138,10 @@ class OCRDocumentViewSet(viewsets.ReadOnlyModelViewSet):
         page = self.paginate_queryset(queryset)
         
         def format_doc(doc):
-            return {
-                "id": str(doc.id),
-                "document_type": doc.document_type,
-                "confidence_score": doc.confidence_score,
-                "processing_status": doc.processing_status,
-                "created_at": doc.created_at.isoformat() if doc.created_at else None
-            }
+            serializer = OCRDocumentSerializer(doc)
+            data = serializer.data
+            data['id'] = str(doc.id)
+            return data
 
         if page is not None:
             data = [format_doc(doc) for doc in page]
