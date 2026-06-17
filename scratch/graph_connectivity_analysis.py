@@ -8,7 +8,7 @@ import django
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 django.setup()
 
-from apps.warehouses.models import NavigationNode, NavigationEdge
+from apps.warehouse.infrastructure.persistence.models import NavigationNode, NavigationEdge
 
 # Load nodes
 nodes = list(NavigationNode.objects.all())

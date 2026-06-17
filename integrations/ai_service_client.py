@@ -68,3 +68,32 @@ class AIServiceClient:
                 "entities": []
             }
 
+    def generate_navigation_guidance(self, route_data: dict) -> dict:
+        url = f"{self.base_url}/api/v1/guidance/navigation"
+        try:
+            response = requests.post(url, json=route_data, headers=self.headers, timeout=10)
+            response.raise_for_status()
+            return response.json()
+        except requests.exceptions.RequestException as e:
+            logger.error(f"AI Service navigation instructions fallback request failed: {e}")
+            return {
+                "success": False,
+                "error": str(e),
+                "instructions": "Fallback: Proceed along the calculated route."
+            }
+
+    def generate_placement_guidance(self, placement_context: dict) -> dict:
+        url = f"{self.base_url}/api/v1/guidance/placement"
+        try:
+            response = requests.post(url, json=placement_context, headers=self.headers, timeout=10)
+            response.raise_for_status()
+            return response.json()
+        except requests.exceptions.RequestException as e:
+            logger.error(f"AI Service placement instructions fallback request failed: {e}")
+            return {
+                "success": False,
+                "error": str(e),
+                "instructions": "Fallback: Place product flat in the allocated bin."
+            }
+
+

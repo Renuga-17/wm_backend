@@ -1,6 +1,6 @@
 import sys
-from apps.routes.services.pathfinding import PathfindingService
-from apps.warehouses.models import NavigationNode, NavigationEdge
+from apps.warehouse.services.pathfinding import PathfindingService
+from apps.warehouse.infrastructure.persistence.models import NavigationNode, NavigationEdge
 
 # Load all nodes
 nodes = list(NavigationNode.objects.all())

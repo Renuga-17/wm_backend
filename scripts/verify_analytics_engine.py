@@ -8,8 +8,8 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 django.setup()
 
-from apps.warehouses.models import Warehouse
-from apps.dashboards.analytics_service import WarehouseAnalyticsService
+from apps.warehouse.infrastructure.persistence.models import Warehouse
+from apps.inventory.analytics_service import WarehouseAnalyticsService
 
 def verify_analytics():
     print("======================================================================")

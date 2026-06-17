@@ -2,11 +2,11 @@ import pytest
 from rest_framework import status
 from django.urls import reverse
 from unittest.mock import patch
-from apps.products.models import Product, ProductCategory
-from apps.bins.models import Bin, Shelf
-from apps.zones.models import Zone
-from apps.warehouses.models import Warehouse, WarehouseLayout, Rack
-from apps.users.models import User
+from apps.inventory.infrastructure.persistence.models import Product, ProductCategory
+from apps.warehouse.infrastructure.persistence.models import Bin, Shelf
+from apps.warehouse.infrastructure.persistence.models import Zone
+from apps.warehouse.infrastructure.persistence.models import Warehouse, WarehouseLayout, Rack
+from apps.identity.infrastructure.persistence.models import User
 
 @pytest.mark.django_db
 class TestWMSAPI:
