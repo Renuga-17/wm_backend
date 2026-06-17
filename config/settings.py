@@ -159,7 +159,7 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=20),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=45),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': False,
@@ -177,15 +177,15 @@ CLICKHOUSE_SETTINGS = {
     "HOST": "jj8tk9yx2g.ap-south-1.aws.clickhouse.cloud",
     "PORT": 8443,
     "USERNAME": "default",
-    "PASSWORD": "YOUR_ACTUAL_PASSWORD",
-    "DATABASE": "wm_clickhouse",
+    "PASSWORD": "NZrz5zKnQo_sb",
+    "DATABASE": "default",
     "SECURE": True,
 }
 
 # Qdrant Settings
 QDRANT_SETTINGS = {
-    'URL': os.getenv('QDRANT_URL', 'http://localhost:6333'),
-    'API_KEY': os.getenv('QDRANT_API_KEY', ''),
+    'URL': os.getenv('QDRANT_URL', 'https://8154ed87-b188-4ddc-996e-d80d11e64562.eu-west-2-0.aws.cloud.qdrant.io/'),
+    'API_KEY': os.getenv('QDRANT_API_KEY', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiJtIiwic3ViamVjdCI6ImFwaS1rZXk6ZTAxYTczZjMtNjE4Ny00NDNmLTljMjMtZjJiNDBjOGFkNTBhIn0.9EnkXICnLSqMY5T-vQlyVoZ5Xh4HU3vyav0m3uxadNc'),
 }
 
 # FastAPI AI Service settings
@@ -219,7 +219,7 @@ CELERY_TASK_SERIALIZER = 'json'
 
 # JWT Settings
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),  
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=45),  
     'REFRESH_TOKEN_LIFETIME': timedelta(minutes=10),  
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': False,
@@ -244,4 +244,4 @@ ML_MODEL_PATH = os.getenv('ML_MODEL_PATH', '')
 # CORS configuration to allow local frontend access
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
-
+
