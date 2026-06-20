@@ -1,4 +1,5 @@
 import logging
+from decimal import Decimal
 from django.db import transaction
 from django.utils import timezone
 from rest_framework.views import APIView
@@ -11,6 +12,7 @@ from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 
 logger = logging.getLogger(__name__)
+
 
 
 class BinAllocationCompleteView(APIView):
@@ -50,9 +52,13 @@ class BinAllocationCompleteView(APIView):
                 allocation.operator = operator_val
                 allocation.save()
 
-                # 2. Update Bin
-                bin_obj.is_occupied = True
-                bin_obj.save()
+                # 2. Update Bin and Sync Digital Twin metrics
+                from apps.warehouse.application.services.digital_twin_sync_service import DigitalTwinSyncService
+                DigitalTwinSyncService.sync_occupancy(
+                    bin_id=bin_obj.id,
+                    is_occupied=True,
+                    capacity_delta=Decimal('1.00')
+                )
 
                 # 3. Update Inventory
                 inventory_record, _ = Inventory.objects.get_or_create(
@@ -81,25 +87,7 @@ class BinAllocationCompleteView(APIView):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
-        # 5. Broadcast Occupancy to Digital Twin WebSocket Consumer
-        try:
-            channel_layer = get_channel_layer()
-            if channel_layer:
-                async_to_sync(channel_layer.group_send)(
-                    'occupancy_updates',
-                    {
-                        'type': 'occupancy_message',
-                        'message': {
-                            'bin_code': bin_obj.bin_code,
-                            'is_occupied': bin_obj.is_occupied,
-                            'current_capacity': float(bin_obj.current_capacity)
-                        }
-                    }
-                )
-                logger.info("BinAllocationCompleteView: Websocket broadcast succeeded.")
-        except Exception as ws_err:
-            logger.warning("BinAllocationCompleteView: Websocket broadcast failed: %s", ws_err)
-
         # Return serialized allocation output
         serializer = BinAllocationOutputSerializer(allocation)
         return Response(serializer.data, status=status.HTTP_200_OK)
+

@@ -1,0 +1,437 @@
+admin/ |  | None | index | index
+admin/login/ |  | None | login | login
+admin/logout/ |  | None | logout | logout
+admin/password_change/ |  | None | password_change | password_change
+admin/password_change/done/ |  | None | password_change_done | password_change_done
+admin/autocomplete/ |  | None | autocomplete_view | autocomplete
+admin/jsi18n/ |  | None | i18n_javascript | jsi18n
+admin/r/<int:content_type_id>/<path:object_id>/ |  | None | shortcut | view_on_site
+admin/auth/group/ |  | None | changelist_view | auth_group_changelist
+admin/auth/group/add/ |  | None | add_view | auth_group_add
+admin/auth/group/<path:object_id>/history/ |  | None | history_view | auth_group_history
+admin/auth/group/<path:object_id>/delete/ |  | None | delete_view | auth_group_delete
+admin/auth/group/<path:object_id>/change/ |  | None | change_view | auth_group_change
+admin/auth/group/<path:object_id>/ |  | None | view | None
+admin/identity/user/<id>/password/ |  | None | user_change_password | auth_user_password_change
+admin/identity/user/ |  | None | changelist_view | identity_user_changelist
+admin/identity/user/add/ |  | None | add_view | identity_user_add
+admin/identity/user/<path:object_id>/history/ |  | None | history_view | identity_user_history
+admin/identity/user/<path:object_id>/delete/ |  | None | delete_view | identity_user_delete
+admin/identity/user/<path:object_id>/change/ |  | None | change_view | identity_user_change
+admin/identity/user/<path:object_id>/ |  | None | view | None
+admin/identity/scanlog/ |  | None | changelist_view | identity_scanlog_changelist
+admin/identity/scanlog/add/ |  | None | add_view | identity_scanlog_add
+admin/identity/scanlog/<path:object_id>/history/ |  | None | history_view | identity_scanlog_history
+admin/identity/scanlog/<path:object_id>/delete/ |  | None | delete_view | identity_scanlog_delete
+admin/identity/scanlog/<path:object_id>/change/ |  | None | change_view | identity_scanlog_change
+admin/identity/scanlog/<path:object_id>/ |  | None | view | None
+admin/identity/auditlog/ |  | None | changelist_view | identity_auditlog_changelist
+admin/identity/auditlog/add/ |  | None | add_view | identity_auditlog_add
+admin/identity/auditlog/<path:object_id>/history/ |  | None | history_view | identity_auditlog_history
+admin/identity/auditlog/<path:object_id>/delete/ |  | None | delete_view | identity_auditlog_delete
+admin/identity/auditlog/<path:object_id>/change/ |  | None | change_view | identity_auditlog_change
+admin/identity/auditlog/<path:object_id>/ |  | None | view | None
+admin/warehouse/warehouse/ |  | None | changelist_view | warehouse_warehouse_changelist
+admin/warehouse/warehouse/add/ |  | None | add_view | warehouse_warehouse_add
+admin/warehouse/warehouse/<path:object_id>/history/ |  | None | history_view | warehouse_warehouse_history
+admin/warehouse/warehouse/<path:object_id>/delete/ |  | None | delete_view | warehouse_warehouse_delete
+admin/warehouse/warehouse/<path:object_id>/change/ |  | None | change_view | warehouse_warehouse_change
+admin/warehouse/warehouse/<path:object_id>/ |  | None | view | None
+admin/warehouse/rack/ |  | None | changelist_view | warehouse_rack_changelist
+admin/warehouse/rack/add/ |  | None | add_view | warehouse_rack_add
+admin/warehouse/rack/<path:object_id>/history/ |  | None | history_view | warehouse_rack_history
+admin/warehouse/rack/<path:object_id>/delete/ |  | None | delete_view | warehouse_rack_delete
+admin/warehouse/rack/<path:object_id>/change/ |  | None | change_view | warehouse_rack_change
+admin/warehouse/rack/<path:object_id>/ |  | None | view | None
+admin/warehouse/zonegroup/ |  | None | changelist_view | warehouse_zonegroup_changelist
+admin/warehouse/zonegroup/add/ |  | None | add_view | warehouse_zonegroup_add
+admin/warehouse/zonegroup/<path:object_id>/history/ |  | None | history_view | warehouse_zonegroup_history
+admin/warehouse/zonegroup/<path:object_id>/delete/ |  | None | delete_view | warehouse_zonegroup_delete
+admin/warehouse/zonegroup/<path:object_id>/change/ |  | None | change_view | warehouse_zonegroup_change
+admin/warehouse/zonegroup/<path:object_id>/ |  | None | view | None
+admin/warehouse/zone/ |  | None | changelist_view | warehouse_zone_changelist
+admin/warehouse/zone/add/ |  | None | add_view | warehouse_zone_add
+admin/warehouse/zone/<path:object_id>/history/ |  | None | history_view | warehouse_zone_history
+admin/warehouse/zone/<path:object_id>/delete/ |  | None | delete_view | warehouse_zone_delete
+admin/warehouse/zone/<path:object_id>/change/ |  | None | change_view | warehouse_zone_change
+admin/warehouse/zone/<path:object_id>/ |  | None | view | None
+admin/warehouse/aisle/ |  | None | changelist_view | warehouse_aisle_changelist
+admin/warehouse/aisle/add/ |  | None | add_view | warehouse_aisle_add
+admin/warehouse/aisle/<path:object_id>/history/ |  | None | history_view | warehouse_aisle_history
+admin/warehouse/aisle/<path:object_id>/delete/ |  | None | delete_view | warehouse_aisle_delete
+admin/warehouse/aisle/<path:object_id>/change/ |  | None | change_view | warehouse_aisle_change
+admin/warehouse/aisle/<path:object_id>/ |  | None | view | None
+admin/warehouse/bin/ |  | None | changelist_view | warehouse_bin_changelist
+admin/warehouse/bin/add/ |  | None | add_view | warehouse_bin_add
+admin/warehouse/bin/<path:object_id>/history/ |  | None | history_view | warehouse_bin_history
+admin/warehouse/bin/<path:object_id>/delete/ |  | None | delete_view | warehouse_bin_delete
+admin/warehouse/bin/<path:object_id>/change/ |  | None | change_view | warehouse_bin_change
+admin/warehouse/bin/<path:object_id>/ |  | None | view | None
+admin/inventory/inventory/ |  | None | changelist_view | inventory_inventory_changelist
+admin/inventory/inventory/add/ |  | None | add_view | inventory_inventory_add
+admin/inventory/inventory/<path:object_id>/history/ |  | None | history_view | inventory_inventory_history
+admin/inventory/inventory/<path:object_id>/delete/ |  | None | delete_view | inventory_inventory_delete
+admin/inventory/inventory/<path:object_id>/change/ |  | None | change_view | inventory_inventory_change
+admin/inventory/inventory/<path:object_id>/ |  | None | view | None
+admin/inventory/product/ |  | None | changelist_view | inventory_product_changelist
+admin/inventory/product/add/ |  | None | add_view | inventory_product_add
+admin/inventory/product/<path:object_id>/history/ |  | None | history_view | inventory_product_history
+admin/inventory/product/<path:object_id>/delete/ |  | None | delete_view | inventory_product_delete
+admin/inventory/product/<path:object_id>/change/ |  | None | change_view | inventory_product_change
+admin/inventory/product/<path:object_id>/ |  | None | view | None
+admin/inventory/productdimension/ |  | None | changelist_view | inventory_productdimension_changelist
+admin/inventory/productdimension/add/ |  | None | add_view | inventory_productdimension_add
+admin/inventory/productdimension/<path:object_id>/history/ |  | None | history_view | inventory_productdimension_history
+admin/inventory/productdimension/<path:object_id>/delete/ |  | None | delete_view | inventory_productdimension_delete
+admin/inventory/productdimension/<path:object_id>/change/ |  | None | change_view | inventory_productdimension_change
+admin/inventory/productdimension/<path:object_id>/ |  | None | view | None
+admin/inventory/productstoragerule/ |  | None | changelist_view | inventory_productstoragerule_changelist
+admin/inventory/productstoragerule/add/ |  | None | add_view | inventory_productstoragerule_add
+admin/inventory/productstoragerule/<path:object_id>/history/ |  | None | history_view | inventory_productstoragerule_history
+admin/inventory/productstoragerule/<path:object_id>/delete/ |  | None | delete_view | inventory_productstoragerule_delete
+admin/inventory/productstoragerule/<path:object_id>/change/ |  | None | change_view | inventory_productstoragerule_change
+admin/inventory/productstoragerule/<path:object_id>/ |  | None | view | None
+admin/inventory/stockmovement/ |  | None | changelist_view | inventory_stockmovement_changelist
+admin/inventory/stockmovement/add/ |  | None | add_view | inventory_stockmovement_add
+admin/inventory/stockmovement/<path:object_id>/history/ |  | None | history_view | inventory_stockmovement_history
+admin/inventory/stockmovement/<path:object_id>/delete/ |  | None | delete_view | inventory_stockmovement_delete
+admin/inventory/stockmovement/<path:object_id>/change/ |  | None | change_view | inventory_stockmovement_change
+admin/inventory/stockmovement/<path:object_id>/ |  | None | view | None
+admin/inventory/storageallocation/ |  | None | changelist_view | inventory_storageallocation_changelist
+admin/inventory/storageallocation/add/ |  | None | add_view | inventory_storageallocation_add
+admin/inventory/storageallocation/<path:object_id>/history/ |  | None | history_view | inventory_storageallocation_history
+admin/inventory/storageallocation/<path:object_id>/delete/ |  | None | delete_view | inventory_storageallocation_delete
+admin/inventory/storageallocation/<path:object_id>/change/ |  | None | change_view | inventory_storageallocation_change
+admin/inventory/storageallocation/<path:object_id>/ |  | None | view | None
+admin/inventory/allocationrecommendation/ |  | None | changelist_view | inventory_allocationrecommendation_changelist
+admin/inventory/allocationrecommendation/add/ |  | None | add_view | inventory_allocationrecommendation_add
+admin/inventory/allocationrecommendation/<path:object_id>/history/ |  | None | history_view | inventory_allocationrecommendation_history
+admin/inventory/allocationrecommendation/<path:object_id>/delete/ |  | None | delete_view | inventory_allocationrecommendation_delete
+admin/inventory/allocationrecommendation/<path:object_id>/change/ |  | None | change_view | inventory_allocationrecommendation_change
+admin/inventory/allocationrecommendation/<path:object_id>/ |  | None | view | None
+admin/inventory/robottask/ |  | None | changelist_view | inventory_robottask_changelist
+admin/inventory/robottask/add/ |  | None | add_view | inventory_robottask_add
+admin/inventory/robottask/<path:object_id>/history/ |  | None | history_view | inventory_robottask_history
+admin/inventory/robottask/<path:object_id>/delete/ |  | None | delete_view | inventory_robottask_delete
+admin/inventory/robottask/<path:object_id>/change/ |  | None | change_view | inventory_robottask_change
+admin/inventory/robottask/<path:object_id>/ |  | None | view | None
+admin/inventory/routeoptimization/ |  | None | changelist_view | inventory_routeoptimization_changelist
+admin/inventory/routeoptimization/add/ |  | None | add_view | inventory_routeoptimization_add
+admin/inventory/routeoptimization/<path:object_id>/history/ |  | None | history_view | inventory_routeoptimization_history
+admin/inventory/routeoptimization/<path:object_id>/delete/ |  | None | delete_view | inventory_routeoptimization_delete
+admin/inventory/routeoptimization/<path:object_id>/change/ |  | None | change_view | inventory_routeoptimization_change
+admin/inventory/routeoptimization/<path:object_id>/ |  | None | view | None
+admin/orders/outboundshipment/ |  | None | changelist_view | orders_outboundshipment_changelist
+admin/orders/outboundshipment/add/ |  | None | add_view | orders_outboundshipment_add
+admin/orders/outboundshipment/<path:object_id>/history/ |  | None | history_view | orders_outboundshipment_history
+admin/orders/outboundshipment/<path:object_id>/delete/ |  | None | delete_view | orders_outboundshipment_delete
+admin/orders/outboundshipment/<path:object_id>/change/ |  | None | change_view | orders_outboundshipment_change
+admin/orders/outboundshipment/<path:object_id>/ |  | None | view | None
+admin/inbound/inboundshipment/ |  | None | changelist_view | inbound_inboundshipment_changelist
+admin/inbound/inboundshipment/add/ |  | None | add_view | inbound_inboundshipment_add
+admin/inbound/inboundshipment/<path:object_id>/history/ |  | None | history_view | inbound_inboundshipment_history
+admin/inbound/inboundshipment/<path:object_id>/delete/ |  | None | delete_view | inbound_inboundshipment_delete
+admin/inbound/inboundshipment/<path:object_id>/change/ |  | None | change_view | inbound_inboundshipment_change
+admin/inbound/inboundshipment/<path:object_id>/ |  | None | view | None
+admin/inbound/ocrdocument/ |  | None | changelist_view | inbound_ocrdocument_changelist
+admin/inbound/ocrdocument/add/ |  | None | add_view | inbound_ocrdocument_add
+admin/inbound/ocrdocument/<path:object_id>/history/ |  | None | history_view | inbound_ocrdocument_history
+admin/inbound/ocrdocument/<path:object_id>/delete/ |  | None | delete_view | inbound_ocrdocument_delete
+admin/inbound/ocrdocument/<path:object_id>/change/ |  | None | change_view | inbound_ocrdocument_change
+admin/inbound/ocrdocument/<path:object_id>/ |  | None | view | None
+admin/recommendations/recommendationrule/ |  | None | changelist_view | recommendations_recommendationrule_changelist
+admin/recommendations/recommendationrule/add/ |  | None | add_view | recommendations_recommendationrule_add
+admin/recommendations/recommendationrule/<path:object_id>/history/ |  | None | history_view | recommendations_recommendationrule_history
+admin/recommendations/recommendationrule/<path:object_id>/delete/ |  | None | delete_view | recommendations_recommendationrule_delete
+admin/recommendations/recommendationrule/<path:object_id>/change/ |  | None | change_view | recommendations_recommendationrule_change
+admin/recommendations/recommendationrule/<path:object_id>/ |  | None | view | None
+admin/recommendations/productclassification/ |  | None | changelist_view | recommendations_productclassification_changelist
+admin/recommendations/productclassification/add/ |  | None | add_view | recommendations_productclassification_add
+admin/recommendations/productclassification/<path:object_id>/history/ |  | None | history_view | recommendations_productclassification_history
+admin/recommendations/productclassification/<path:object_id>/delete/ |  | None | delete_view | recommendations_productclassification_delete
+admin/recommendations/productclassification/<path:object_id>/change/ |  | None | change_view | recommendations_productclassification_change
+admin/recommendations/productclassification/<path:object_id>/ |  | None | view | None
+admin/recommendations/storagerecommendation/ |  | None | changelist_view | recommendations_storagerecommendation_changelist
+admin/recommendations/storagerecommendation/add/ |  | None | add_view | recommendations_storagerecommendation_add
+admin/recommendations/storagerecommendation/<path:object_id>/history/ |  | None | history_view | recommendations_storagerecommendation_history
+admin/recommendations/storagerecommendation/<path:object_id>/delete/ |  | None | delete_view | recommendations_storagerecommendation_delete
+admin/recommendations/storagerecommendation/<path:object_id>/change/ |  | None | change_view | recommendations_storagerecommendation_change
+admin/recommendations/storagerecommendation/<path:object_id>/ |  | None | view | None
+admin/recommendations/binallocation/ |  | None | changelist_view | recommendations_binallocation_changelist
+admin/recommendations/binallocation/add/ |  | None | add_view | recommendations_binallocation_add
+admin/recommendations/binallocation/<path:object_id>/history/ |  | None | history_view | recommendations_binallocation_history
+admin/recommendations/binallocation/<path:object_id>/delete/ |  | None | delete_view | recommendations_binallocation_delete
+admin/recommendations/binallocation/<path:object_id>/change/ |  | None | change_view | recommendations_binallocation_change
+admin/recommendations/binallocation/<path:object_id>/ |  | None | view | None
+admin/recommendations/bin3dplacement/ |  | None | changelist_view | recommendations_bin3dplacement_changelist
+admin/recommendations/bin3dplacement/add/ |  | None | add_view | recommendations_bin3dplacement_add
+admin/recommendations/bin3dplacement/<path:object_id>/history/ |  | None | history_view | recommendations_bin3dplacement_history
+admin/recommendations/bin3dplacement/<path:object_id>/delete/ |  | None | delete_view | recommendations_bin3dplacement_delete
+admin/recommendations/bin3dplacement/<path:object_id>/change/ |  | None | change_view | recommendations_bin3dplacement_change
+admin/recommendations/bin3dplacement/<path:object_id>/ |  | None | view | None
+admin/^(?P<app_label>auth|identity|warehouse|inventory|orders|inbound|recommendations)/$ |  | None | app_index | app_list
+admin/(?P<url>.*)$ |  | None | catch_all_view | None
+api/users/login/ | POST | None | TokenObtainPairView | token_obtain_pair
+api/users/token/refresh/ | POST | None | TokenRefreshView | token_refresh
+api/users/^$ |  | UserSerializer | UserViewSet | users-list
+api/users/^\.(?P<format>[a-z0-9]+)/?$ |  | UserSerializer | UserViewSet | users-list
+api/users/^(?P<pk>[^/.]+)/$ |  | UserSerializer | UserViewSet | users-detail
+api/users/^(?P<pk>[^/.]+)\.(?P<format>[a-z0-9]+)/?$ |  | UserSerializer | UserViewSet | users-detail
+api/users/ | GET | None | APIRootView | api-root
+api/users/<drf_format_suffix:format> | GET | None | APIRootView | api-root
+api/audit-logs/^scan-logs/$ |  | ScanLogSerializer | ScanLogViewSet | scan-logs-list
+api/audit-logs/^scan-logs\.(?P<format>[a-z0-9]+)/?$ |  | ScanLogSerializer | ScanLogViewSet | scan-logs-list
+api/audit-logs/^scan-logs/(?P<pk>[^/.]+)/$ |  | ScanLogSerializer | ScanLogViewSet | scan-logs-detail
+api/audit-logs/^scan-logs/(?P<pk>[^/.]+)\.(?P<format>[a-z0-9]+)/?$ |  | ScanLogSerializer | ScanLogViewSet | scan-logs-detail
+api/audit-logs/^$ |  | AuditLogSerializer | AuditLogViewSet | audit_logs-list
+api/audit-logs/^\.(?P<format>[a-z0-9]+)/?$ |  | AuditLogSerializer | AuditLogViewSet | audit_logs-list
+api/audit-logs/^(?P<pk>[^/.]+)/$ |  | AuditLogSerializer | AuditLogViewSet | audit_logs-detail
+api/audit-logs/^(?P<pk>[^/.]+)\.(?P<format>[a-z0-9]+)/?$ |  | AuditLogSerializer | AuditLogViewSet | audit_logs-detail
+api/audit-logs/ | GET | None | APIRootView | api-root
+api/audit-logs/<drf_format_suffix:format> | GET | None | APIRootView | api-root
+api/layout/upload | POST | None | LayoutUploadView | layout-upload
+api/layout/analyze | POST | None | LayoutAnalyzeView | layout-analyze
+api/layout/entities | GET | None | LayoutEntitiesView | layout-entities
+api/layout/generate-topology | POST | None | GenerateTopologyView | layout-generate-topology
+api/layout/graph | GET | None | LayoutGraphView | layout-graph
+api/layout/<uuid:layout_id> | GET | None | LayoutDetailView | layout-detail
+api/twin/layout/<uuid:layout_id> | GET | None | WarehouseTwinDetailView | twin-layout-detail
+api/twin/racks | GET | None | TwinRacksView | twin-racks
+api/twin/zones | GET | None | TwinZonesView | twin-zones
+api/twin/occupancy | GET | None | TwinOccupancyView | twin-occupancy
+api/twin/paths | GET | None | TwinPathsView | twin-paths
+api/twin/summary | GET | None | TwinSummaryView | twin-summary
+api/warehouses/^racks/$ |  | RackSerializer | RackViewSet | racks-list
+api/warehouses/^racks\.(?P<format>[a-z0-9]+)/?$ |  | RackSerializer | RackViewSet | racks-list
+api/warehouses/^racks/(?P<pk>[^/.]+)/$ |  | RackSerializer | RackViewSet | racks-detail
+api/warehouses/^racks/(?P<pk>[^/.]+)\.(?P<format>[a-z0-9]+)/?$ |  | RackSerializer | RackViewSet | racks-detail
+api/warehouses/^spatial-entities/$ |  | SpatialEntitySerializer | SpatialEntityViewSet | spatial-entities-list
+api/warehouses/^spatial-entities\.(?P<format>[a-z0-9]+)/?$ |  | SpatialEntitySerializer | SpatialEntityViewSet | spatial-entities-list
+api/warehouses/^spatial-entities/(?P<pk>[^/.]+)/$ |  | SpatialEntitySerializer | SpatialEntityViewSet | spatial-entities-detail
+api/warehouses/^spatial-entities/(?P<pk>[^/.]+)\.(?P<format>[a-z0-9]+)/?$ |  | SpatialEntitySerializer | SpatialEntityViewSet | spatial-entities-detail
+api/warehouses/^navigation-nodes/$ |  | NavigationNodeSerializer | NavigationNodeViewSet | navigation-nodes-list
+api/warehouses/^navigation-nodes\.(?P<format>[a-z0-9]+)/?$ |  | NavigationNodeSerializer | NavigationNodeViewSet | navigation-nodes-list
+api/warehouses/^navigation-nodes/(?P<pk>[^/.]+)/$ |  | NavigationNodeSerializer | NavigationNodeViewSet | navigation-nodes-detail
+api/warehouses/^navigation-nodes/(?P<pk>[^/.]+)\.(?P<format>[a-z0-9]+)/?$ |  | NavigationNodeSerializer | NavigationNodeViewSet | navigation-nodes-detail
+api/warehouses/^paths/$ |  | WarehousePathSerializer | WarehousePathViewSet | paths-list
+api/warehouses/^paths\.(?P<format>[a-z0-9]+)/?$ |  | WarehousePathSerializer | WarehousePathViewSet | paths-list
+api/warehouses/^paths/(?P<pk>[^/.]+)/$ |  | WarehousePathSerializer | WarehousePathViewSet | paths-detail
+api/warehouses/^paths/(?P<pk>[^/.]+)\.(?P<format>[a-z0-9]+)/?$ |  | WarehousePathSerializer | WarehousePathViewSet | paths-detail
+api/warehouses/^rack-coordinates/$ |  | RackCoordinateSerializer | RackCoordinateViewSet | rack-coordinates-list
+api/warehouses/^rack-coordinates\.(?P<format>[a-z0-9]+)/?$ |  | RackCoordinateSerializer | RackCoordinateViewSet | rack-coordinates-list
+api/warehouses/^rack-coordinates/(?P<pk>[^/.]+)/$ |  | RackCoordinateSerializer | RackCoordinateViewSet | rack-coordinates-detail
+api/warehouses/^rack-coordinates/(?P<pk>[^/.]+)\.(?P<format>[a-z0-9]+)/?$ |  | RackCoordinateSerializer | RackCoordinateViewSet | rack-coordinates-detail
+api/warehouses/^$ |  | WarehouseSerializer | WarehouseViewSet | warehouses-list
+api/warehouses/^\.(?P<format>[a-z0-9]+)/?$ |  | WarehouseSerializer | WarehouseViewSet | warehouses-list
+api/warehouses/^(?P<pk>[^/.]+)/$ |  | WarehouseSerializer | WarehouseViewSet | warehouses-detail
+api/warehouses/^(?P<pk>[^/.]+)\.(?P<format>[a-z0-9]+)/?$ |  | WarehouseSerializer | WarehouseViewSet | warehouses-detail
+api/warehouses/ | GET | None | APIRootView | api-root
+api/warehouses/<drf_format_suffix:format> | GET | None | APIRootView | api-root
+api/zones/^zone-groups/$ |  | ZoneGroupSerializer | ZoneGroupViewSet | zone-groups-list
+api/zones/^zone-groups\.(?P<format>[a-z0-9]+)/?$ |  | ZoneGroupSerializer | ZoneGroupViewSet | zone-groups-list
+api/zones/^zone-groups/(?P<pk>[^/.]+)/$ |  | ZoneGroupSerializer | ZoneGroupViewSet | zone-groups-detail
+api/zones/^zone-groups/(?P<pk>[^/.]+)\.(?P<format>[a-z0-9]+)/?$ |  | ZoneGroupSerializer | ZoneGroupViewSet | zone-groups-detail
+api/zones/^aisles/$ |  | AisleSerializer | AisleViewSet | aisles-list
+api/zones/^aisles\.(?P<format>[a-z0-9]+)/?$ |  | AisleSerializer | AisleViewSet | aisles-list
+api/zones/^aisles/(?P<pk>[^/.]+)/$ |  | AisleSerializer | AisleViewSet | aisles-detail
+api/zones/^aisles/(?P<pk>[^/.]+)\.(?P<format>[a-z0-9]+)/?$ |  | AisleSerializer | AisleViewSet | aisles-detail
+api/zones/^boundaries/$ |  | ZoneBoundarySerializer | ZoneBoundaryViewSet | zone-boundaries-list
+api/zones/^boundaries\.(?P<format>[a-z0-9]+)/?$ |  | ZoneBoundarySerializer | ZoneBoundaryViewSet | zone-boundaries-list
+api/zones/^boundaries/(?P<pk>[^/.]+)/$ |  | ZoneBoundarySerializer | ZoneBoundaryViewSet | zone-boundaries-detail
+api/zones/^boundaries/(?P<pk>[^/.]+)\.(?P<format>[a-z0-9]+)/?$ |  | ZoneBoundarySerializer | ZoneBoundaryViewSet | zone-boundaries-detail
+api/zones/^$ |  | ZoneSerializer | ZoneViewSet | zones-list
+api/zones/^\.(?P<format>[a-z0-9]+)/?$ |  | ZoneSerializer | ZoneViewSet | zones-list
+api/zones/^(?P<pk>[^/.]+)/$ |  | ZoneSerializer | ZoneViewSet | zones-detail
+api/zones/^(?P<pk>[^/.]+)\.(?P<format>[a-z0-9]+)/?$ |  | ZoneSerializer | ZoneViewSet | zones-detail
+api/zones/ | GET | None | APIRootView | api-root
+api/zones/<drf_format_suffix:format> | GET | None | APIRootView | api-root
+api/bins/^$ |  | BinSerializer | BinViewSet | bins-list
+api/bins/^\.(?P<format>[a-z0-9]+)/?$ |  | BinSerializer | BinViewSet | bins-list
+api/bins/^(?P<pk>[^/.]+)/$ |  | BinSerializer | BinViewSet | bins-detail
+api/bins/^(?P<pk>[^/.]+)\.(?P<format>[a-z0-9]+)/?$ |  | BinSerializer | BinViewSet | bins-detail
+api/bins/ | GET | None | APIRootView | api-root
+api/bins/<drf_format_suffix:format> | GET | None | APIRootView | api-root
+api/routes/generate/ | POST | None | GenerateRouteView | generate-route
+api/routes/^block-path/$ |  | OptimizedRouteSerializer | RouteViewSet | routes-block-path
+api/routes/^block-path\.(?P<format>[a-z0-9]+)/?$ |  | OptimizedRouteSerializer | RouteViewSet | routes-block-path
+api/routes/^congestion/$ |  | OptimizedRouteSerializer | RouteViewSet | routes-congestion
+api/routes/^congestion\.(?P<format>[a-z0-9]+)/?$ |  | OptimizedRouteSerializer | RouteViewSet | routes-congestion
+api/routes/^multi-pick/$ |  | OptimizedRouteSerializer | RouteViewSet | routes-multi-pick
+api/routes/^multi-pick\.(?P<format>[a-z0-9]+)/?$ |  | OptimizedRouteSerializer | RouteViewSet | routes-multi-pick
+api/routes/^optimize/$ |  | OptimizedRouteSerializer | RouteViewSet | routes-optimize
+api/routes/^optimize\.(?P<format>[a-z0-9]+)/?$ |  | OptimizedRouteSerializer | RouteViewSet | routes-optimize
+api/routes/^recalculate/$ |  | OptimizedRouteSerializer | RouteViewSet | routes-recalculate
+api/routes/^recalculate\.(?P<format>[a-z0-9]+)/?$ |  | OptimizedRouteSerializer | RouteViewSet | routes-recalculate
+api/routes/^(?P<pk>[^/.]+)/$ |  | OptimizedRouteSerializer | RouteViewSet | routes-detail
+api/routes/^(?P<pk>[^/.]+)\.(?P<format>[a-z0-9]+)/?$ |  | OptimizedRouteSerializer | RouteViewSet | routes-detail
+api/routes/ | GET | None | APIRootView | api-root
+api/routes/<drf_format_suffix:format> | GET | None | APIRootView | api-root
+api/products/^$ |  | ProductSerializer | ProductViewSet | products-list
+api/products/^\.(?P<format>[a-z0-9]+)/?$ |  | ProductSerializer | ProductViewSet | products-list
+api/products/^(?P<pk>[^/.]+)/$ |  | ProductSerializer | ProductViewSet | products-detail
+api/products/^(?P<pk>[^/.]+)\.(?P<format>[a-z0-9]+)/?$ |  | ProductSerializer | ProductViewSet | products-detail
+api/products/ | GET | None | APIRootView | api-root
+api/products/<drf_format_suffix:format> | GET | None | APIRootView | api-root
+api/inventory/^$ |  | InventorySerializer | InventoryViewSet | inventory-list
+api/inventory/^\.(?P<format>[a-z0-9]+)/?$ |  | InventorySerializer | InventoryViewSet | inventory-list
+api/inventory/^adjust/$ |  | InventorySerializer | InventoryViewSet | inventory-adjust
+api/inventory/^adjust\.(?P<format>[a-z0-9]+)/?$ |  | InventorySerializer | InventoryViewSet | inventory-adjust
+api/inventory/^audit/$ |  | InventorySerializer | InventoryViewSet | inventory-audit
+api/inventory/^audit\.(?P<format>[a-z0-9]+)/?$ |  | InventorySerializer | InventoryViewSet | inventory-audit
+api/inventory/^relocate/$ |  | InventorySerializer | InventoryViewSet | inventory-relocate
+api/inventory/^relocate\.(?P<format>[a-z0-9]+)/?$ |  | InventorySerializer | InventoryViewSet | inventory-relocate
+api/inventory/^report-damage/$ |  | InventorySerializer | InventoryViewSet | inventory-report-damage
+api/inventory/^report-damage\.(?P<format>[a-z0-9]+)/?$ |  | InventorySerializer | InventoryViewSet | inventory-report-damage
+api/inventory/^transfer/$ |  | InventorySerializer | InventoryViewSet | inventory-transfer
+api/inventory/^transfer\.(?P<format>[a-z0-9]+)/?$ |  | InventorySerializer | InventoryViewSet | inventory-transfer
+api/inventory/^(?P<pk>[^/.]+)/$ |  | InventorySerializer | InventoryViewSet | inventory-detail
+api/inventory/^(?P<pk>[^/.]+)\.(?P<format>[a-z0-9]+)/?$ |  | InventorySerializer | InventoryViewSet | inventory-detail
+api/inventory/ | GET | None | APIRootView | api-root
+api/inventory/<drf_format_suffix:format> | GET | None | APIRootView | api-root
+api/movements/^allocations/$ |  | StorageAllocationSerializer | StorageAllocationViewSet | storage-allocations-list
+api/movements/^allocations\.(?P<format>[a-z0-9]+)/?$ |  | StorageAllocationSerializer | StorageAllocationViewSet | storage-allocations-list
+api/movements/^allocations/(?P<pk>[^/.]+)/$ |  | StorageAllocationSerializer | StorageAllocationViewSet | storage-allocations-detail
+api/movements/^allocations/(?P<pk>[^/.]+)\.(?P<format>[a-z0-9]+)/?$ |  | StorageAllocationSerializer | StorageAllocationViewSet | storage-allocations-detail
+api/movements/^$ |  | MovementSerializer | MovementViewSet | movements-list
+api/movements/^\.(?P<format>[a-z0-9]+)/?$ |  | MovementSerializer | MovementViewSet | movements-list
+api/movements/^(?P<pk>[^/.]+)/$ |  | MovementSerializer | MovementViewSet | movements-detail
+api/movements/^(?P<pk>[^/.]+)\.(?P<format>[a-z0-9]+)/?$ |  | MovementSerializer | MovementViewSet | movements-detail
+api/movements/ | GET | None | APIRootView | api-root
+api/movements/<drf_format_suffix:format> | GET | None | APIRootView | api-root
+api/recommendations/storage/ | POST | None | StorageRecommendationView | storage-recommendation
+api/recommendations/bin-allocation/<int:pk>/complete/ | PATCH | None | BinAllocationCompleteView | bin-allocation-complete
+api/recommendations/bin-allocation/ | POST | None | BinAllocationView | bin-allocation
+api/recommendations/3d-placement/ | POST | None | ThreeDPlacementView | three-d-placement
+api/recommendations/^$ |  | RecommendationSerializer | RecommendationViewSet | recommendations-list
+api/recommendations/^\.(?P<format>[a-z0-9]+)/?$ |  | RecommendationSerializer | RecommendationViewSet | recommendations-list
+api/recommendations/^allocate/$ |  | RecommendationSerializer | RecommendationViewSet | recommendations-allocate
+api/recommendations/^allocate\.(?P<format>[a-z0-9]+)/?$ |  | RecommendationSerializer | RecommendationViewSet | recommendations-allocate
+api/recommendations/^suggest-bin/$ |  | RecommendationSerializer | RecommendationViewSet | recommendations-suggest-bin
+api/recommendations/^suggest-bin\.(?P<format>[a-z0-9]+)/?$ |  | RecommendationSerializer | RecommendationViewSet | recommendations-suggest-bin
+api/recommendations/^(?P<pk>[^/.]+)/$ |  | RecommendationSerializer | RecommendationViewSet | recommendations-detail
+api/recommendations/^(?P<pk>[^/.]+)\.(?P<format>[a-z0-9]+)/?$ |  | RecommendationSerializer | RecommendationViewSet | recommendations-detail
+api/recommendations/ | GET | None | APIRootView | api-root
+api/recommendations/<drf_format_suffix:format> | GET | None | APIRootView | api-root
+api/ai/query/ | POST | None | RAGQueryView | rag-query
+api/ai/rag-health/ | GET | None | RAGHealthView | rag-health
+api/ai/^alerts/$ |  | None | AIRecommendationViewSet | ai-recommendations-alerts
+api/ai/^alerts\.(?P<format>[a-z0-9]+)/?$ |  | None | AIRecommendationViewSet | ai-recommendations-alerts
+api/ai/^congestion-risk/$ |  | None | AIRecommendationViewSet | ai-recommendations-congestion-risk
+api/ai/^congestion-risk\.(?P<format>[a-z0-9]+)/?$ |  | None | AIRecommendationViewSet | ai-recommendations-congestion-risk
+api/ai/^feedback/$ |  | None | AIRecommendationViewSet | ai-recommendations-feedback
+api/ai/^feedback\.(?P<format>[a-z0-9]+)/?$ |  | None | AIRecommendationViewSet | ai-recommendations-feedback
+api/ai/^hotspot-prevention/$ |  | None | AIRecommendationViewSet | ai-recommendations-hotspot-prevention
+api/ai/^hotspot-prevention\.(?P<format>[a-z0-9]+)/?$ |  | None | AIRecommendationViewSet | ai-recommendations-hotspot-prevention
+api/ai/^operational-scores/$ |  | None | AIRecommendationViewSet | ai-recommendations-operational-scores
+api/ai/^operational-scores\.(?P<format>[a-z0-9]+)/?$ |  | None | AIRecommendationViewSet | ai-recommendations-operational-scores
+api/ai/^optimize-slotting/$ |  | None | AIRecommendationViewSet | ai-recommendations-optimize-slotting
+api/ai/^optimize-slotting\.(?P<format>[a-z0-9]+)/?$ |  | None | AIRecommendationViewSet | ai-recommendations-optimize-slotting
+api/ai/^predict-demand/$ |  | None | AIRecommendationViewSet | ai-recommendations-predict-demand
+api/ai/^predict-demand\.(?P<format>[a-z0-9]+)/?$ |  | None | AIRecommendationViewSet | ai-recommendations-predict-demand
+api/ai/^recommendations/$ |  | None | AIRecommendationViewSet | ai-recommendations-recommendations
+api/ai/^recommendations\.(?P<format>[a-z0-9]+)/?$ |  | None | AIRecommendationViewSet | ai-recommendations-recommendations
+api/ai/^slotting-score/$ |  | None | AIRecommendationViewSet | ai-recommendations-slotting-score
+api/ai/^slotting-score\.(?P<format>[a-z0-9]+)/?$ |  | None | AIRecommendationViewSet | ai-recommendations-slotting-score
+api/ai/ | GET | None | APIRootView | api-root
+api/ai/<drf_format_suffix:format> | GET | None | APIRootView | api-root
+api/dashboards/^analytics/bin-heatmap/$ |  | None | AnalyticsViewSet | analytics-bin-heatmap
+api/dashboards/^analytics/bin-heatmap\.(?P<format>[a-z0-9]+)/?$ |  | None | AnalyticsViewSet | analytics-bin-heatmap
+api/dashboards/^analytics/heatmaps/$ |  | None | AnalyticsViewSet | analytics-heatmaps
+api/dashboards/^analytics/heatmaps\.(?P<format>[a-z0-9]+)/?$ |  | None | AnalyticsViewSet | analytics-heatmaps
+api/dashboards/^analytics/inbound-metrics/$ |  | None | AnalyticsViewSet | analytics-inbound-metrics
+api/dashboards/^analytics/inbound-metrics\.(?P<format>[a-z0-9]+)/?$ |  | None | AnalyticsViewSet | analytics-inbound-metrics
+api/dashboards/^analytics/inventory-movements/$ |  | None | AnalyticsViewSet | analytics-inventory-movements
+api/dashboards/^analytics/inventory-movements\.(?P<format>[a-z0-9]+)/?$ |  | None | AnalyticsViewSet | analytics-inventory-movements
+api/dashboards/^analytics/occupancy-trends/$ |  | None | AnalyticsViewSet | analytics-occupancy-trends
+api/dashboards/^analytics/occupancy-trends\.(?P<format>[a-z0-9]+)/?$ |  | None | AnalyticsViewSet | analytics-occupancy-trends
+api/dashboards/^analytics/outbound-metrics/$ |  | None | AnalyticsViewSet | analytics-outbound-metrics
+api/dashboards/^analytics/outbound-metrics\.(?P<format>[a-z0-9]+)/?$ |  | None | AnalyticsViewSet | analytics-outbound-metrics
+api/dashboards/^analytics/rack-heatmap/$ |  | None | AnalyticsViewSet | analytics-rack-heatmap
+api/dashboards/^analytics/rack-heatmap\.(?P<format>[a-z0-9]+)/?$ |  | None | AnalyticsViewSet | analytics-rack-heatmap
+api/dashboards/^analytics/recommendation-metrics/$ |  | None | AnalyticsViewSet | analytics-recommendation-metrics
+api/dashboards/^analytics/recommendation-metrics\.(?P<format>[a-z0-9]+)/?$ |  | None | AnalyticsViewSet | analytics-recommendation-metrics
+api/dashboards/^analytics/route-metrics/$ |  | None | AnalyticsViewSet | analytics-route-metrics
+api/dashboards/^analytics/route-metrics\.(?P<format>[a-z0-9]+)/?$ |  | None | AnalyticsViewSet | analytics-route-metrics
+api/dashboards/^analytics/routes/$ |  | None | AnalyticsViewSet | analytics-routes
+api/dashboards/^analytics/routes\.(?P<format>[a-z0-9]+)/?$ |  | None | AnalyticsViewSet | analytics-routes
+api/dashboards/^analytics/telemetry/$ |  | None | AnalyticsViewSet | analytics-telemetry
+api/dashboards/^analytics/telemetry\.(?P<format>[a-z0-9]+)/?$ |  | None | AnalyticsViewSet | analytics-telemetry
+api/dashboards/^analytics/throughput/$ |  | None | AnalyticsViewSet | analytics-throughput
+api/dashboards/^analytics/throughput\.(?P<format>[a-z0-9]+)/?$ |  | None | AnalyticsViewSet | analytics-throughput
+api/dashboards/^analytics/top-zones/$ |  | None | AnalyticsViewSet | analytics-top-zones
+api/dashboards/^analytics/top-zones\.(?P<format>[a-z0-9]+)/?$ |  | None | AnalyticsViewSet | analytics-top-zones
+api/dashboards/^analytics/warehouse-kpis/$ |  | None | AnalyticsViewSet | analytics-warehouse-kpis
+api/dashboards/^analytics/warehouse-kpis\.(?P<format>[a-z0-9]+)/?$ |  | None | AnalyticsViewSet | analytics-warehouse-kpis
+api/dashboards/^analytics/zone-heatmap/$ |  | None | AnalyticsViewSet | analytics-zone-heatmap
+api/dashboards/^analytics/zone-heatmap\.(?P<format>[a-z0-9]+)/?$ |  | None | AnalyticsViewSet | analytics-zone-heatmap
+api/dashboards/^robot-tasks/$ |  | RobotTaskSerializer | RobotTaskViewSet | robot-tasks-list
+api/dashboards/^robot-tasks\.(?P<format>[a-z0-9]+)/?$ |  | RobotTaskSerializer | RobotTaskViewSet | robot-tasks-list
+api/dashboards/^robot-tasks/(?P<pk>[^/.]+)/$ |  | RobotTaskSerializer | RobotTaskViewSet | robot-tasks-detail
+api/dashboards/^robot-tasks/(?P<pk>[^/.]+)\.(?P<format>[a-z0-9]+)/?$ |  | RobotTaskSerializer | RobotTaskViewSet | robot-tasks-detail
+api/dashboards/^route-optimizations/$ |  | RouteOptimizationSerializer | RouteOptimizationViewSet | route-optimizations-list
+api/dashboards/^route-optimizations\.(?P<format>[a-z0-9]+)/?$ |  | RouteOptimizationSerializer | RouteOptimizationViewSet | route-optimizations-list
+api/dashboards/^route-optimizations/(?P<pk>[^/.]+)/$ |  | RouteOptimizationSerializer | RouteOptimizationViewSet | route-optimizations-detail
+api/dashboards/^route-optimizations/(?P<pk>[^/.]+)\.(?P<format>[a-z0-9]+)/?$ |  | RouteOptimizationSerializer | RouteOptimizationViewSet | route-optimizations-detail
+api/dashboards/^$ |  | DashboardSerializer | DashboardViewSet | dashboards-list
+api/dashboards/^\.(?P<format>[a-z0-9]+)/?$ |  | DashboardSerializer | DashboardViewSet | dashboards-list
+api/dashboards/^(?P<pk>[^/.]+)/$ |  | DashboardSerializer | DashboardViewSet | dashboards-detail
+api/dashboards/^(?P<pk>[^/.]+)\.(?P<format>[a-z0-9]+)/?$ |  | DashboardSerializer | DashboardViewSet | dashboards-detail
+api/dashboards/ | GET | None | APIRootView | api-root
+api/dashboards/<drf_format_suffix:format> | GET | None | APIRootView | api-root
+api/orders/^$ |  | OrderSerializer | OrderViewSet | orders-list
+api/orders/^\.(?P<format>[a-z0-9]+)/?$ |  | OrderSerializer | OrderViewSet | orders-list
+api/orders/^assign-picker/$ |  | OrderSerializer | OrderViewSet | orders-assign-picker
+api/orders/^assign-picker\.(?P<format>[a-z0-9]+)/?$ |  | OrderSerializer | OrderViewSet | orders-assign-picker
+api/orders/^close/$ |  | OrderSerializer | OrderViewSet | orders-close
+api/orders/^close\.(?P<format>[a-z0-9]+)/?$ |  | OrderSerializer | OrderViewSet | orders-close
+api/orders/^dispatch/$ |  | OrderSerializer | OrderViewSet | orders-dispatch-shipment
+api/orders/^dispatch\.(?P<format>[a-z0-9]+)/?$ |  | OrderSerializer | OrderViewSet | orders-dispatch-shipment
+api/orders/^generate-picklist/$ |  | OrderSerializer | OrderViewSet | orders-generate-picklist
+api/orders/^generate-picklist\.(?P<format>[a-z0-9]+)/?$ |  | OrderSerializer | OrderViewSet | orders-generate-picklist
+api/orders/^optimize-route/$ |  | OrderSerializer | OrderViewSet | orders-optimize-route
+api/orders/^optimize-route\.(?P<format>[a-z0-9]+)/?$ |  | OrderSerializer | OrderViewSet | orders-optimize-route
+api/orders/^pack/$ |  | OrderSerializer | OrderViewSet | orders-pack
+api/orders/^pack\.(?P<format>[a-z0-9]+)/?$ |  | OrderSerializer | OrderViewSet | orders-pack
+api/orders/^(?P<pk>[^/.]+)/$ |  | OrderSerializer | OrderViewSet | orders-detail
+api/orders/^(?P<pk>[^/.]+)\.(?P<format>[a-z0-9]+)/?$ |  | OrderSerializer | OrderViewSet | orders-detail
+api/orders/ | GET | None | APIRootView | api-root
+api/orders/<drf_format_suffix:format> | GET | None | APIRootView | api-root
+api/product-classifications/^$ |  | ProductClassificationSerializer | ProductClassificationViewSet | product-classifications-list
+api/product-classifications/^\.(?P<format>[a-z0-9]+)/?$ |  | ProductClassificationSerializer | ProductClassificationViewSet | product-classifications-list
+api/product-classifications/^(?P<pk>[^/.]+)/$ |  | ProductClassificationSerializer | ProductClassificationViewSet | product-classifications-detail
+api/product-classifications/^(?P<pk>[^/.]+)\.(?P<format>[a-z0-9]+)/?$ |  | ProductClassificationSerializer | ProductClassificationViewSet | product-classifications-detail
+api/product-classifications/ | GET | None | APIRootView | api-root
+api/product-classifications/<drf_format_suffix:format> | GET | None | APIRootView | api-root
+api/product-dimensions/^storage-rules/$ |  | ProductStorageRuleSerializer | ProductStorageRuleViewSet | product-storage-rules-list
+api/product-dimensions/^storage-rules\.(?P<format>[a-z0-9]+)/?$ |  | ProductStorageRuleSerializer | ProductStorageRuleViewSet | product-storage-rules-list
+api/product-dimensions/^storage-rules/(?P<pk>[^/.]+)/$ |  | ProductStorageRuleSerializer | ProductStorageRuleViewSet | product-storage-rules-detail
+api/product-dimensions/^storage-rules/(?P<pk>[^/.]+)\.(?P<format>[a-z0-9]+)/?$ |  | ProductStorageRuleSerializer | ProductStorageRuleViewSet | product-storage-rules-detail
+api/product-dimensions/^$ |  | ProductDimensionSerializer | ProductDimensionViewSet | product-dimensions-list
+api/product-dimensions/^\.(?P<format>[a-z0-9]+)/?$ |  | ProductDimensionSerializer | ProductDimensionViewSet | product-dimensions-list
+api/product-dimensions/^(?P<pk>[^/.]+)/$ |  | ProductDimensionSerializer | ProductDimensionViewSet | product-dimensions-detail
+api/product-dimensions/^(?P<pk>[^/.]+)\.(?P<format>[a-z0-9]+)/?$ |  | ProductDimensionSerializer | ProductDimensionViewSet | product-dimensions-detail
+api/product-dimensions/ | GET | None | APIRootView | api-root
+api/product-dimensions/<drf_format_suffix:format> | GET | None | APIRootView | api-root
+api/inbound/^$ |  | InboundSerializer | InboundViewSet | inbound-list
+api/inbound/^\.(?P<format>[a-z0-9]+)/?$ |  | InboundSerializer | InboundViewSet | inbound-list
+api/inbound/^(?P<pk>[^/.]+)/$ |  | InboundSerializer | InboundViewSet | inbound-detail
+api/inbound/^(?P<pk>[^/.]+)\.(?P<format>[a-z0-9]+)/?$ |  | InboundSerializer | InboundViewSet | inbound-detail
+api/inbound/ | GET | None | APIRootView | api-root
+api/inbound/<drf_format_suffix:format> | GET | None | APIRootView | api-root
+api/ocr/upload/ | POST | None | OCRUploadView | ocr-upload
+api/ocr/review-queue/ |  | OCRDocumentSerializer | OCRDocumentViewSet | ocr-review-queue
+api/ocr/^documents/$ |  | OCRDocumentSerializer | OCRDocumentViewSet | ocr-documents-list
+api/ocr/^documents\.(?P<format>[a-z0-9]+)/?$ |  | OCRDocumentSerializer | OCRDocumentViewSet | ocr-documents-list
+api/ocr/^documents/review-queue/$ |  | OCRDocumentSerializer | OCRDocumentViewSet | ocr-documents-review-queue
+api/ocr/^documents/review-queue\.(?P<format>[a-z0-9]+)/?$ |  | OCRDocumentSerializer | OCRDocumentViewSet | ocr-documents-review-queue
+api/ocr/^documents/(?P<pk>[^/.]+)/$ |  | OCRDocumentSerializer | OCRDocumentViewSet | ocr-documents-detail
+api/ocr/^documents/(?P<pk>[^/.]+)\.(?P<format>[a-z0-9]+)/?$ |  | OCRDocumentSerializer | OCRDocumentViewSet | ocr-documents-detail
+api/ocr/^documents/(?P<pk>[^/.]+)/approve/$ |  | OCRDocumentSerializer | OCRDocumentViewSet | ocr-documents-approve
+api/ocr/^documents/(?P<pk>[^/.]+)/approve\.(?P<format>[a-z0-9]+)/?$ |  | OCRDocumentSerializer | OCRDocumentViewSet | ocr-documents-approve
+api/ocr/^documents/(?P<pk>[^/.]+)/reject/$ |  | OCRDocumentSerializer | OCRDocumentViewSet | ocr-documents-reject
+api/ocr/^documents/(?P<pk>[^/.]+)/reject\.(?P<format>[a-z0-9]+)/?$ |  | OCRDocumentSerializer | OCRDocumentViewSet | ocr-documents-reject
+api/ocr/^documents/(?P<pk>[^/.]+)/sync-rag/$ |  | OCRDocumentSerializer | OCRDocumentViewSet | ocr-documents-sync-rag
+api/ocr/^documents/(?P<pk>[^/.]+)/sync-rag\.(?P<format>[a-z0-9]+)/?$ |  | OCRDocumentSerializer | OCRDocumentViewSet | ocr-documents-sync-rag
+api/ocr/ | GET | None | APIRootView | api-root
+api/ocr/<drf_format_suffix:format> | GET | None | APIRootView | api-root
+^media/(?P<path>.*)$ |  | None | serve | None

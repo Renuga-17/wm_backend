@@ -28,7 +28,7 @@ class RAGResponseException(RAGClientException):
 
 class RAGClient:
     def __init__(self):
-        self.base_url = getattr(settings, 'RAG_BASE_URL', 'http://localhost:8001').rstrip('/')
+        self.base_url = getattr(settings, 'RAG_BASE_URL', 'http://localhost:8002').rstrip('/')
         self.timeout = getattr(settings, 'RAG_TIMEOUT', 30)
 
     def analyze(self, payload: dict, request_id: str) -> dict:

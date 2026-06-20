@@ -213,22 +213,12 @@ class InboundOrchestratorService:
             )
             raise e
 
-        # Step G: Send to RAG ingestion if text is available (outside database transaction)
+        # Step G: Send to RAG ingestion asynchronously (non-blocking, outside database transaction)
         try:
-            send_to_rag(
-                ocr_document_id=str(ocr_document.id),
-                document_type="OCRDocument",
-                warehouse_id=rag_metadata["warehouse_id"],
-                text=ocr_document.raw_text,
-                sku=rag_metadata["sku"],
-                product_id=rag_metadata["product_id"],
-                category=rag_metadata["category"],
-                zone=rag_metadata["zone"],
-                rack=rag_metadata["rack"],
-                shelf=rag_metadata["shelf"],
-                bin=rag_metadata["bin"],
-            )
+            from apps.inbound.tasks import sync_rag_task
+            sync_rag_task.delay(str(ocr_document.id))
+            logger.info("InboundOrchestratorService: RAG sync task queued successfully.")
         except Exception as rag_err:
-            logger.warning("InboundOrchestratorService: RAG ingestion trigger failed: %s", rag_err)
+            logger.warning("InboundOrchestratorService: Queueing RAG ingestion failed: %s", rag_err)
 
         return shipment

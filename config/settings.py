@@ -174,12 +174,12 @@ MONGODB_SETTINGS = {
 
 # ClickHouse Settings
 CLICKHOUSE_SETTINGS = {
-    "HOST": "jj8tk9yx2g.ap-south-1.aws.clickhouse.cloud",
-    "PORT": 8443,
-    "USERNAME": "default",
-    "PASSWORD": "NZrz5zKnQo_sb",
-    "DATABASE": "default",
-    "SECURE": True,
+    "HOST": os.getenv('CLICKHOUSE_HOST', 'localhost'),
+    "PORT": int(os.getenv('CLICKHOUSE_PORT', '8443')),
+    "USERNAME": os.getenv('CLICKHOUSE_USER', 'default'),
+    "PASSWORD": os.getenv('CLICKHOUSE_PASSWORD', ''),
+    "DATABASE": os.getenv('CLICKHOUSE_DB', 'default'),
+    "SECURE": os.getenv('CLICKHOUSE_SECURE', 'True') == 'True',
 }
 
 # Qdrant Settings
@@ -196,11 +196,11 @@ AI_SERVICE_SETTINGS = {
 
 # OCR Microservice settings
 OCR_SERVICE_SETTINGS = {
-    'BASE_URL': os.getenv('OCR_SERVICE_URL', 'http://localhost:8002'),
+    'BASE_URL': os.getenv('OCR_SERVICE_URL', 'http://localhost:8001'),
 }
 
 # RAG Microservice settings
-RAG_BASE_URL = os.getenv('RAG_BASE_URL', 'http://localhost:8001')
+RAG_BASE_URL = os.getenv('RAG_BASE_URL', 'http://localhost:8002')
 try:
     RAG_TIMEOUT = int(os.getenv('RAG_TIMEOUT', '30'))
 except ValueError:

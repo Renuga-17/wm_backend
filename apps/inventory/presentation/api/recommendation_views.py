@@ -128,8 +128,7 @@ class RecommendationViewSet(viewsets.ModelViewSet):
                 bin=bin_obj,
                 quantity=quantity
             )
-            # Placeholder for future occupancy update
-            self.update_bin_occupancy(bin_obj)
+            self.update_bin_occupancy(bin_obj, quantity)
 
         return Response({
             "allocation_id": str(allocation.id),
@@ -141,9 +140,15 @@ class RecommendationViewSet(viewsets.ModelViewSet):
             "quantity": quantity
         }, status=status.HTTP_201_CREATED)
 
-    def update_bin_occupancy(self, bin_obj):
-        """Placeholder for future Digital Twin occupancy update."""
-        pass
+    def update_bin_occupancy(self, bin_obj, quantity):
+        """Update Digital Twin occupancy via DigitalTwinSyncService."""
+        from apps.warehouse.application.services.digital_twin_sync_service import DigitalTwinSyncService
+        DigitalTwinSyncService.sync_occupancy(
+            bin_id=bin_obj.id,
+            is_occupied=True,
+            capacity_delta=quantity
+        )
+
 
 
 class AIRecommendationViewSet(viewsets.GenericViewSet):

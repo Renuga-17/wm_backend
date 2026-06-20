@@ -218,3 +218,28 @@ class OCRDocumentViewSet(viewsets.ReadOnlyModelViewSet):
             "processing_status": ocr_doc.processing_status
         }, status=status.HTTP_200_OK)
 
+    @action(detail=True, methods=['post'], url_path='sync-rag')
+    def sync_rag(self, request, pk=None):
+        """POST /api/ocr/documents/{id}/sync-rag/"""
+        ocr_doc = self.get_object()
+        
+        if ocr_doc.processing_status != OCRDocument.ProcessingStatus.COMPLETED:
+            return Response(
+                {"error": f"Cannot sync to RAG for document in status: {ocr_doc.processing_status}. Document must be COMPLETED."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+            
+        from apps.inbound.application.services.rag_service import sync_document_to_rag
+        
+        success = sync_document_to_rag(ocr_doc)
+        if success:
+            return Response({
+                "success": True,
+                "message": "OCR Document successfully synced to RAG."
+            }, status=status.HTTP_200_OK)
+        else:
+            return Response(
+                {"error": "Failed to sync document to RAG service. Check backend logs for details."},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+

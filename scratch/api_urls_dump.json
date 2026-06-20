@@ -1,0 +1,4357 @@
+[
+  {
+    "url": "admin/",
+    "name": "index",
+    "view": "django.contrib.admin.sites.index",
+    "docstring": "Display the main admin index page, which lists all of the installed\n        apps that have been registered in this site.",
+    "methods": []
+  },
+  {
+    "url": "admin/login/",
+    "name": "login",
+    "view": "django.contrib.admin.sites.login",
+    "docstring": "Display the login form for the given HttpRequest.",
+    "methods": []
+  },
+  {
+    "url": "admin/logout/",
+    "name": "logout",
+    "view": "django.contrib.admin.sites.logout",
+    "docstring": "Log out the user for the given HttpRequest.\n\n        This should *not* assume the user is already logged in.",
+    "methods": []
+  },
+  {
+    "url": "admin/password_change/",
+    "name": "password_change",
+    "view": "django.contrib.admin.sites.password_change",
+    "docstring": "Handle the \"change password\" task -- both form display and validation.",
+    "methods": []
+  },
+  {
+    "url": "admin/password_change/done/",
+    "name": "password_change_done",
+    "view": "django.contrib.admin.sites.password_change_done",
+    "docstring": "Display the \"success\" page after a password change.",
+    "methods": []
+  },
+  {
+    "url": "admin/autocomplete/",
+    "name": "autocomplete",
+    "view": "django.contrib.admin.sites.autocomplete_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/jsi18n/",
+    "name": "jsi18n",
+    "view": "django.contrib.admin.sites.i18n_javascript",
+    "docstring": "Display the i18n JavaScript that the Django admin requires.\n\n        `extra_context` is unused but present for consistency with the other\n        admin views.",
+    "methods": []
+  },
+  {
+    "url": "admin/r/<int:content_type_id>/<path:object_id>/",
+    "name": "view_on_site",
+    "view": "django.contrib.contenttypes.views.shortcut",
+    "docstring": "Redirect to an object's page based on a content-type ID and an object ID.",
+    "methods": []
+  },
+  {
+    "url": "admin/auth/group/",
+    "name": "auth_group_changelist",
+    "view": "django.contrib.admin.options.changelist_view",
+    "docstring": "The 'change list' admin view for this model.",
+    "methods": []
+  },
+  {
+    "url": "admin/auth/group/add/",
+    "name": "auth_group_add",
+    "view": "django.contrib.admin.options.add_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/auth/group/<path:object_id>/history/",
+    "name": "auth_group_history",
+    "view": "django.contrib.admin.options.history_view",
+    "docstring": "The 'history' admin view for this model.",
+    "methods": []
+  },
+  {
+    "url": "admin/auth/group/<path:object_id>/delete/",
+    "name": "auth_group_delete",
+    "view": "django.contrib.admin.options.delete_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/auth/group/<path:object_id>/change/",
+    "name": "auth_group_change",
+    "view": "django.contrib.admin.options.change_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/auth/group/<path:object_id>/",
+    "name": null,
+    "view": "django.views.generic.base.RedirectView",
+    "docstring": "Provide a redirect on any GET request.",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "admin/identity/user/<id>/password/",
+    "name": "auth_user_password_change",
+    "view": "django.contrib.auth.admin.user_change_password",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/identity/user/",
+    "name": "identity_user_changelist",
+    "view": "django.contrib.admin.options.changelist_view",
+    "docstring": "The 'change list' admin view for this model.",
+    "methods": []
+  },
+  {
+    "url": "admin/identity/user/add/",
+    "name": "identity_user_add",
+    "view": "django.contrib.auth.admin.add_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/identity/user/<path:object_id>/history/",
+    "name": "identity_user_history",
+    "view": "django.contrib.admin.options.history_view",
+    "docstring": "The 'history' admin view for this model.",
+    "methods": []
+  },
+  {
+    "url": "admin/identity/user/<path:object_id>/delete/",
+    "name": "identity_user_delete",
+    "view": "django.contrib.admin.options.delete_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/identity/user/<path:object_id>/change/",
+    "name": "identity_user_change",
+    "view": "django.contrib.admin.options.change_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/identity/user/<path:object_id>/",
+    "name": null,
+    "view": "django.views.generic.base.RedirectView",
+    "docstring": "Provide a redirect on any GET request.",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "admin/identity/scanlog/",
+    "name": "identity_scanlog_changelist",
+    "view": "django.contrib.admin.options.changelist_view",
+    "docstring": "The 'change list' admin view for this model.",
+    "methods": []
+  },
+  {
+    "url": "admin/identity/scanlog/add/",
+    "name": "identity_scanlog_add",
+    "view": "django.contrib.admin.options.add_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/identity/scanlog/<path:object_id>/history/",
+    "name": "identity_scanlog_history",
+    "view": "django.contrib.admin.options.history_view",
+    "docstring": "The 'history' admin view for this model.",
+    "methods": []
+  },
+  {
+    "url": "admin/identity/scanlog/<path:object_id>/delete/",
+    "name": "identity_scanlog_delete",
+    "view": "django.contrib.admin.options.delete_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/identity/scanlog/<path:object_id>/change/",
+    "name": "identity_scanlog_change",
+    "view": "django.contrib.admin.options.change_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/identity/scanlog/<path:object_id>/",
+    "name": null,
+    "view": "django.views.generic.base.RedirectView",
+    "docstring": "Provide a redirect on any GET request.",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "admin/identity/auditlog/",
+    "name": "identity_auditlog_changelist",
+    "view": "django.contrib.admin.options.changelist_view",
+    "docstring": "The 'change list' admin view for this model.",
+    "methods": []
+  },
+  {
+    "url": "admin/identity/auditlog/add/",
+    "name": "identity_auditlog_add",
+    "view": "django.contrib.admin.options.add_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/identity/auditlog/<path:object_id>/history/",
+    "name": "identity_auditlog_history",
+    "view": "django.contrib.admin.options.history_view",
+    "docstring": "The 'history' admin view for this model.",
+    "methods": []
+  },
+  {
+    "url": "admin/identity/auditlog/<path:object_id>/delete/",
+    "name": "identity_auditlog_delete",
+    "view": "django.contrib.admin.options.delete_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/identity/auditlog/<path:object_id>/change/",
+    "name": "identity_auditlog_change",
+    "view": "django.contrib.admin.options.change_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/identity/auditlog/<path:object_id>/",
+    "name": null,
+    "view": "django.views.generic.base.RedirectView",
+    "docstring": "Provide a redirect on any GET request.",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "admin/warehouse/warehouse/",
+    "name": "warehouse_warehouse_changelist",
+    "view": "django.contrib.admin.options.changelist_view",
+    "docstring": "The 'change list' admin view for this model.",
+    "methods": []
+  },
+  {
+    "url": "admin/warehouse/warehouse/add/",
+    "name": "warehouse_warehouse_add",
+    "view": "django.contrib.admin.options.add_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/warehouse/warehouse/<path:object_id>/history/",
+    "name": "warehouse_warehouse_history",
+    "view": "django.contrib.admin.options.history_view",
+    "docstring": "The 'history' admin view for this model.",
+    "methods": []
+  },
+  {
+    "url": "admin/warehouse/warehouse/<path:object_id>/delete/",
+    "name": "warehouse_warehouse_delete",
+    "view": "django.contrib.admin.options.delete_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/warehouse/warehouse/<path:object_id>/change/",
+    "name": "warehouse_warehouse_change",
+    "view": "django.contrib.admin.options.change_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/warehouse/warehouse/<path:object_id>/",
+    "name": null,
+    "view": "django.views.generic.base.RedirectView",
+    "docstring": "Provide a redirect on any GET request.",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "admin/warehouse/rack/",
+    "name": "warehouse_rack_changelist",
+    "view": "django.contrib.admin.options.changelist_view",
+    "docstring": "The 'change list' admin view for this model.",
+    "methods": []
+  },
+  {
+    "url": "admin/warehouse/rack/add/",
+    "name": "warehouse_rack_add",
+    "view": "django.contrib.admin.options.add_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/warehouse/rack/<path:object_id>/history/",
+    "name": "warehouse_rack_history",
+    "view": "django.contrib.admin.options.history_view",
+    "docstring": "The 'history' admin view for this model.",
+    "methods": []
+  },
+  {
+    "url": "admin/warehouse/rack/<path:object_id>/delete/",
+    "name": "warehouse_rack_delete",
+    "view": "django.contrib.admin.options.delete_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/warehouse/rack/<path:object_id>/change/",
+    "name": "warehouse_rack_change",
+    "view": "django.contrib.admin.options.change_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/warehouse/rack/<path:object_id>/",
+    "name": null,
+    "view": "django.views.generic.base.RedirectView",
+    "docstring": "Provide a redirect on any GET request.",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "admin/warehouse/zonegroup/",
+    "name": "warehouse_zonegroup_changelist",
+    "view": "django.contrib.admin.options.changelist_view",
+    "docstring": "The 'change list' admin view for this model.",
+    "methods": []
+  },
+  {
+    "url": "admin/warehouse/zonegroup/add/",
+    "name": "warehouse_zonegroup_add",
+    "view": "django.contrib.admin.options.add_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/warehouse/zonegroup/<path:object_id>/history/",
+    "name": "warehouse_zonegroup_history",
+    "view": "django.contrib.admin.options.history_view",
+    "docstring": "The 'history' admin view for this model.",
+    "methods": []
+  },
+  {
+    "url": "admin/warehouse/zonegroup/<path:object_id>/delete/",
+    "name": "warehouse_zonegroup_delete",
+    "view": "django.contrib.admin.options.delete_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/warehouse/zonegroup/<path:object_id>/change/",
+    "name": "warehouse_zonegroup_change",
+    "view": "django.contrib.admin.options.change_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/warehouse/zonegroup/<path:object_id>/",
+    "name": null,
+    "view": "django.views.generic.base.RedirectView",
+    "docstring": "Provide a redirect on any GET request.",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "admin/warehouse/zone/",
+    "name": "warehouse_zone_changelist",
+    "view": "django.contrib.admin.options.changelist_view",
+    "docstring": "The 'change list' admin view for this model.",
+    "methods": []
+  },
+  {
+    "url": "admin/warehouse/zone/add/",
+    "name": "warehouse_zone_add",
+    "view": "django.contrib.admin.options.add_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/warehouse/zone/<path:object_id>/history/",
+    "name": "warehouse_zone_history",
+    "view": "django.contrib.admin.options.history_view",
+    "docstring": "The 'history' admin view for this model.",
+    "methods": []
+  },
+  {
+    "url": "admin/warehouse/zone/<path:object_id>/delete/",
+    "name": "warehouse_zone_delete",
+    "view": "django.contrib.admin.options.delete_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/warehouse/zone/<path:object_id>/change/",
+    "name": "warehouse_zone_change",
+    "view": "django.contrib.admin.options.change_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/warehouse/zone/<path:object_id>/",
+    "name": null,
+    "view": "django.views.generic.base.RedirectView",
+    "docstring": "Provide a redirect on any GET request.",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "admin/warehouse/aisle/",
+    "name": "warehouse_aisle_changelist",
+    "view": "django.contrib.admin.options.changelist_view",
+    "docstring": "The 'change list' admin view for this model.",
+    "methods": []
+  },
+  {
+    "url": "admin/warehouse/aisle/add/",
+    "name": "warehouse_aisle_add",
+    "view": "django.contrib.admin.options.add_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/warehouse/aisle/<path:object_id>/history/",
+    "name": "warehouse_aisle_history",
+    "view": "django.contrib.admin.options.history_view",
+    "docstring": "The 'history' admin view for this model.",
+    "methods": []
+  },
+  {
+    "url": "admin/warehouse/aisle/<path:object_id>/delete/",
+    "name": "warehouse_aisle_delete",
+    "view": "django.contrib.admin.options.delete_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/warehouse/aisle/<path:object_id>/change/",
+    "name": "warehouse_aisle_change",
+    "view": "django.contrib.admin.options.change_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/warehouse/aisle/<path:object_id>/",
+    "name": null,
+    "view": "django.views.generic.base.RedirectView",
+    "docstring": "Provide a redirect on any GET request.",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "admin/warehouse/bin/",
+    "name": "warehouse_bin_changelist",
+    "view": "django.contrib.admin.options.changelist_view",
+    "docstring": "The 'change list' admin view for this model.",
+    "methods": []
+  },
+  {
+    "url": "admin/warehouse/bin/add/",
+    "name": "warehouse_bin_add",
+    "view": "django.contrib.admin.options.add_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/warehouse/bin/<path:object_id>/history/",
+    "name": "warehouse_bin_history",
+    "view": "django.contrib.admin.options.history_view",
+    "docstring": "The 'history' admin view for this model.",
+    "methods": []
+  },
+  {
+    "url": "admin/warehouse/bin/<path:object_id>/delete/",
+    "name": "warehouse_bin_delete",
+    "view": "django.contrib.admin.options.delete_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/warehouse/bin/<path:object_id>/change/",
+    "name": "warehouse_bin_change",
+    "view": "django.contrib.admin.options.change_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/warehouse/bin/<path:object_id>/",
+    "name": null,
+    "view": "django.views.generic.base.RedirectView",
+    "docstring": "Provide a redirect on any GET request.",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "admin/inventory/inventory/",
+    "name": "inventory_inventory_changelist",
+    "view": "django.contrib.admin.options.changelist_view",
+    "docstring": "The 'change list' admin view for this model.",
+    "methods": []
+  },
+  {
+    "url": "admin/inventory/inventory/add/",
+    "name": "inventory_inventory_add",
+    "view": "django.contrib.admin.options.add_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/inventory/inventory/<path:object_id>/history/",
+    "name": "inventory_inventory_history",
+    "view": "django.contrib.admin.options.history_view",
+    "docstring": "The 'history' admin view for this model.",
+    "methods": []
+  },
+  {
+    "url": "admin/inventory/inventory/<path:object_id>/delete/",
+    "name": "inventory_inventory_delete",
+    "view": "django.contrib.admin.options.delete_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/inventory/inventory/<path:object_id>/change/",
+    "name": "inventory_inventory_change",
+    "view": "django.contrib.admin.options.change_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/inventory/inventory/<path:object_id>/",
+    "name": null,
+    "view": "django.views.generic.base.RedirectView",
+    "docstring": "Provide a redirect on any GET request.",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "admin/inventory/product/",
+    "name": "inventory_product_changelist",
+    "view": "django.contrib.admin.options.changelist_view",
+    "docstring": "The 'change list' admin view for this model.",
+    "methods": []
+  },
+  {
+    "url": "admin/inventory/product/add/",
+    "name": "inventory_product_add",
+    "view": "django.contrib.admin.options.add_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/inventory/product/<path:object_id>/history/",
+    "name": "inventory_product_history",
+    "view": "django.contrib.admin.options.history_view",
+    "docstring": "The 'history' admin view for this model.",
+    "methods": []
+  },
+  {
+    "url": "admin/inventory/product/<path:object_id>/delete/",
+    "name": "inventory_product_delete",
+    "view": "django.contrib.admin.options.delete_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/inventory/product/<path:object_id>/change/",
+    "name": "inventory_product_change",
+    "view": "django.contrib.admin.options.change_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/inventory/product/<path:object_id>/",
+    "name": null,
+    "view": "django.views.generic.base.RedirectView",
+    "docstring": "Provide a redirect on any GET request.",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "admin/inventory/productdimension/",
+    "name": "inventory_productdimension_changelist",
+    "view": "django.contrib.admin.options.changelist_view",
+    "docstring": "The 'change list' admin view for this model.",
+    "methods": []
+  },
+  {
+    "url": "admin/inventory/productdimension/add/",
+    "name": "inventory_productdimension_add",
+    "view": "django.contrib.admin.options.add_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/inventory/productdimension/<path:object_id>/history/",
+    "name": "inventory_productdimension_history",
+    "view": "django.contrib.admin.options.history_view",
+    "docstring": "The 'history' admin view for this model.",
+    "methods": []
+  },
+  {
+    "url": "admin/inventory/productdimension/<path:object_id>/delete/",
+    "name": "inventory_productdimension_delete",
+    "view": "django.contrib.admin.options.delete_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/inventory/productdimension/<path:object_id>/change/",
+    "name": "inventory_productdimension_change",
+    "view": "django.contrib.admin.options.change_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/inventory/productdimension/<path:object_id>/",
+    "name": null,
+    "view": "django.views.generic.base.RedirectView",
+    "docstring": "Provide a redirect on any GET request.",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "admin/inventory/productstoragerule/",
+    "name": "inventory_productstoragerule_changelist",
+    "view": "django.contrib.admin.options.changelist_view",
+    "docstring": "The 'change list' admin view for this model.",
+    "methods": []
+  },
+  {
+    "url": "admin/inventory/productstoragerule/add/",
+    "name": "inventory_productstoragerule_add",
+    "view": "django.contrib.admin.options.add_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/inventory/productstoragerule/<path:object_id>/history/",
+    "name": "inventory_productstoragerule_history",
+    "view": "django.contrib.admin.options.history_view",
+    "docstring": "The 'history' admin view for this model.",
+    "methods": []
+  },
+  {
+    "url": "admin/inventory/productstoragerule/<path:object_id>/delete/",
+    "name": "inventory_productstoragerule_delete",
+    "view": "django.contrib.admin.options.delete_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/inventory/productstoragerule/<path:object_id>/change/",
+    "name": "inventory_productstoragerule_change",
+    "view": "django.contrib.admin.options.change_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/inventory/productstoragerule/<path:object_id>/",
+    "name": null,
+    "view": "django.views.generic.base.RedirectView",
+    "docstring": "Provide a redirect on any GET request.",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "admin/inventory/stockmovement/",
+    "name": "inventory_stockmovement_changelist",
+    "view": "django.contrib.admin.options.changelist_view",
+    "docstring": "The 'change list' admin view for this model.",
+    "methods": []
+  },
+  {
+    "url": "admin/inventory/stockmovement/add/",
+    "name": "inventory_stockmovement_add",
+    "view": "django.contrib.admin.options.add_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/inventory/stockmovement/<path:object_id>/history/",
+    "name": "inventory_stockmovement_history",
+    "view": "django.contrib.admin.options.history_view",
+    "docstring": "The 'history' admin view for this model.",
+    "methods": []
+  },
+  {
+    "url": "admin/inventory/stockmovement/<path:object_id>/delete/",
+    "name": "inventory_stockmovement_delete",
+    "view": "django.contrib.admin.options.delete_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/inventory/stockmovement/<path:object_id>/change/",
+    "name": "inventory_stockmovement_change",
+    "view": "django.contrib.admin.options.change_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/inventory/stockmovement/<path:object_id>/",
+    "name": null,
+    "view": "django.views.generic.base.RedirectView",
+    "docstring": "Provide a redirect on any GET request.",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "admin/inventory/storageallocation/",
+    "name": "inventory_storageallocation_changelist",
+    "view": "django.contrib.admin.options.changelist_view",
+    "docstring": "The 'change list' admin view for this model.",
+    "methods": []
+  },
+  {
+    "url": "admin/inventory/storageallocation/add/",
+    "name": "inventory_storageallocation_add",
+    "view": "django.contrib.admin.options.add_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/inventory/storageallocation/<path:object_id>/history/",
+    "name": "inventory_storageallocation_history",
+    "view": "django.contrib.admin.options.history_view",
+    "docstring": "The 'history' admin view for this model.",
+    "methods": []
+  },
+  {
+    "url": "admin/inventory/storageallocation/<path:object_id>/delete/",
+    "name": "inventory_storageallocation_delete",
+    "view": "django.contrib.admin.options.delete_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/inventory/storageallocation/<path:object_id>/change/",
+    "name": "inventory_storageallocation_change",
+    "view": "django.contrib.admin.options.change_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/inventory/storageallocation/<path:object_id>/",
+    "name": null,
+    "view": "django.views.generic.base.RedirectView",
+    "docstring": "Provide a redirect on any GET request.",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "admin/inventory/allocationrecommendation/",
+    "name": "inventory_allocationrecommendation_changelist",
+    "view": "django.contrib.admin.options.changelist_view",
+    "docstring": "The 'change list' admin view for this model.",
+    "methods": []
+  },
+  {
+    "url": "admin/inventory/allocationrecommendation/add/",
+    "name": "inventory_allocationrecommendation_add",
+    "view": "django.contrib.admin.options.add_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/inventory/allocationrecommendation/<path:object_id>/history/",
+    "name": "inventory_allocationrecommendation_history",
+    "view": "django.contrib.admin.options.history_view",
+    "docstring": "The 'history' admin view for this model.",
+    "methods": []
+  },
+  {
+    "url": "admin/inventory/allocationrecommendation/<path:object_id>/delete/",
+    "name": "inventory_allocationrecommendation_delete",
+    "view": "django.contrib.admin.options.delete_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/inventory/allocationrecommendation/<path:object_id>/change/",
+    "name": "inventory_allocationrecommendation_change",
+    "view": "django.contrib.admin.options.change_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/inventory/allocationrecommendation/<path:object_id>/",
+    "name": null,
+    "view": "django.views.generic.base.RedirectView",
+    "docstring": "Provide a redirect on any GET request.",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "admin/inventory/robottask/",
+    "name": "inventory_robottask_changelist",
+    "view": "django.contrib.admin.options.changelist_view",
+    "docstring": "The 'change list' admin view for this model.",
+    "methods": []
+  },
+  {
+    "url": "admin/inventory/robottask/add/",
+    "name": "inventory_robottask_add",
+    "view": "django.contrib.admin.options.add_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/inventory/robottask/<path:object_id>/history/",
+    "name": "inventory_robottask_history",
+    "view": "django.contrib.admin.options.history_view",
+    "docstring": "The 'history' admin view for this model.",
+    "methods": []
+  },
+  {
+    "url": "admin/inventory/robottask/<path:object_id>/delete/",
+    "name": "inventory_robottask_delete",
+    "view": "django.contrib.admin.options.delete_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/inventory/robottask/<path:object_id>/change/",
+    "name": "inventory_robottask_change",
+    "view": "django.contrib.admin.options.change_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/inventory/robottask/<path:object_id>/",
+    "name": null,
+    "view": "django.views.generic.base.RedirectView",
+    "docstring": "Provide a redirect on any GET request.",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "admin/inventory/routeoptimization/",
+    "name": "inventory_routeoptimization_changelist",
+    "view": "django.contrib.admin.options.changelist_view",
+    "docstring": "The 'change list' admin view for this model.",
+    "methods": []
+  },
+  {
+    "url": "admin/inventory/routeoptimization/add/",
+    "name": "inventory_routeoptimization_add",
+    "view": "django.contrib.admin.options.add_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/inventory/routeoptimization/<path:object_id>/history/",
+    "name": "inventory_routeoptimization_history",
+    "view": "django.contrib.admin.options.history_view",
+    "docstring": "The 'history' admin view for this model.",
+    "methods": []
+  },
+  {
+    "url": "admin/inventory/routeoptimization/<path:object_id>/delete/",
+    "name": "inventory_routeoptimization_delete",
+    "view": "django.contrib.admin.options.delete_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/inventory/routeoptimization/<path:object_id>/change/",
+    "name": "inventory_routeoptimization_change",
+    "view": "django.contrib.admin.options.change_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/inventory/routeoptimization/<path:object_id>/",
+    "name": null,
+    "view": "django.views.generic.base.RedirectView",
+    "docstring": "Provide a redirect on any GET request.",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "admin/orders/outboundshipment/",
+    "name": "orders_outboundshipment_changelist",
+    "view": "django.contrib.admin.options.changelist_view",
+    "docstring": "The 'change list' admin view for this model.",
+    "methods": []
+  },
+  {
+    "url": "admin/orders/outboundshipment/add/",
+    "name": "orders_outboundshipment_add",
+    "view": "django.contrib.admin.options.add_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/orders/outboundshipment/<path:object_id>/history/",
+    "name": "orders_outboundshipment_history",
+    "view": "django.contrib.admin.options.history_view",
+    "docstring": "The 'history' admin view for this model.",
+    "methods": []
+  },
+  {
+    "url": "admin/orders/outboundshipment/<path:object_id>/delete/",
+    "name": "orders_outboundshipment_delete",
+    "view": "django.contrib.admin.options.delete_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/orders/outboundshipment/<path:object_id>/change/",
+    "name": "orders_outboundshipment_change",
+    "view": "django.contrib.admin.options.change_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/orders/outboundshipment/<path:object_id>/",
+    "name": null,
+    "view": "django.views.generic.base.RedirectView",
+    "docstring": "Provide a redirect on any GET request.",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "admin/inbound/inboundshipment/",
+    "name": "inbound_inboundshipment_changelist",
+    "view": "django.contrib.admin.options.changelist_view",
+    "docstring": "The 'change list' admin view for this model.",
+    "methods": []
+  },
+  {
+    "url": "admin/inbound/inboundshipment/add/",
+    "name": "inbound_inboundshipment_add",
+    "view": "django.contrib.admin.options.add_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/inbound/inboundshipment/<path:object_id>/history/",
+    "name": "inbound_inboundshipment_history",
+    "view": "django.contrib.admin.options.history_view",
+    "docstring": "The 'history' admin view for this model.",
+    "methods": []
+  },
+  {
+    "url": "admin/inbound/inboundshipment/<path:object_id>/delete/",
+    "name": "inbound_inboundshipment_delete",
+    "view": "django.contrib.admin.options.delete_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/inbound/inboundshipment/<path:object_id>/change/",
+    "name": "inbound_inboundshipment_change",
+    "view": "django.contrib.admin.options.change_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/inbound/inboundshipment/<path:object_id>/",
+    "name": null,
+    "view": "django.views.generic.base.RedirectView",
+    "docstring": "Provide a redirect on any GET request.",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "admin/inbound/ocrdocument/",
+    "name": "inbound_ocrdocument_changelist",
+    "view": "django.contrib.admin.options.changelist_view",
+    "docstring": "The 'change list' admin view for this model.",
+    "methods": []
+  },
+  {
+    "url": "admin/inbound/ocrdocument/add/",
+    "name": "inbound_ocrdocument_add",
+    "view": "django.contrib.admin.options.add_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/inbound/ocrdocument/<path:object_id>/history/",
+    "name": "inbound_ocrdocument_history",
+    "view": "django.contrib.admin.options.history_view",
+    "docstring": "The 'history' admin view for this model.",
+    "methods": []
+  },
+  {
+    "url": "admin/inbound/ocrdocument/<path:object_id>/delete/",
+    "name": "inbound_ocrdocument_delete",
+    "view": "django.contrib.admin.options.delete_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/inbound/ocrdocument/<path:object_id>/change/",
+    "name": "inbound_ocrdocument_change",
+    "view": "django.contrib.admin.options.change_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/inbound/ocrdocument/<path:object_id>/",
+    "name": null,
+    "view": "django.views.generic.base.RedirectView",
+    "docstring": "Provide a redirect on any GET request.",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "admin/recommendations/recommendationrule/",
+    "name": "recommendations_recommendationrule_changelist",
+    "view": "django.contrib.admin.options.changelist_view",
+    "docstring": "The 'change list' admin view for this model.",
+    "methods": []
+  },
+  {
+    "url": "admin/recommendations/recommendationrule/add/",
+    "name": "recommendations_recommendationrule_add",
+    "view": "django.contrib.admin.options.add_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/recommendations/recommendationrule/<path:object_id>/history/",
+    "name": "recommendations_recommendationrule_history",
+    "view": "django.contrib.admin.options.history_view",
+    "docstring": "The 'history' admin view for this model.",
+    "methods": []
+  },
+  {
+    "url": "admin/recommendations/recommendationrule/<path:object_id>/delete/",
+    "name": "recommendations_recommendationrule_delete",
+    "view": "django.contrib.admin.options.delete_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/recommendations/recommendationrule/<path:object_id>/change/",
+    "name": "recommendations_recommendationrule_change",
+    "view": "django.contrib.admin.options.change_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/recommendations/recommendationrule/<path:object_id>/",
+    "name": null,
+    "view": "django.views.generic.base.RedirectView",
+    "docstring": "Provide a redirect on any GET request.",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "admin/recommendations/productclassification/",
+    "name": "recommendations_productclassification_changelist",
+    "view": "django.contrib.admin.options.changelist_view",
+    "docstring": "The 'change list' admin view for this model.",
+    "methods": []
+  },
+  {
+    "url": "admin/recommendations/productclassification/add/",
+    "name": "recommendations_productclassification_add",
+    "view": "django.contrib.admin.options.add_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/recommendations/productclassification/<path:object_id>/history/",
+    "name": "recommendations_productclassification_history",
+    "view": "django.contrib.admin.options.history_view",
+    "docstring": "The 'history' admin view for this model.",
+    "methods": []
+  },
+  {
+    "url": "admin/recommendations/productclassification/<path:object_id>/delete/",
+    "name": "recommendations_productclassification_delete",
+    "view": "django.contrib.admin.options.delete_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/recommendations/productclassification/<path:object_id>/change/",
+    "name": "recommendations_productclassification_change",
+    "view": "django.contrib.admin.options.change_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/recommendations/productclassification/<path:object_id>/",
+    "name": null,
+    "view": "django.views.generic.base.RedirectView",
+    "docstring": "Provide a redirect on any GET request.",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "admin/recommendations/storagerecommendation/",
+    "name": "recommendations_storagerecommendation_changelist",
+    "view": "django.contrib.admin.options.changelist_view",
+    "docstring": "The 'change list' admin view for this model.",
+    "methods": []
+  },
+  {
+    "url": "admin/recommendations/storagerecommendation/add/",
+    "name": "recommendations_storagerecommendation_add",
+    "view": "django.contrib.admin.options.add_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/recommendations/storagerecommendation/<path:object_id>/history/",
+    "name": "recommendations_storagerecommendation_history",
+    "view": "django.contrib.admin.options.history_view",
+    "docstring": "The 'history' admin view for this model.",
+    "methods": []
+  },
+  {
+    "url": "admin/recommendations/storagerecommendation/<path:object_id>/delete/",
+    "name": "recommendations_storagerecommendation_delete",
+    "view": "django.contrib.admin.options.delete_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/recommendations/storagerecommendation/<path:object_id>/change/",
+    "name": "recommendations_storagerecommendation_change",
+    "view": "django.contrib.admin.options.change_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/recommendations/storagerecommendation/<path:object_id>/",
+    "name": null,
+    "view": "django.views.generic.base.RedirectView",
+    "docstring": "Provide a redirect on any GET request.",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "admin/recommendations/binallocation/",
+    "name": "recommendations_binallocation_changelist",
+    "view": "django.contrib.admin.options.changelist_view",
+    "docstring": "The 'change list' admin view for this model.",
+    "methods": []
+  },
+  {
+    "url": "admin/recommendations/binallocation/add/",
+    "name": "recommendations_binallocation_add",
+    "view": "django.contrib.admin.options.add_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/recommendations/binallocation/<path:object_id>/history/",
+    "name": "recommendations_binallocation_history",
+    "view": "django.contrib.admin.options.history_view",
+    "docstring": "The 'history' admin view for this model.",
+    "methods": []
+  },
+  {
+    "url": "admin/recommendations/binallocation/<path:object_id>/delete/",
+    "name": "recommendations_binallocation_delete",
+    "view": "django.contrib.admin.options.delete_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/recommendations/binallocation/<path:object_id>/change/",
+    "name": "recommendations_binallocation_change",
+    "view": "django.contrib.admin.options.change_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/recommendations/binallocation/<path:object_id>/",
+    "name": null,
+    "view": "django.views.generic.base.RedirectView",
+    "docstring": "Provide a redirect on any GET request.",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "admin/recommendations/bin3dplacement/",
+    "name": "recommendations_bin3dplacement_changelist",
+    "view": "django.contrib.admin.options.changelist_view",
+    "docstring": "The 'change list' admin view for this model.",
+    "methods": []
+  },
+  {
+    "url": "admin/recommendations/bin3dplacement/add/",
+    "name": "recommendations_bin3dplacement_add",
+    "view": "django.contrib.admin.options.add_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/recommendations/bin3dplacement/<path:object_id>/history/",
+    "name": "recommendations_bin3dplacement_history",
+    "view": "django.contrib.admin.options.history_view",
+    "docstring": "The 'history' admin view for this model.",
+    "methods": []
+  },
+  {
+    "url": "admin/recommendations/bin3dplacement/<path:object_id>/delete/",
+    "name": "recommendations_bin3dplacement_delete",
+    "view": "django.contrib.admin.options.delete_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/recommendations/bin3dplacement/<path:object_id>/change/",
+    "name": "recommendations_bin3dplacement_change",
+    "view": "django.contrib.admin.options.change_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/recommendations/bin3dplacement/<path:object_id>/",
+    "name": null,
+    "view": "django.views.generic.base.RedirectView",
+    "docstring": "Provide a redirect on any GET request.",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "admin/^(?P<app_label>auth|identity|warehouse|inventory|orders|inbound|recommendations)/$",
+    "name": "app_list",
+    "view": "django.contrib.admin.sites.app_index",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "admin/(?P<url>.*)$",
+    "name": null,
+    "view": "django.contrib.admin.sites.catch_all_view",
+    "docstring": "",
+    "methods": []
+  },
+  {
+    "url": "api/users/login/",
+    "name": "token_obtain_pair",
+    "view": "rest_framework_simplejwt.views.TokenObtainPairView",
+    "docstring": "Takes a set of user credentials and returns an access and refresh JSON web\n    token pair to prove the authentication of those credentials.",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "api/users/token/refresh/",
+    "name": "token_refresh",
+    "view": "rest_framework_simplejwt.views.TokenRefreshView",
+    "docstring": "Takes a refresh type JSON web token and returns an access type JSON web\n    token if the refresh token is valid.",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "api/users/^$",
+    "name": "users-list",
+    "view": "apps.identity.presentation.api.user_views.UserViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST"
+    ]
+  },
+  {
+    "url": "api/users/^\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "users-list",
+    "view": "apps.identity.presentation.api.user_views.UserViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST"
+    ]
+  },
+  {
+    "url": "api/users/^(?P<pk>[^/.]+)/$",
+    "name": "users-detail",
+    "view": "apps.identity.presentation.api.user_views.UserViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ]
+  },
+  {
+    "url": "api/users/^(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "users-detail",
+    "view": "apps.identity.presentation.api.user_views.UserViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ]
+  },
+  {
+    "url": "api/users/",
+    "name": "api-root",
+    "view": "rest_framework.routers.APIRootView",
+    "docstring": "The default basic root view for DefaultRouter",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "api/users/<drf_format_suffix:format>",
+    "name": "api-root",
+    "view": "rest_framework.routers.APIRootView",
+    "docstring": "The default basic root view for DefaultRouter",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "api/audit-logs/^scan-logs/$",
+    "name": "scan-logs-list",
+    "view": "apps.identity.presentation.api.audit_views.ScanLogViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST"
+    ]
+  },
+  {
+    "url": "api/audit-logs/^scan-logs\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "scan-logs-list",
+    "view": "apps.identity.presentation.api.audit_views.ScanLogViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST"
+    ]
+  },
+  {
+    "url": "api/audit-logs/^scan-logs/(?P<pk>[^/.]+)/$",
+    "name": "scan-logs-detail",
+    "view": "apps.identity.presentation.api.audit_views.ScanLogViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ]
+  },
+  {
+    "url": "api/audit-logs/^scan-logs/(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "scan-logs-detail",
+    "view": "apps.identity.presentation.api.audit_views.ScanLogViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ]
+  },
+  {
+    "url": "api/audit-logs/^$",
+    "name": "audit_logs-list",
+    "view": "apps.identity.presentation.api.audit_views.AuditLogViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST"
+    ]
+  },
+  {
+    "url": "api/audit-logs/^\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "audit_logs-list",
+    "view": "apps.identity.presentation.api.audit_views.AuditLogViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST"
+    ]
+  },
+  {
+    "url": "api/audit-logs/^(?P<pk>[^/.]+)/$",
+    "name": "audit_logs-detail",
+    "view": "apps.identity.presentation.api.audit_views.AuditLogViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ]
+  },
+  {
+    "url": "api/audit-logs/^(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "audit_logs-detail",
+    "view": "apps.identity.presentation.api.audit_views.AuditLogViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ]
+  },
+  {
+    "url": "api/audit-logs/",
+    "name": "api-root",
+    "view": "rest_framework.routers.APIRootView",
+    "docstring": "The default basic root view for DefaultRouter",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "api/audit-logs/<drf_format_suffix:format>",
+    "name": "api-root",
+    "view": "rest_framework.routers.APIRootView",
+    "docstring": "The default basic root view for DefaultRouter",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "api/layout/upload",
+    "name": "layout-upload",
+    "view": "apps.warehouse.presentation.api.layout_views.LayoutUploadView",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "api/layout/analyze",
+    "name": "layout-analyze",
+    "view": "apps.warehouse.presentation.api.layout_views.LayoutAnalyzeView",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "api/layout/entities",
+    "name": "layout-entities",
+    "view": "apps.warehouse.presentation.api.layout_views.LayoutEntitiesView",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "api/layout/generate-topology",
+    "name": "layout-generate-topology",
+    "view": "apps.warehouse.presentation.api.layout_views.GenerateTopologyView",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "api/layout/graph",
+    "name": "layout-graph",
+    "view": "apps.warehouse.presentation.api.layout_views.LayoutGraphView",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "api/layout/<uuid:layout_id>",
+    "name": "layout-detail",
+    "view": "apps.warehouse.presentation.api.layout_views.LayoutDetailView",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "api/twin/layout/<uuid:layout_id>",
+    "name": "twin-layout-detail",
+    "view": "apps.warehouse.presentation.api.twin_views.WarehouseTwinDetailView",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "api/twin/racks",
+    "name": "twin-racks",
+    "view": "apps.warehouse.presentation.api.twin_views.TwinRacksView",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "api/twin/zones",
+    "name": "twin-zones",
+    "view": "apps.warehouse.presentation.api.twin_views.TwinZonesView",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "api/twin/occupancy",
+    "name": "twin-occupancy",
+    "view": "apps.warehouse.presentation.api.twin_views.TwinOccupancyView",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "api/twin/paths",
+    "name": "twin-paths",
+    "view": "apps.warehouse.presentation.api.twin_views.TwinPathsView",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "api/twin/summary",
+    "name": "twin-summary",
+    "view": "apps.warehouse.presentation.api.twin_views.TwinSummaryView",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "api/warehouses/^racks/$",
+    "name": "racks-list",
+    "view": "apps.warehouse.presentation.api.warehouse_views.RackViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST"
+    ]
+  },
+  {
+    "url": "api/warehouses/^racks\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "racks-list",
+    "view": "apps.warehouse.presentation.api.warehouse_views.RackViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST"
+    ]
+  },
+  {
+    "url": "api/warehouses/^racks/(?P<pk>[^/.]+)/$",
+    "name": "racks-detail",
+    "view": "apps.warehouse.presentation.api.warehouse_views.RackViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ]
+  },
+  {
+    "url": "api/warehouses/^racks/(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "racks-detail",
+    "view": "apps.warehouse.presentation.api.warehouse_views.RackViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ]
+  },
+  {
+    "url": "api/warehouses/^spatial-entities/$",
+    "name": "spatial-entities-list",
+    "view": "apps.warehouse.presentation.api.warehouse_views.SpatialEntityViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST"
+    ]
+  },
+  {
+    "url": "api/warehouses/^spatial-entities\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "spatial-entities-list",
+    "view": "apps.warehouse.presentation.api.warehouse_views.SpatialEntityViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST"
+    ]
+  },
+  {
+    "url": "api/warehouses/^spatial-entities/(?P<pk>[^/.]+)/$",
+    "name": "spatial-entities-detail",
+    "view": "apps.warehouse.presentation.api.warehouse_views.SpatialEntityViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ]
+  },
+  {
+    "url": "api/warehouses/^spatial-entities/(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "spatial-entities-detail",
+    "view": "apps.warehouse.presentation.api.warehouse_views.SpatialEntityViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ]
+  },
+  {
+    "url": "api/warehouses/^navigation-nodes/$",
+    "name": "navigation-nodes-list",
+    "view": "apps.warehouse.presentation.api.warehouse_views.NavigationNodeViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST"
+    ]
+  },
+  {
+    "url": "api/warehouses/^navigation-nodes\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "navigation-nodes-list",
+    "view": "apps.warehouse.presentation.api.warehouse_views.NavigationNodeViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST"
+    ]
+  },
+  {
+    "url": "api/warehouses/^navigation-nodes/(?P<pk>[^/.]+)/$",
+    "name": "navigation-nodes-detail",
+    "view": "apps.warehouse.presentation.api.warehouse_views.NavigationNodeViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ]
+  },
+  {
+    "url": "api/warehouses/^navigation-nodes/(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "navigation-nodes-detail",
+    "view": "apps.warehouse.presentation.api.warehouse_views.NavigationNodeViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ]
+  },
+  {
+    "url": "api/warehouses/^paths/$",
+    "name": "paths-list",
+    "view": "apps.warehouse.presentation.api.warehouse_views.WarehousePathViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST"
+    ]
+  },
+  {
+    "url": "api/warehouses/^paths\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "paths-list",
+    "view": "apps.warehouse.presentation.api.warehouse_views.WarehousePathViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST"
+    ]
+  },
+  {
+    "url": "api/warehouses/^paths/(?P<pk>[^/.]+)/$",
+    "name": "paths-detail",
+    "view": "apps.warehouse.presentation.api.warehouse_views.WarehousePathViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ]
+  },
+  {
+    "url": "api/warehouses/^paths/(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "paths-detail",
+    "view": "apps.warehouse.presentation.api.warehouse_views.WarehousePathViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ]
+  },
+  {
+    "url": "api/warehouses/^rack-coordinates/$",
+    "name": "rack-coordinates-list",
+    "view": "apps.warehouse.presentation.api.warehouse_views.RackCoordinateViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST"
+    ]
+  },
+  {
+    "url": "api/warehouses/^rack-coordinates\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "rack-coordinates-list",
+    "view": "apps.warehouse.presentation.api.warehouse_views.RackCoordinateViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST"
+    ]
+  },
+  {
+    "url": "api/warehouses/^rack-coordinates/(?P<pk>[^/.]+)/$",
+    "name": "rack-coordinates-detail",
+    "view": "apps.warehouse.presentation.api.warehouse_views.RackCoordinateViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ]
+  },
+  {
+    "url": "api/warehouses/^rack-coordinates/(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "rack-coordinates-detail",
+    "view": "apps.warehouse.presentation.api.warehouse_views.RackCoordinateViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ]
+  },
+  {
+    "url": "api/warehouses/^$",
+    "name": "warehouses-list",
+    "view": "apps.warehouse.presentation.api.warehouse_views.WarehouseViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST"
+    ]
+  },
+  {
+    "url": "api/warehouses/^\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "warehouses-list",
+    "view": "apps.warehouse.presentation.api.warehouse_views.WarehouseViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST"
+    ]
+  },
+  {
+    "url": "api/warehouses/^(?P<pk>[^/.]+)/$",
+    "name": "warehouses-detail",
+    "view": "apps.warehouse.presentation.api.warehouse_views.WarehouseViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ]
+  },
+  {
+    "url": "api/warehouses/^(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "warehouses-detail",
+    "view": "apps.warehouse.presentation.api.warehouse_views.WarehouseViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ]
+  },
+  {
+    "url": "api/warehouses/",
+    "name": "api-root",
+    "view": "rest_framework.routers.APIRootView",
+    "docstring": "The default basic root view for DefaultRouter",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "api/warehouses/<drf_format_suffix:format>",
+    "name": "api-root",
+    "view": "rest_framework.routers.APIRootView",
+    "docstring": "The default basic root view for DefaultRouter",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "api/zones/^zone-groups/$",
+    "name": "zone-groups-list",
+    "view": "apps.warehouse.presentation.api.zone_views.ZoneGroupViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST"
+    ]
+  },
+  {
+    "url": "api/zones/^zone-groups\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "zone-groups-list",
+    "view": "apps.warehouse.presentation.api.zone_views.ZoneGroupViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST"
+    ]
+  },
+  {
+    "url": "api/zones/^zone-groups/(?P<pk>[^/.]+)/$",
+    "name": "zone-groups-detail",
+    "view": "apps.warehouse.presentation.api.zone_views.ZoneGroupViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ]
+  },
+  {
+    "url": "api/zones/^zone-groups/(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "zone-groups-detail",
+    "view": "apps.warehouse.presentation.api.zone_views.ZoneGroupViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ]
+  },
+  {
+    "url": "api/zones/^aisles/$",
+    "name": "aisles-list",
+    "view": "apps.warehouse.presentation.api.zone_views.AisleViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST"
+    ]
+  },
+  {
+    "url": "api/zones/^aisles\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "aisles-list",
+    "view": "apps.warehouse.presentation.api.zone_views.AisleViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST"
+    ]
+  },
+  {
+    "url": "api/zones/^aisles/(?P<pk>[^/.]+)/$",
+    "name": "aisles-detail",
+    "view": "apps.warehouse.presentation.api.zone_views.AisleViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ]
+  },
+  {
+    "url": "api/zones/^aisles/(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "aisles-detail",
+    "view": "apps.warehouse.presentation.api.zone_views.AisleViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ]
+  },
+  {
+    "url": "api/zones/^boundaries/$",
+    "name": "zone-boundaries-list",
+    "view": "apps.warehouse.presentation.api.zone_views.ZoneBoundaryViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST"
+    ]
+  },
+  {
+    "url": "api/zones/^boundaries\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "zone-boundaries-list",
+    "view": "apps.warehouse.presentation.api.zone_views.ZoneBoundaryViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST"
+    ]
+  },
+  {
+    "url": "api/zones/^boundaries/(?P<pk>[^/.]+)/$",
+    "name": "zone-boundaries-detail",
+    "view": "apps.warehouse.presentation.api.zone_views.ZoneBoundaryViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ]
+  },
+  {
+    "url": "api/zones/^boundaries/(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "zone-boundaries-detail",
+    "view": "apps.warehouse.presentation.api.zone_views.ZoneBoundaryViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ]
+  },
+  {
+    "url": "api/zones/^$",
+    "name": "zones-list",
+    "view": "apps.warehouse.presentation.api.zone_views.ZoneViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST"
+    ]
+  },
+  {
+    "url": "api/zones/^\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "zones-list",
+    "view": "apps.warehouse.presentation.api.zone_views.ZoneViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST"
+    ]
+  },
+  {
+    "url": "api/zones/^(?P<pk>[^/.]+)/$",
+    "name": "zones-detail",
+    "view": "apps.warehouse.presentation.api.zone_views.ZoneViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ]
+  },
+  {
+    "url": "api/zones/^(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "zones-detail",
+    "view": "apps.warehouse.presentation.api.zone_views.ZoneViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ]
+  },
+  {
+    "url": "api/zones/",
+    "name": "api-root",
+    "view": "rest_framework.routers.APIRootView",
+    "docstring": "The default basic root view for DefaultRouter",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "api/zones/<drf_format_suffix:format>",
+    "name": "api-root",
+    "view": "rest_framework.routers.APIRootView",
+    "docstring": "The default basic root view for DefaultRouter",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "api/bins/^$",
+    "name": "bins-list",
+    "view": "apps.warehouse.presentation.api.bin_views.BinViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST"
+    ]
+  },
+  {
+    "url": "api/bins/^\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "bins-list",
+    "view": "apps.warehouse.presentation.api.bin_views.BinViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST"
+    ]
+  },
+  {
+    "url": "api/bins/^(?P<pk>[^/.]+)/$",
+    "name": "bins-detail",
+    "view": "apps.warehouse.presentation.api.bin_views.BinViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ]
+  },
+  {
+    "url": "api/bins/^(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "bins-detail",
+    "view": "apps.warehouse.presentation.api.bin_views.BinViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ]
+  },
+  {
+    "url": "api/bins/",
+    "name": "api-root",
+    "view": "rest_framework.routers.APIRootView",
+    "docstring": "The default basic root view for DefaultRouter",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "api/bins/<drf_format_suffix:format>",
+    "name": "api-root",
+    "view": "rest_framework.routers.APIRootView",
+    "docstring": "The default basic root view for DefaultRouter",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "api/routes/generate/",
+    "name": "generate-route",
+    "view": "apps.warehouse.presentation.api.generate_route_view.GenerateRouteView",
+    "docstring": "POST /api/routes/generate/\n    Exposes the existing routing engine.\n    Request body:\n        {\n            \"source_bin_id\": \"<uuid>\",\n            \"destination_bin_id\": \"<uuid>\"\n        }",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "api/routes/^block-path/$",
+    "name": "routes-block-path",
+    "view": "apps.warehouse.presentation.api.route_views.RouteViewSet",
+    "docstring": "",
+    "methods": [
+      "POST"
+    ]
+  },
+  {
+    "url": "api/routes/^block-path\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "routes-block-path",
+    "view": "apps.warehouse.presentation.api.route_views.RouteViewSet",
+    "docstring": "",
+    "methods": [
+      "POST"
+    ]
+  },
+  {
+    "url": "api/routes/^congestion/$",
+    "name": "routes-congestion",
+    "view": "apps.warehouse.presentation.api.route_views.RouteViewSet",
+    "docstring": "",
+    "methods": [
+      "GET"
+    ]
+  },
+  {
+    "url": "api/routes/^congestion\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "routes-congestion",
+    "view": "apps.warehouse.presentation.api.route_views.RouteViewSet",
+    "docstring": "",
+    "methods": [
+      "GET"
+    ]
+  },
+  {
+    "url": "api/routes/^multi-pick/$",
+    "name": "routes-multi-pick",
+    "view": "apps.warehouse.presentation.api.route_views.RouteViewSet",
+    "docstring": "",
+    "methods": [
+      "POST"
+    ]
+  },
+  {
+    "url": "api/routes/^multi-pick\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "routes-multi-pick",
+    "view": "apps.warehouse.presentation.api.route_views.RouteViewSet",
+    "docstring": "",
+    "methods": [
+      "POST"
+    ]
+  },
+  {
+    "url": "api/routes/^optimize/$",
+    "name": "routes-optimize",
+    "view": "apps.warehouse.presentation.api.route_views.RouteViewSet",
+    "docstring": "",
+    "methods": [
+      "POST"
+    ]
+  },
+  {
+    "url": "api/routes/^optimize\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "routes-optimize",
+    "view": "apps.warehouse.presentation.api.route_views.RouteViewSet",
+    "docstring": "",
+    "methods": [
+      "POST"
+    ]
+  },
+  {
+    "url": "api/routes/^recalculate/$",
+    "name": "routes-recalculate",
+    "view": "apps.warehouse.presentation.api.route_views.RouteViewSet",
+    "docstring": "",
+    "methods": [
+      "POST"
+    ]
+  },
+  {
+    "url": "api/routes/^recalculate\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "routes-recalculate",
+    "view": "apps.warehouse.presentation.api.route_views.RouteViewSet",
+    "docstring": "",
+    "methods": [
+      "POST"
+    ]
+  },
+  {
+    "url": "api/routes/^(?P<pk>[^/.]+)/$",
+    "name": "routes-detail",
+    "view": "apps.warehouse.presentation.api.route_views.RouteViewSet",
+    "docstring": "",
+    "methods": [
+      "GET"
+    ]
+  },
+  {
+    "url": "api/routes/^(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "routes-detail",
+    "view": "apps.warehouse.presentation.api.route_views.RouteViewSet",
+    "docstring": "",
+    "methods": [
+      "GET"
+    ]
+  },
+  {
+    "url": "api/routes/",
+    "name": "api-root",
+    "view": "rest_framework.routers.APIRootView",
+    "docstring": "The default basic root view for DefaultRouter",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "api/routes/<drf_format_suffix:format>",
+    "name": "api-root",
+    "view": "rest_framework.routers.APIRootView",
+    "docstring": "The default basic root view for DefaultRouter",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "api/products/^$",
+    "name": "products-list",
+    "view": "apps.inventory.presentation.api.product_views.ProductViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST"
+    ]
+  },
+  {
+    "url": "api/products/^\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "products-list",
+    "view": "apps.inventory.presentation.api.product_views.ProductViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST"
+    ]
+  },
+  {
+    "url": "api/products/^(?P<pk>[^/.]+)/$",
+    "name": "products-detail",
+    "view": "apps.inventory.presentation.api.product_views.ProductViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ]
+  },
+  {
+    "url": "api/products/^(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "products-detail",
+    "view": "apps.inventory.presentation.api.product_views.ProductViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ]
+  },
+  {
+    "url": "api/products/",
+    "name": "api-root",
+    "view": "rest_framework.routers.APIRootView",
+    "docstring": "The default basic root view for DefaultRouter",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "api/products/<drf_format_suffix:format>",
+    "name": "api-root",
+    "view": "rest_framework.routers.APIRootView",
+    "docstring": "The default basic root view for DefaultRouter",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "api/inventory/^$",
+    "name": "inventory-list",
+    "view": "apps.inventory.presentation.api.inventory_views.InventoryViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST"
+    ]
+  },
+  {
+    "url": "api/inventory/^\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "inventory-list",
+    "view": "apps.inventory.presentation.api.inventory_views.InventoryViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST"
+    ]
+  },
+  {
+    "url": "api/inventory/^adjust/$",
+    "name": "inventory-adjust",
+    "view": "apps.inventory.presentation.api.inventory_views.InventoryViewSet",
+    "docstring": "",
+    "methods": [
+      "POST"
+    ]
+  },
+  {
+    "url": "api/inventory/^adjust\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "inventory-adjust",
+    "view": "apps.inventory.presentation.api.inventory_views.InventoryViewSet",
+    "docstring": "",
+    "methods": [
+      "POST"
+    ]
+  },
+  {
+    "url": "api/inventory/^audit/$",
+    "name": "inventory-audit",
+    "view": "apps.inventory.presentation.api.inventory_views.InventoryViewSet",
+    "docstring": "",
+    "methods": [
+      "POST"
+    ]
+  },
+  {
+    "url": "api/inventory/^audit\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "inventory-audit",
+    "view": "apps.inventory.presentation.api.inventory_views.InventoryViewSet",
+    "docstring": "",
+    "methods": [
+      "POST"
+    ]
+  },
+  {
+    "url": "api/inventory/^relocate/$",
+    "name": "inventory-relocate",
+    "view": "apps.inventory.presentation.api.inventory_views.InventoryViewSet",
+    "docstring": "",
+    "methods": [
+      "POST"
+    ]
+  },
+  {
+    "url": "api/inventory/^relocate\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "inventory-relocate",
+    "view": "apps.inventory.presentation.api.inventory_views.InventoryViewSet",
+    "docstring": "",
+    "methods": [
+      "POST"
+    ]
+  },
+  {
+    "url": "api/inventory/^report-damage/$",
+    "name": "inventory-report-damage",
+    "view": "apps.inventory.presentation.api.inventory_views.InventoryViewSet",
+    "docstring": "",
+    "methods": [
+      "POST"
+    ]
+  },
+  {
+    "url": "api/inventory/^report-damage\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "inventory-report-damage",
+    "view": "apps.inventory.presentation.api.inventory_views.InventoryViewSet",
+    "docstring": "",
+    "methods": [
+      "POST"
+    ]
+  },
+  {
+    "url": "api/inventory/^transfer/$",
+    "name": "inventory-transfer",
+    "view": "apps.inventory.presentation.api.inventory_views.InventoryViewSet",
+    "docstring": "",
+    "methods": [
+      "POST"
+    ]
+  },
+  {
+    "url": "api/inventory/^transfer\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "inventory-transfer",
+    "view": "apps.inventory.presentation.api.inventory_views.InventoryViewSet",
+    "docstring": "",
+    "methods": [
+      "POST"
+    ]
+  },
+  {
+    "url": "api/inventory/^(?P<pk>[^/.]+)/$",
+    "name": "inventory-detail",
+    "view": "apps.inventory.presentation.api.inventory_views.InventoryViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ]
+  },
+  {
+    "url": "api/inventory/^(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "inventory-detail",
+    "view": "apps.inventory.presentation.api.inventory_views.InventoryViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ]
+  },
+  {
+    "url": "api/inventory/",
+    "name": "api-root",
+    "view": "rest_framework.routers.APIRootView",
+    "docstring": "The default basic root view for DefaultRouter",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "api/inventory/<drf_format_suffix:format>",
+    "name": "api-root",
+    "view": "rest_framework.routers.APIRootView",
+    "docstring": "The default basic root view for DefaultRouter",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "api/movements/^allocations/$",
+    "name": "storage-allocations-list",
+    "view": "apps.inventory.presentation.api.movement_views.StorageAllocationViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST"
+    ]
+  },
+  {
+    "url": "api/movements/^allocations\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "storage-allocations-list",
+    "view": "apps.inventory.presentation.api.movement_views.StorageAllocationViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST"
+    ]
+  },
+  {
+    "url": "api/movements/^allocations/(?P<pk>[^/.]+)/$",
+    "name": "storage-allocations-detail",
+    "view": "apps.inventory.presentation.api.movement_views.StorageAllocationViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ]
+  },
+  {
+    "url": "api/movements/^allocations/(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "storage-allocations-detail",
+    "view": "apps.inventory.presentation.api.movement_views.StorageAllocationViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ]
+  },
+  {
+    "url": "api/movements/^$",
+    "name": "movements-list",
+    "view": "apps.inventory.presentation.api.movement_views.MovementViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST"
+    ]
+  },
+  {
+    "url": "api/movements/^\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "movements-list",
+    "view": "apps.inventory.presentation.api.movement_views.MovementViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST"
+    ]
+  },
+  {
+    "url": "api/movements/^(?P<pk>[^/.]+)/$",
+    "name": "movements-detail",
+    "view": "apps.inventory.presentation.api.movement_views.MovementViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ]
+  },
+  {
+    "url": "api/movements/^(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "movements-detail",
+    "view": "apps.inventory.presentation.api.movement_views.MovementViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ]
+  },
+  {
+    "url": "api/movements/",
+    "name": "api-root",
+    "view": "rest_framework.routers.APIRootView",
+    "docstring": "The default basic root view for DefaultRouter",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "api/movements/<drf_format_suffix:format>",
+    "name": "api-root",
+    "view": "rest_framework.routers.APIRootView",
+    "docstring": "The default basic root view for DefaultRouter",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "api/recommendations/storage/",
+    "name": "storage-recommendation",
+    "view": "apps.recommendations.presentation.api.storage_recommendation_view.StorageRecommendationView",
+    "docstring": "API endpoint to generate and retrieve storage recommendations.\n    POST /api/recommendations/storage/",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "api/recommendations/bin-allocation/<int:pk>/complete/",
+    "name": "bin-allocation-complete",
+    "view": "apps.recommendations.presentation.api.bin_allocation_complete_view.BinAllocationCompleteView",
+    "docstring": "PATCH /api/recommendations/bin-allocation/{id}/complete/\n    Request:\n    {\n      \"operator\": \"warehouse_operator_01\"\n    }",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "api/recommendations/bin-allocation/",
+    "name": "bin-allocation",
+    "view": "apps.recommendations.presentation.api.bin_allocation_view.BinAllocationView",
+    "docstring": "API endpoint to select and allocate a bin for a product.\n    POST /api/recommendations/bin-allocation/",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "api/recommendations/3d-placement/",
+    "name": "three-d-placement",
+    "view": "apps.recommendations.presentation.api.three_d_placement_view.ThreeDPlacementView",
+    "docstring": "POST /api/recommendations/3d-placement/\n    Evaluates 3D placement positioning for a completed BinAllocation.",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "api/recommendations/^$",
+    "name": "recommendations-list",
+    "view": "apps.inventory.presentation.api.recommendation_views.RecommendationViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST"
+    ]
+  },
+  {
+    "url": "api/recommendations/^\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "recommendations-list",
+    "view": "apps.inventory.presentation.api.recommendation_views.RecommendationViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST"
+    ]
+  },
+  {
+    "url": "api/recommendations/^allocate/$",
+    "name": "recommendations-allocate",
+    "view": "apps.inventory.presentation.api.recommendation_views.RecommendationViewSet",
+    "docstring": "",
+    "methods": [
+      "POST"
+    ]
+  },
+  {
+    "url": "api/recommendations/^allocate\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "recommendations-allocate",
+    "view": "apps.inventory.presentation.api.recommendation_views.RecommendationViewSet",
+    "docstring": "",
+    "methods": [
+      "POST"
+    ]
+  },
+  {
+    "url": "api/recommendations/^suggest-bin/$",
+    "name": "recommendations-suggest-bin",
+    "view": "apps.inventory.presentation.api.recommendation_views.RecommendationViewSet",
+    "docstring": "",
+    "methods": [
+      "POST"
+    ]
+  },
+  {
+    "url": "api/recommendations/^suggest-bin\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "recommendations-suggest-bin",
+    "view": "apps.inventory.presentation.api.recommendation_views.RecommendationViewSet",
+    "docstring": "",
+    "methods": [
+      "POST"
+    ]
+  },
+  {
+    "url": "api/recommendations/^(?P<pk>[^/.]+)/$",
+    "name": "recommendations-detail",
+    "view": "apps.inventory.presentation.api.recommendation_views.RecommendationViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ]
+  },
+  {
+    "url": "api/recommendations/^(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "recommendations-detail",
+    "view": "apps.inventory.presentation.api.recommendation_views.RecommendationViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ]
+  },
+  {
+    "url": "api/recommendations/",
+    "name": "api-root",
+    "view": "rest_framework.routers.APIRootView",
+    "docstring": "The default basic root view for DefaultRouter",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "api/recommendations/<drf_format_suffix:format>",
+    "name": "api-root",
+    "view": "rest_framework.routers.APIRootView",
+    "docstring": "The default basic root view for DefaultRouter",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "api/ai/query/",
+    "name": "rag-query",
+    "view": "apps.ai.presentation.api.rag_query_view.RAGQueryView",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "api/ai/rag-health/",
+    "name": "rag-health",
+    "view": "apps.ai.presentation.api.rag_query_view.RAGHealthView",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "api/ai/^alerts/$",
+    "name": "ai-recommendations-alerts",
+    "view": "apps.inventory.presentation.api.recommendation_views.AIRecommendationViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST"
+    ]
+  },
+  {
+    "url": "api/ai/^alerts\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "ai-recommendations-alerts",
+    "view": "apps.inventory.presentation.api.recommendation_views.AIRecommendationViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST"
+    ]
+  },
+  {
+    "url": "api/ai/^congestion-risk/$",
+    "name": "ai-recommendations-congestion-risk",
+    "view": "apps.inventory.presentation.api.recommendation_views.AIRecommendationViewSet",
+    "docstring": "",
+    "methods": [
+      "GET"
+    ]
+  },
+  {
+    "url": "api/ai/^congestion-risk\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "ai-recommendations-congestion-risk",
+    "view": "apps.inventory.presentation.api.recommendation_views.AIRecommendationViewSet",
+    "docstring": "",
+    "methods": [
+      "GET"
+    ]
+  },
+  {
+    "url": "api/ai/^feedback/$",
+    "name": "ai-recommendations-feedback",
+    "view": "apps.inventory.presentation.api.recommendation_views.AIRecommendationViewSet",
+    "docstring": "",
+    "methods": [
+      "POST"
+    ]
+  },
+  {
+    "url": "api/ai/^feedback\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "ai-recommendations-feedback",
+    "view": "apps.inventory.presentation.api.recommendation_views.AIRecommendationViewSet",
+    "docstring": "",
+    "methods": [
+      "POST"
+    ]
+  },
+  {
+    "url": "api/ai/^hotspot-prevention/$",
+    "name": "ai-recommendations-hotspot-prevention",
+    "view": "apps.inventory.presentation.api.recommendation_views.AIRecommendationViewSet",
+    "docstring": "",
+    "methods": [
+      "GET"
+    ]
+  },
+  {
+    "url": "api/ai/^hotspot-prevention\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "ai-recommendations-hotspot-prevention",
+    "view": "apps.inventory.presentation.api.recommendation_views.AIRecommendationViewSet",
+    "docstring": "",
+    "methods": [
+      "GET"
+    ]
+  },
+  {
+    "url": "api/ai/^operational-scores/$",
+    "name": "ai-recommendations-operational-scores",
+    "view": "apps.inventory.presentation.api.recommendation_views.AIRecommendationViewSet",
+    "docstring": "",
+    "methods": [
+      "GET"
+    ]
+  },
+  {
+    "url": "api/ai/^operational-scores\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "ai-recommendations-operational-scores",
+    "view": "apps.inventory.presentation.api.recommendation_views.AIRecommendationViewSet",
+    "docstring": "",
+    "methods": [
+      "GET"
+    ]
+  },
+  {
+    "url": "api/ai/^optimize-slotting/$",
+    "name": "ai-recommendations-optimize-slotting",
+    "view": "apps.inventory.presentation.api.recommendation_views.AIRecommendationViewSet",
+    "docstring": "",
+    "methods": [
+      "POST"
+    ]
+  },
+  {
+    "url": "api/ai/^optimize-slotting\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "ai-recommendations-optimize-slotting",
+    "view": "apps.inventory.presentation.api.recommendation_views.AIRecommendationViewSet",
+    "docstring": "",
+    "methods": [
+      "POST"
+    ]
+  },
+  {
+    "url": "api/ai/^predict-demand/$",
+    "name": "ai-recommendations-predict-demand",
+    "view": "apps.inventory.presentation.api.recommendation_views.AIRecommendationViewSet",
+    "docstring": "",
+    "methods": [
+      "POST"
+    ]
+  },
+  {
+    "url": "api/ai/^predict-demand\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "ai-recommendations-predict-demand",
+    "view": "apps.inventory.presentation.api.recommendation_views.AIRecommendationViewSet",
+    "docstring": "",
+    "methods": [
+      "POST"
+    ]
+  },
+  {
+    "url": "api/ai/^recommendations/$",
+    "name": "ai-recommendations-recommendations",
+    "view": "apps.inventory.presentation.api.recommendation_views.AIRecommendationViewSet",
+    "docstring": "",
+    "methods": [
+      "GET"
+    ]
+  },
+  {
+    "url": "api/ai/^recommendations\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "ai-recommendations-recommendations",
+    "view": "apps.inventory.presentation.api.recommendation_views.AIRecommendationViewSet",
+    "docstring": "",
+    "methods": [
+      "GET"
+    ]
+  },
+  {
+    "url": "api/ai/^slotting-score/$",
+    "name": "ai-recommendations-slotting-score",
+    "view": "apps.inventory.presentation.api.recommendation_views.AIRecommendationViewSet",
+    "docstring": "",
+    "methods": [
+      "GET"
+    ]
+  },
+  {
+    "url": "api/ai/^slotting-score\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "ai-recommendations-slotting-score",
+    "view": "apps.inventory.presentation.api.recommendation_views.AIRecommendationViewSet",
+    "docstring": "",
+    "methods": [
+      "GET"
+    ]
+  },
+  {
+    "url": "api/ai/",
+    "name": "api-root",
+    "view": "rest_framework.routers.APIRootView",
+    "docstring": "The default basic root view for DefaultRouter",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "api/ai/<drf_format_suffix:format>",
+    "name": "api-root",
+    "view": "rest_framework.routers.APIRootView",
+    "docstring": "The default basic root view for DefaultRouter",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "api/dashboards/^analytics/bin-heatmap/$",
+    "name": "analytics-bin-heatmap",
+    "view": "apps.inventory.presentation.api.dashboard_views.AnalyticsViewSet",
+    "docstring": "ViewSet for fetching warehouse ClickHouse analytics and heatmaps.\n    All endpoints accept warehouse_id, start_time, end_time query params.",
+    "methods": [
+      "GET"
+    ]
+  },
+  {
+    "url": "api/dashboards/^analytics/bin-heatmap\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "analytics-bin-heatmap",
+    "view": "apps.inventory.presentation.api.dashboard_views.AnalyticsViewSet",
+    "docstring": "ViewSet for fetching warehouse ClickHouse analytics and heatmaps.\n    All endpoints accept warehouse_id, start_time, end_time query params.",
+    "methods": [
+      "GET"
+    ]
+  },
+  {
+    "url": "api/dashboards/^analytics/heatmaps/$",
+    "name": "analytics-heatmaps",
+    "view": "apps.inventory.presentation.api.dashboard_views.AnalyticsViewSet",
+    "docstring": "ViewSet for fetching warehouse ClickHouse analytics and heatmaps.\n    All endpoints accept warehouse_id, start_time, end_time query params.",
+    "methods": [
+      "GET"
+    ]
+  },
+  {
+    "url": "api/dashboards/^analytics/heatmaps\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "analytics-heatmaps",
+    "view": "apps.inventory.presentation.api.dashboard_views.AnalyticsViewSet",
+    "docstring": "ViewSet for fetching warehouse ClickHouse analytics and heatmaps.\n    All endpoints accept warehouse_id, start_time, end_time query params.",
+    "methods": [
+      "GET"
+    ]
+  },
+  {
+    "url": "api/dashboards/^analytics/inbound-metrics/$",
+    "name": "analytics-inbound-metrics",
+    "view": "apps.inventory.presentation.api.dashboard_views.AnalyticsViewSet",
+    "docstring": "ViewSet for fetching warehouse ClickHouse analytics and heatmaps.\n    All endpoints accept warehouse_id, start_time, end_time query params.",
+    "methods": [
+      "GET"
+    ]
+  },
+  {
+    "url": "api/dashboards/^analytics/inbound-metrics\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "analytics-inbound-metrics",
+    "view": "apps.inventory.presentation.api.dashboard_views.AnalyticsViewSet",
+    "docstring": "ViewSet for fetching warehouse ClickHouse analytics and heatmaps.\n    All endpoints accept warehouse_id, start_time, end_time query params.",
+    "methods": [
+      "GET"
+    ]
+  },
+  {
+    "url": "api/dashboards/^analytics/inventory-movements/$",
+    "name": "analytics-inventory-movements",
+    "view": "apps.inventory.presentation.api.dashboard_views.AnalyticsViewSet",
+    "docstring": "ViewSet for fetching warehouse ClickHouse analytics and heatmaps.\n    All endpoints accept warehouse_id, start_time, end_time query params.",
+    "methods": [
+      "GET"
+    ]
+  },
+  {
+    "url": "api/dashboards/^analytics/inventory-movements\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "analytics-inventory-movements",
+    "view": "apps.inventory.presentation.api.dashboard_views.AnalyticsViewSet",
+    "docstring": "ViewSet for fetching warehouse ClickHouse analytics and heatmaps.\n    All endpoints accept warehouse_id, start_time, end_time query params.",
+    "methods": [
+      "GET"
+    ]
+  },
+  {
+    "url": "api/dashboards/^analytics/occupancy-trends/$",
+    "name": "analytics-occupancy-trends",
+    "view": "apps.inventory.presentation.api.dashboard_views.AnalyticsViewSet",
+    "docstring": "ViewSet for fetching warehouse ClickHouse analytics and heatmaps.\n    All endpoints accept warehouse_id, start_time, end_time query params.",
+    "methods": [
+      "GET"
+    ]
+  },
+  {
+    "url": "api/dashboards/^analytics/occupancy-trends\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "analytics-occupancy-trends",
+    "view": "apps.inventory.presentation.api.dashboard_views.AnalyticsViewSet",
+    "docstring": "ViewSet for fetching warehouse ClickHouse analytics and heatmaps.\n    All endpoints accept warehouse_id, start_time, end_time query params.",
+    "methods": [
+      "GET"
+    ]
+  },
+  {
+    "url": "api/dashboards/^analytics/outbound-metrics/$",
+    "name": "analytics-outbound-metrics",
+    "view": "apps.inventory.presentation.api.dashboard_views.AnalyticsViewSet",
+    "docstring": "ViewSet for fetching warehouse ClickHouse analytics and heatmaps.\n    All endpoints accept warehouse_id, start_time, end_time query params.",
+    "methods": [
+      "GET"
+    ]
+  },
+  {
+    "url": "api/dashboards/^analytics/outbound-metrics\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "analytics-outbound-metrics",
+    "view": "apps.inventory.presentation.api.dashboard_views.AnalyticsViewSet",
+    "docstring": "ViewSet for fetching warehouse ClickHouse analytics and heatmaps.\n    All endpoints accept warehouse_id, start_time, end_time query params.",
+    "methods": [
+      "GET"
+    ]
+  },
+  {
+    "url": "api/dashboards/^analytics/rack-heatmap/$",
+    "name": "analytics-rack-heatmap",
+    "view": "apps.inventory.presentation.api.dashboard_views.AnalyticsViewSet",
+    "docstring": "ViewSet for fetching warehouse ClickHouse analytics and heatmaps.\n    All endpoints accept warehouse_id, start_time, end_time query params.",
+    "methods": [
+      "GET"
+    ]
+  },
+  {
+    "url": "api/dashboards/^analytics/rack-heatmap\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "analytics-rack-heatmap",
+    "view": "apps.inventory.presentation.api.dashboard_views.AnalyticsViewSet",
+    "docstring": "ViewSet for fetching warehouse ClickHouse analytics and heatmaps.\n    All endpoints accept warehouse_id, start_time, end_time query params.",
+    "methods": [
+      "GET"
+    ]
+  },
+  {
+    "url": "api/dashboards/^analytics/recommendation-metrics/$",
+    "name": "analytics-recommendation-metrics",
+    "view": "apps.inventory.presentation.api.dashboard_views.AnalyticsViewSet",
+    "docstring": "ViewSet for fetching warehouse ClickHouse analytics and heatmaps.\n    All endpoints accept warehouse_id, start_time, end_time query params.",
+    "methods": [
+      "GET"
+    ]
+  },
+  {
+    "url": "api/dashboards/^analytics/recommendation-metrics\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "analytics-recommendation-metrics",
+    "view": "apps.inventory.presentation.api.dashboard_views.AnalyticsViewSet",
+    "docstring": "ViewSet for fetching warehouse ClickHouse analytics and heatmaps.\n    All endpoints accept warehouse_id, start_time, end_time query params.",
+    "methods": [
+      "GET"
+    ]
+  },
+  {
+    "url": "api/dashboards/^analytics/route-metrics/$",
+    "name": "analytics-route-metrics",
+    "view": "apps.inventory.presentation.api.dashboard_views.AnalyticsViewSet",
+    "docstring": "ViewSet for fetching warehouse ClickHouse analytics and heatmaps.\n    All endpoints accept warehouse_id, start_time, end_time query params.",
+    "methods": [
+      "GET"
+    ]
+  },
+  {
+    "url": "api/dashboards/^analytics/route-metrics\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "analytics-route-metrics",
+    "view": "apps.inventory.presentation.api.dashboard_views.AnalyticsViewSet",
+    "docstring": "ViewSet for fetching warehouse ClickHouse analytics and heatmaps.\n    All endpoints accept warehouse_id, start_time, end_time query params.",
+    "methods": [
+      "GET"
+    ]
+  },
+  {
+    "url": "api/dashboards/^analytics/routes/$",
+    "name": "analytics-routes",
+    "view": "apps.inventory.presentation.api.dashboard_views.AnalyticsViewSet",
+    "docstring": "ViewSet for fetching warehouse ClickHouse analytics and heatmaps.\n    All endpoints accept warehouse_id, start_time, end_time query params.",
+    "methods": [
+      "GET"
+    ]
+  },
+  {
+    "url": "api/dashboards/^analytics/routes\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "analytics-routes",
+    "view": "apps.inventory.presentation.api.dashboard_views.AnalyticsViewSet",
+    "docstring": "ViewSet for fetching warehouse ClickHouse analytics and heatmaps.\n    All endpoints accept warehouse_id, start_time, end_time query params.",
+    "methods": [
+      "GET"
+    ]
+  },
+  {
+    "url": "api/dashboards/^analytics/telemetry/$",
+    "name": "analytics-telemetry",
+    "view": "apps.inventory.presentation.api.dashboard_views.AnalyticsViewSet",
+    "docstring": "ViewSet for fetching warehouse ClickHouse analytics and heatmaps.\n    All endpoints accept warehouse_id, start_time, end_time query params.",
+    "methods": [
+      "GET"
+    ]
+  },
+  {
+    "url": "api/dashboards/^analytics/telemetry\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "analytics-telemetry",
+    "view": "apps.inventory.presentation.api.dashboard_views.AnalyticsViewSet",
+    "docstring": "ViewSet for fetching warehouse ClickHouse analytics and heatmaps.\n    All endpoints accept warehouse_id, start_time, end_time query params.",
+    "methods": [
+      "GET"
+    ]
+  },
+  {
+    "url": "api/dashboards/^analytics/throughput/$",
+    "name": "analytics-throughput",
+    "view": "apps.inventory.presentation.api.dashboard_views.AnalyticsViewSet",
+    "docstring": "ViewSet for fetching warehouse ClickHouse analytics and heatmaps.\n    All endpoints accept warehouse_id, start_time, end_time query params.",
+    "methods": [
+      "GET"
+    ]
+  },
+  {
+    "url": "api/dashboards/^analytics/throughput\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "analytics-throughput",
+    "view": "apps.inventory.presentation.api.dashboard_views.AnalyticsViewSet",
+    "docstring": "ViewSet for fetching warehouse ClickHouse analytics and heatmaps.\n    All endpoints accept warehouse_id, start_time, end_time query params.",
+    "methods": [
+      "GET"
+    ]
+  },
+  {
+    "url": "api/dashboards/^analytics/top-zones/$",
+    "name": "analytics-top-zones",
+    "view": "apps.inventory.presentation.api.dashboard_views.AnalyticsViewSet",
+    "docstring": "ViewSet for fetching warehouse ClickHouse analytics and heatmaps.\n    All endpoints accept warehouse_id, start_time, end_time query params.",
+    "methods": [
+      "GET"
+    ]
+  },
+  {
+    "url": "api/dashboards/^analytics/top-zones\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "analytics-top-zones",
+    "view": "apps.inventory.presentation.api.dashboard_views.AnalyticsViewSet",
+    "docstring": "ViewSet for fetching warehouse ClickHouse analytics and heatmaps.\n    All endpoints accept warehouse_id, start_time, end_time query params.",
+    "methods": [
+      "GET"
+    ]
+  },
+  {
+    "url": "api/dashboards/^analytics/warehouse-kpis/$",
+    "name": "analytics-warehouse-kpis",
+    "view": "apps.inventory.presentation.api.dashboard_views.AnalyticsViewSet",
+    "docstring": "ViewSet for fetching warehouse ClickHouse analytics and heatmaps.\n    All endpoints accept warehouse_id, start_time, end_time query params.",
+    "methods": [
+      "GET"
+    ]
+  },
+  {
+    "url": "api/dashboards/^analytics/warehouse-kpis\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "analytics-warehouse-kpis",
+    "view": "apps.inventory.presentation.api.dashboard_views.AnalyticsViewSet",
+    "docstring": "ViewSet for fetching warehouse ClickHouse analytics and heatmaps.\n    All endpoints accept warehouse_id, start_time, end_time query params.",
+    "methods": [
+      "GET"
+    ]
+  },
+  {
+    "url": "api/dashboards/^analytics/zone-heatmap/$",
+    "name": "analytics-zone-heatmap",
+    "view": "apps.inventory.presentation.api.dashboard_views.AnalyticsViewSet",
+    "docstring": "ViewSet for fetching warehouse ClickHouse analytics and heatmaps.\n    All endpoints accept warehouse_id, start_time, end_time query params.",
+    "methods": [
+      "GET"
+    ]
+  },
+  {
+    "url": "api/dashboards/^analytics/zone-heatmap\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "analytics-zone-heatmap",
+    "view": "apps.inventory.presentation.api.dashboard_views.AnalyticsViewSet",
+    "docstring": "ViewSet for fetching warehouse ClickHouse analytics and heatmaps.\n    All endpoints accept warehouse_id, start_time, end_time query params.",
+    "methods": [
+      "GET"
+    ]
+  },
+  {
+    "url": "api/dashboards/^robot-tasks/$",
+    "name": "robot-tasks-list",
+    "view": "apps.inventory.presentation.api.dashboard_views.RobotTaskViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST"
+    ]
+  },
+  {
+    "url": "api/dashboards/^robot-tasks\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "robot-tasks-list",
+    "view": "apps.inventory.presentation.api.dashboard_views.RobotTaskViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST"
+    ]
+  },
+  {
+    "url": "api/dashboards/^robot-tasks/(?P<pk>[^/.]+)/$",
+    "name": "robot-tasks-detail",
+    "view": "apps.inventory.presentation.api.dashboard_views.RobotTaskViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ]
+  },
+  {
+    "url": "api/dashboards/^robot-tasks/(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "robot-tasks-detail",
+    "view": "apps.inventory.presentation.api.dashboard_views.RobotTaskViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ]
+  },
+  {
+    "url": "api/dashboards/^route-optimizations/$",
+    "name": "route-optimizations-list",
+    "view": "apps.inventory.presentation.api.dashboard_views.RouteOptimizationViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST"
+    ]
+  },
+  {
+    "url": "api/dashboards/^route-optimizations\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "route-optimizations-list",
+    "view": "apps.inventory.presentation.api.dashboard_views.RouteOptimizationViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST"
+    ]
+  },
+  {
+    "url": "api/dashboards/^route-optimizations/(?P<pk>[^/.]+)/$",
+    "name": "route-optimizations-detail",
+    "view": "apps.inventory.presentation.api.dashboard_views.RouteOptimizationViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ]
+  },
+  {
+    "url": "api/dashboards/^route-optimizations/(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "route-optimizations-detail",
+    "view": "apps.inventory.presentation.api.dashboard_views.RouteOptimizationViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ]
+  },
+  {
+    "url": "api/dashboards/^$",
+    "name": "dashboards-list",
+    "view": "apps.inventory.presentation.api.dashboard_views.DashboardViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST"
+    ]
+  },
+  {
+    "url": "api/dashboards/^\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "dashboards-list",
+    "view": "apps.inventory.presentation.api.dashboard_views.DashboardViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST"
+    ]
+  },
+  {
+    "url": "api/dashboards/^(?P<pk>[^/.]+)/$",
+    "name": "dashboards-detail",
+    "view": "apps.inventory.presentation.api.dashboard_views.DashboardViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ]
+  },
+  {
+    "url": "api/dashboards/^(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "dashboards-detail",
+    "view": "apps.inventory.presentation.api.dashboard_views.DashboardViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ]
+  },
+  {
+    "url": "api/dashboards/",
+    "name": "api-root",
+    "view": "rest_framework.routers.APIRootView",
+    "docstring": "The default basic root view for DefaultRouter",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "api/dashboards/<drf_format_suffix:format>",
+    "name": "api-root",
+    "view": "rest_framework.routers.APIRootView",
+    "docstring": "The default basic root view for DefaultRouter",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "api/orders/^$",
+    "name": "orders-list",
+    "view": "apps.orders.presentation.api.order_views.OrderViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST"
+    ]
+  },
+  {
+    "url": "api/orders/^\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "orders-list",
+    "view": "apps.orders.presentation.api.order_views.OrderViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST"
+    ]
+  },
+  {
+    "url": "api/orders/^assign-picker/$",
+    "name": "orders-assign-picker",
+    "view": "apps.orders.presentation.api.order_views.OrderViewSet",
+    "docstring": "",
+    "methods": [
+      "POST"
+    ]
+  },
+  {
+    "url": "api/orders/^assign-picker\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "orders-assign-picker",
+    "view": "apps.orders.presentation.api.order_views.OrderViewSet",
+    "docstring": "",
+    "methods": [
+      "POST"
+    ]
+  },
+  {
+    "url": "api/orders/^close/$",
+    "name": "orders-close",
+    "view": "apps.orders.presentation.api.order_views.OrderViewSet",
+    "docstring": "",
+    "methods": [
+      "POST"
+    ]
+  },
+  {
+    "url": "api/orders/^close\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "orders-close",
+    "view": "apps.orders.presentation.api.order_views.OrderViewSet",
+    "docstring": "",
+    "methods": [
+      "POST"
+    ]
+  },
+  {
+    "url": "api/orders/^dispatch/$",
+    "name": "orders-dispatch-shipment",
+    "view": "apps.orders.presentation.api.order_views.OrderViewSet",
+    "docstring": "",
+    "methods": [
+      "POST"
+    ]
+  },
+  {
+    "url": "api/orders/^dispatch\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "orders-dispatch-shipment",
+    "view": "apps.orders.presentation.api.order_views.OrderViewSet",
+    "docstring": "",
+    "methods": [
+      "POST"
+    ]
+  },
+  {
+    "url": "api/orders/^generate-picklist/$",
+    "name": "orders-generate-picklist",
+    "view": "apps.orders.presentation.api.order_views.OrderViewSet",
+    "docstring": "",
+    "methods": [
+      "POST"
+    ]
+  },
+  {
+    "url": "api/orders/^generate-picklist\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "orders-generate-picklist",
+    "view": "apps.orders.presentation.api.order_views.OrderViewSet",
+    "docstring": "",
+    "methods": [
+      "POST"
+    ]
+  },
+  {
+    "url": "api/orders/^optimize-route/$",
+    "name": "orders-optimize-route",
+    "view": "apps.orders.presentation.api.order_views.OrderViewSet",
+    "docstring": "",
+    "methods": [
+      "POST"
+    ]
+  },
+  {
+    "url": "api/orders/^optimize-route\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "orders-optimize-route",
+    "view": "apps.orders.presentation.api.order_views.OrderViewSet",
+    "docstring": "",
+    "methods": [
+      "POST"
+    ]
+  },
+  {
+    "url": "api/orders/^pack/$",
+    "name": "orders-pack",
+    "view": "apps.orders.presentation.api.order_views.OrderViewSet",
+    "docstring": "",
+    "methods": [
+      "POST"
+    ]
+  },
+  {
+    "url": "api/orders/^pack\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "orders-pack",
+    "view": "apps.orders.presentation.api.order_views.OrderViewSet",
+    "docstring": "",
+    "methods": [
+      "POST"
+    ]
+  },
+  {
+    "url": "api/orders/^(?P<pk>[^/.]+)/$",
+    "name": "orders-detail",
+    "view": "apps.orders.presentation.api.order_views.OrderViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ]
+  },
+  {
+    "url": "api/orders/^(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "orders-detail",
+    "view": "apps.orders.presentation.api.order_views.OrderViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ]
+  },
+  {
+    "url": "api/orders/",
+    "name": "api-root",
+    "view": "rest_framework.routers.APIRootView",
+    "docstring": "The default basic root view for DefaultRouter",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "api/orders/<drf_format_suffix:format>",
+    "name": "api-root",
+    "view": "rest_framework.routers.APIRootView",
+    "docstring": "The default basic root view for DefaultRouter",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "api/product-classifications/^$",
+    "name": "product-classifications-list",
+    "view": "apps.recommendations.presentation.api.classification_views.ProductClassificationViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST"
+    ]
+  },
+  {
+    "url": "api/product-classifications/^\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "product-classifications-list",
+    "view": "apps.recommendations.presentation.api.classification_views.ProductClassificationViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST"
+    ]
+  },
+  {
+    "url": "api/product-classifications/^(?P<pk>[^/.]+)/$",
+    "name": "product-classifications-detail",
+    "view": "apps.recommendations.presentation.api.classification_views.ProductClassificationViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ]
+  },
+  {
+    "url": "api/product-classifications/^(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "product-classifications-detail",
+    "view": "apps.recommendations.presentation.api.classification_views.ProductClassificationViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ]
+  },
+  {
+    "url": "api/product-classifications/",
+    "name": "api-root",
+    "view": "rest_framework.routers.APIRootView",
+    "docstring": "The default basic root view for DefaultRouter",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "api/product-classifications/<drf_format_suffix:format>",
+    "name": "api-root",
+    "view": "rest_framework.routers.APIRootView",
+    "docstring": "The default basic root view for DefaultRouter",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "api/product-dimensions/^storage-rules/$",
+    "name": "product-storage-rules-list",
+    "view": "apps.inventory.presentation.api.product_views.ProductStorageRuleViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST"
+    ]
+  },
+  {
+    "url": "api/product-dimensions/^storage-rules\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "product-storage-rules-list",
+    "view": "apps.inventory.presentation.api.product_views.ProductStorageRuleViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST"
+    ]
+  },
+  {
+    "url": "api/product-dimensions/^storage-rules/(?P<pk>[^/.]+)/$",
+    "name": "product-storage-rules-detail",
+    "view": "apps.inventory.presentation.api.product_views.ProductStorageRuleViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ]
+  },
+  {
+    "url": "api/product-dimensions/^storage-rules/(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "product-storage-rules-detail",
+    "view": "apps.inventory.presentation.api.product_views.ProductStorageRuleViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ]
+  },
+  {
+    "url": "api/product-dimensions/^$",
+    "name": "product-dimensions-list",
+    "view": "apps.inventory.presentation.api.product_views.ProductDimensionViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST"
+    ]
+  },
+  {
+    "url": "api/product-dimensions/^\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "product-dimensions-list",
+    "view": "apps.inventory.presentation.api.product_views.ProductDimensionViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST"
+    ]
+  },
+  {
+    "url": "api/product-dimensions/^(?P<pk>[^/.]+)/$",
+    "name": "product-dimensions-detail",
+    "view": "apps.inventory.presentation.api.product_views.ProductDimensionViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ]
+  },
+  {
+    "url": "api/product-dimensions/^(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "product-dimensions-detail",
+    "view": "apps.inventory.presentation.api.product_views.ProductDimensionViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ]
+  },
+  {
+    "url": "api/product-dimensions/",
+    "name": "api-root",
+    "view": "rest_framework.routers.APIRootView",
+    "docstring": "The default basic root view for DefaultRouter",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "api/product-dimensions/<drf_format_suffix:format>",
+    "name": "api-root",
+    "view": "rest_framework.routers.APIRootView",
+    "docstring": "The default basic root view for DefaultRouter",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "api/inbound/^$",
+    "name": "inbound-list",
+    "view": "apps.inbound.presentation.api.inbound_views.InboundViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST"
+    ]
+  },
+  {
+    "url": "api/inbound/^\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "inbound-list",
+    "view": "apps.inbound.presentation.api.inbound_views.InboundViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "POST"
+    ]
+  },
+  {
+    "url": "api/inbound/^(?P<pk>[^/.]+)/$",
+    "name": "inbound-detail",
+    "view": "apps.inbound.presentation.api.inbound_views.InboundViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ]
+  },
+  {
+    "url": "api/inbound/^(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "inbound-detail",
+    "view": "apps.inbound.presentation.api.inbound_views.InboundViewSet",
+    "docstring": "",
+    "methods": [
+      "GET",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ]
+  },
+  {
+    "url": "api/inbound/",
+    "name": "api-root",
+    "view": "rest_framework.routers.APIRootView",
+    "docstring": "The default basic root view for DefaultRouter",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "api/inbound/<drf_format_suffix:format>",
+    "name": "api-root",
+    "view": "rest_framework.routers.APIRootView",
+    "docstring": "The default basic root view for DefaultRouter",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "api/ocr/upload/",
+    "name": "ocr-upload",
+    "view": "apps.inbound.presentation.api.ocr_views.OCRUploadView",
+    "docstring": "POST /api/ocr/upload/\n    Accepts a document file via multipart/form-data. Calculates hash to detect\n    duplicates, creates OCRDocument record, and triggers OCR pipeline.",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "api/ocr/review-queue/",
+    "name": "ocr-review-queue",
+    "view": "apps.inbound.presentation.api.ocr_views.OCRDocumentViewSet",
+    "docstring": "ViewSet for OCRDocument retrieval and history tracking.\n    GET /api/ocr/documents/        - list paginated audit log\n    GET /api/ocr/documents/{id}/   - check document status & details",
+    "methods": [
+      "GET"
+    ]
+  },
+  {
+    "url": "api/ocr/^documents/$",
+    "name": "ocr-documents-list",
+    "view": "apps.inbound.presentation.api.ocr_views.OCRDocumentViewSet",
+    "docstring": "ViewSet for OCRDocument retrieval and history tracking.\n    GET /api/ocr/documents/        - list paginated audit log\n    GET /api/ocr/documents/{id}/   - check document status & details",
+    "methods": [
+      "GET"
+    ]
+  },
+  {
+    "url": "api/ocr/^documents\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "ocr-documents-list",
+    "view": "apps.inbound.presentation.api.ocr_views.OCRDocumentViewSet",
+    "docstring": "ViewSet for OCRDocument retrieval and history tracking.\n    GET /api/ocr/documents/        - list paginated audit log\n    GET /api/ocr/documents/{id}/   - check document status & details",
+    "methods": [
+      "GET"
+    ]
+  },
+  {
+    "url": "api/ocr/^documents/review-queue/$",
+    "name": "ocr-documents-review-queue",
+    "view": "apps.inbound.presentation.api.ocr_views.OCRDocumentViewSet",
+    "docstring": "ViewSet for OCRDocument retrieval and history tracking.\n    GET /api/ocr/documents/        - list paginated audit log\n    GET /api/ocr/documents/{id}/   - check document status & details",
+    "methods": [
+      "GET"
+    ]
+  },
+  {
+    "url": "api/ocr/^documents/review-queue\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "ocr-documents-review-queue",
+    "view": "apps.inbound.presentation.api.ocr_views.OCRDocumentViewSet",
+    "docstring": "ViewSet for OCRDocument retrieval and history tracking.\n    GET /api/ocr/documents/        - list paginated audit log\n    GET /api/ocr/documents/{id}/   - check document status & details",
+    "methods": [
+      "GET"
+    ]
+  },
+  {
+    "url": "api/ocr/^documents/(?P<pk>[^/.]+)/$",
+    "name": "ocr-documents-detail",
+    "view": "apps.inbound.presentation.api.ocr_views.OCRDocumentViewSet",
+    "docstring": "ViewSet for OCRDocument retrieval and history tracking.\n    GET /api/ocr/documents/        - list paginated audit log\n    GET /api/ocr/documents/{id}/   - check document status & details",
+    "methods": [
+      "GET"
+    ]
+  },
+  {
+    "url": "api/ocr/^documents/(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "ocr-documents-detail",
+    "view": "apps.inbound.presentation.api.ocr_views.OCRDocumentViewSet",
+    "docstring": "ViewSet for OCRDocument retrieval and history tracking.\n    GET /api/ocr/documents/        - list paginated audit log\n    GET /api/ocr/documents/{id}/   - check document status & details",
+    "methods": [
+      "GET"
+    ]
+  },
+  {
+    "url": "api/ocr/^documents/(?P<pk>[^/.]+)/approve/$",
+    "name": "ocr-documents-approve",
+    "view": "apps.inbound.presentation.api.ocr_views.OCRDocumentViewSet",
+    "docstring": "ViewSet for OCRDocument retrieval and history tracking.\n    GET /api/ocr/documents/        - list paginated audit log\n    GET /api/ocr/documents/{id}/   - check document status & details",
+    "methods": [
+      "POST"
+    ]
+  },
+  {
+    "url": "api/ocr/^documents/(?P<pk>[^/.]+)/approve\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "ocr-documents-approve",
+    "view": "apps.inbound.presentation.api.ocr_views.OCRDocumentViewSet",
+    "docstring": "ViewSet for OCRDocument retrieval and history tracking.\n    GET /api/ocr/documents/        - list paginated audit log\n    GET /api/ocr/documents/{id}/   - check document status & details",
+    "methods": [
+      "POST"
+    ]
+  },
+  {
+    "url": "api/ocr/^documents/(?P<pk>[^/.]+)/reject/$",
+    "name": "ocr-documents-reject",
+    "view": "apps.inbound.presentation.api.ocr_views.OCRDocumentViewSet",
+    "docstring": "ViewSet for OCRDocument retrieval and history tracking.\n    GET /api/ocr/documents/        - list paginated audit log\n    GET /api/ocr/documents/{id}/   - check document status & details",
+    "methods": [
+      "POST"
+    ]
+  },
+  {
+    "url": "api/ocr/^documents/(?P<pk>[^/.]+)/reject\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "ocr-documents-reject",
+    "view": "apps.inbound.presentation.api.ocr_views.OCRDocumentViewSet",
+    "docstring": "ViewSet for OCRDocument retrieval and history tracking.\n    GET /api/ocr/documents/        - list paginated audit log\n    GET /api/ocr/documents/{id}/   - check document status & details",
+    "methods": [
+      "POST"
+    ]
+  },
+  {
+    "url": "api/ocr/^documents/(?P<pk>[^/.]+)/sync-rag/$",
+    "name": "ocr-documents-sync-rag",
+    "view": "apps.inbound.presentation.api.ocr_views.OCRDocumentViewSet",
+    "docstring": "ViewSet for OCRDocument retrieval and history tracking.\n    GET /api/ocr/documents/        - list paginated audit log\n    GET /api/ocr/documents/{id}/   - check document status & details",
+    "methods": [
+      "POST"
+    ]
+  },
+  {
+    "url": "api/ocr/^documents/(?P<pk>[^/.]+)/sync-rag\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "ocr-documents-sync-rag",
+    "view": "apps.inbound.presentation.api.ocr_views.OCRDocumentViewSet",
+    "docstring": "ViewSet for OCRDocument retrieval and history tracking.\n    GET /api/ocr/documents/        - list paginated audit log\n    GET /api/ocr/documents/{id}/   - check document status & details",
+    "methods": [
+      "POST"
+    ]
+  },
+  {
+    "url": "api/ocr/",
+    "name": "api-root",
+    "view": "rest_framework.routers.APIRootView",
+    "docstring": "The default basic root view for DefaultRouter",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "api/ocr/<drf_format_suffix:format>",
+    "name": "api-root",
+    "view": "rest_framework.routers.APIRootView",
+    "docstring": "The default basic root view for DefaultRouter",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE",
+      "HEAD",
+      "TRACE"
+    ]
+  },
+  {
+    "url": "^media/(?P<path>.*)$",
+    "name": null,
+    "view": "django.views.static.serve",
+    "docstring": "Serve static files below a given point in the directory structure.\n\n    To use, put a URL pattern such as::\n\n        from django.views.static import serve\n\n        path('<path:path>', serve, {'document_root': '/path/to/my/files/'})\n\n    in your URLconf. You must provide the ``document_root`` param. You may\n    also set ``show_indexes`` to ``True`` if you'd like to serve a basic index\n    of the directory.  This index view will use the template hardcoded below,\n    but if you'd like to override it, you can create a template called\n    ``static/directory_index.html``.",
+    "methods": []
+  }
+]

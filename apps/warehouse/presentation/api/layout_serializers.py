@@ -18,3 +18,8 @@ class LayoutUploadSerializer(serializers.Serializer):
 
 class LayoutAnalysisSerializer(serializers.Serializer):
     layout_id = serializers.UUIDField()
+
+class GenerateTopologySerializer(serializers.Serializer):
+    layout_id = serializers.UUIDField()
+    shelves_per_rack = serializers.IntegerField(default=4, min_value=1)
+    bins_per_shelf = serializers.IntegerField(default=5, min_value=1)
