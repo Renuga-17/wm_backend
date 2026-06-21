@@ -1,0 +1,1 @@
+# Outbound bounded context

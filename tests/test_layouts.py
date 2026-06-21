@@ -3,9 +3,9 @@ from rest_framework import status
 from django.urls import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
 from unittest.mock import patch
-from apps.warehouses.models import Warehouse, WarehouseLayout, CADObject, MLExtraction, Rack, SpatialEntity
-from apps.zones.models import Zone, ZoneBoundary
-from apps.users.models import User
+from apps.warehouse.infrastructure.persistence.models import Warehouse, WarehouseLayout, CADObject, MLExtraction, Rack, SpatialEntity
+from apps.warehouse.infrastructure.persistence.models import Zone, ZoneBoundary
+from apps.identity.infrastructure.persistence.models import User
 import os
 
 @pytest.mark.django_db

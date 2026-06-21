@@ -2,11 +2,11 @@ import pytest
 from rest_framework import status
 from django.urls import reverse
 from unittest.mock import patch
-from apps.products.models import Product, ProductCategory
-from apps.bins.models import Bin, Shelf
-from apps.zones.models import Zone
-from apps.warehouses.models import Warehouse, WarehouseLayout, Rack
-from apps.users.models import User
+from apps.inventory.infrastructure.persistence.models import Product, ProductCategory
+from apps.warehouse.infrastructure.persistence.models import Bin, Shelf
+from apps.warehouse.infrastructure.persistence.models import Zone
+from apps.warehouse.infrastructure.persistence.models import Warehouse, WarehouseLayout, Rack
+from apps.identity.infrastructure.persistence.models import User
 
 @pytest.mark.django_db
 class TestWMSAPI:
@@ -72,14 +72,14 @@ class TestWMSAPI:
         suggest_url = '/api/recommendations/suggest-bin/'
         headers = {'HTTP_AUTHORIZATION': f'Bearer {access_token}'}
         
-        # Mock the AI Service Client
-        with patch('integrations.ai_service_client.AIServiceClient.get_storage_recommendation') as mock_ai:
-            mock_ai.return_value = {
-                "success": True,
-                "recommended_bin_id": str(bin_obj.id),
-                "confidence_score": 0.95,
-                "reasoning": "High-velocity category co-location."
-            }
+        # Mock the local AI slotting calculation in AISlottingEngine
+        from unittest.mock import MagicMock
+        with patch('apps.inventory.presentation.api.recommendation_views.AISlottingEngine.optimize_slotting') as mock_optimize:
+            mock_rec = MagicMock()
+            mock_rec.recommended_bin = bin_obj
+            mock_rec.confidence_score = 0.95
+            mock_rec.reasoning = {"logic": "High-velocity category co-location."}
+            mock_optimize.return_value = mock_rec
             
             res = client.post(
                 suggest_url,

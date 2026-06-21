@@ -1,10 +1,6 @@
-from django.urls import path, include
-from rest_framework.routers import DefaultRouter
-from .views import RecommendationViewSet
-
-router = DefaultRouter()
-router.register(r'', RecommendationViewSet, basename='recommendations')
+from django.urls import path
+from .presentation.api.storage_recommendation_view import StorageRecommendationView
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path('', StorageRecommendationView.as_view(), name='storage-recommendation'),
 ]

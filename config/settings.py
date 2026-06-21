@@ -16,7 +16,7 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-default-secret-key-
 
 DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').split(',')
+ALLOWED_HOSTS = ['testserver', 'localhost', '127.0.0.1']
 
 INSTALLED_APPS = [
     'daphne',
@@ -33,19 +33,14 @@ INSTALLED_APPS = [
     'channels',
     
     # Local apps
-    'apps.users.apps.UsersConfig',
-    'apps.warehouses.apps.WarehousesConfig',
-    'apps.zones.apps.ZonesConfig',
-    'apps.bins.apps.BinsConfig',
-    'apps.products.apps.ProductsConfig',
+    'apps.identity.apps.IdentityConfig',
+    'apps.warehouse.apps.WarehouseConfig',
     'apps.inventory.apps.InventoryConfig',
-    'apps.inbound.apps.InboundConfig',
     'apps.orders.apps.OrdersConfig',
-    'apps.movements.apps.MovementsConfig',
+    'apps.inbound.apps.InboundConfig',
+    'apps.outbound.apps.OutboundConfig',
     'apps.recommendations.apps.RecommendationsConfig',
-    'apps.dashboards.apps.DashboardsConfig',
-    'apps.audit_logs.apps.AuditLogsConfig',
-    'apps.routes.apps.RoutesConfig',
+    'apps.ai.apps.AIConfig',
 ]
 
 MIDDLEWARE = [
@@ -89,16 +84,26 @@ CHANNEL_LAYERS = {
     },
 }
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DB_NAME', 'wm_db'),
-        'USER': os.getenv('DB_USER', 'postgres'),
-        'PASSWORD': os.getenv('DB_PASSWORD', 'postgres'),
-        'HOST': os.getenv('DB_HOST', 'localhost'),
-        'PORT': os.getenv('DB_PORT', '5432'),
+DB_ENGINE = os.getenv('DB_ENGINE', 'sqlite' if not os.getenv('DB_HOST') else 'postgresql')
+
+if DB_ENGINE == 'sqlite':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.getenv('DB_NAME', 'wm_db'),
+            'USER': os.getenv('DB_USER', 'postgres'),
+            'PASSWORD': os.getenv('DB_PASSWORD', 'postgres'),
+            'HOST': os.getenv('DB_HOST', 'localhost'),
+            'PORT': os.getenv('DB_PORT', '5432'),
+        }
+    }
 
 CACHES = {
     'default': {
@@ -125,7 +130,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-AUTH_USER_MODEL = 'users.User'
+AUTH_USER_MODEL = 'identity.User'
 
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
@@ -140,15 +145,25 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+from datetime import timedelta
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.AllowAny',
+        'rest_framework.permissions.IsAuthenticated',
     ),
     'DEFAULT_PAGINATION_CLASS': 'common.pagination.StandardResultsSetPagination',
     'EXCEPTION_HANDLER': 'common.exceptions.custom_exception_handler',
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=45),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': False,
+    'UPDATE_LAST_LOGIN': False,
 }
 
 # MongoDB Settings
@@ -159,24 +174,38 @@ MONGODB_SETTINGS = {
 
 # ClickHouse Settings
 CLICKHOUSE_SETTINGS = {
-    'HOST': os.getenv('CLICKHOUSE_HOST', 'localhost'),
-    'PORT': int(os.getenv('CLICKHOUSE_PORT', '8123')),
-    'USERNAME': os.getenv('CLICKHOUSE_USER', 'default'),
-    'PASSWORD': os.getenv('CLICKHOUSE_PASSWORD', ''),
-    'DATABASE': os.getenv('CLICKHOUSE_DB', 'wm_clickhouse'),
+    "HOST": os.getenv('CLICKHOUSE_HOST', 'localhost'),
+    "PORT": int(os.getenv('CLICKHOUSE_PORT', '8443')),
+    "USERNAME": os.getenv('CLICKHOUSE_USER', 'default'),
+    "PASSWORD": os.getenv('CLICKHOUSE_PASSWORD', ''),
+    "DATABASE": os.getenv('CLICKHOUSE_DB', 'default'),
+    "SECURE": os.getenv('CLICKHOUSE_SECURE', 'True') == 'True',
 }
 
 # Qdrant Settings
 QDRANT_SETTINGS = {
-    'URL': os.getenv('QDRANT_URL', 'http://localhost:6333'),
-    'API_KEY': os.getenv('QDRANT_API_KEY', ''),
+    'URL': os.getenv('QDRANT_URL', 'https://8154ed87-b188-4ddc-996e-d80d11e64562.eu-west-2-0.aws.cloud.qdrant.io/'),
+    'API_KEY': os.getenv('QDRANT_API_KEY', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiJtIiwic3ViamVjdCI6ImFwaS1rZXk6ZTAxYTczZjMtNjE4Ny00NDNmLTljMjMtZjJiNDBjOGFkNTBhIn0.9EnkXICnLSqMY5T-vQlyVoZ5Xh4HU3vyav0m3uxadNc'),
 }
 
 # FastAPI AI Service settings
 AI_SERVICE_SETTINGS = {
-    'BASE_URL': os.getenv('AI_SERVICE_URL', 'http://localhost:8001'),
+    'BASE_URL': os.getenv('AI_SERVICE_URL', 'http://localhost:8002'),
     'API_KEY': os.getenv('AI_SERVICE_API_KEY', ''),
 }
+
+# OCR Microservice settings
+OCR_SERVICE_SETTINGS = {
+    'BASE_URL': os.getenv('OCR_SERVICE_URL', 'http://localhost:8001'),
+}
+
+# RAG Microservice settings
+RAG_BASE_URL = os.getenv('RAG_BASE_URL', 'http://localhost:8002')
+try:
+    RAG_TIMEOUT = int(os.getenv('RAG_TIMEOUT', '30'))
+except ValueError:
+    RAG_TIMEOUT = 30
+
 
 # Media File Storage Settings
 MEDIA_URL = '/media/'
@@ -190,13 +219,29 @@ CELERY_TASK_SERIALIZER = 'json'
 
 # JWT Settings
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),  
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=45),  
     'REFRESH_TOKEN_LIFETIME': timedelta(minutes=10),  
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': False,
     'UPDATE_LAST_LOGIN': False,
 }
 
-# CORS Settings
+# Redirect Django migrations to the Clean Architecture Infrastructure layer
+MIGRATION_MODULES = {
+    'identity': 'apps.identity.infrastructure.persistence.migrations',
+    'warehouse': 'apps.warehouse.infrastructure.persistence.migrations',
+    'inventory': 'apps.inventory.infrastructure.persistence.migrations',
+    'orders': 'apps.orders.infrastructure.persistence.migrations',
+    'inbound': 'apps.inbound.infrastructure.persistence.migrations',
+    'outbound': 'apps.outbound.infrastructure.persistence.migrations',
+}
+
+# Storage Recommendation Settings
+WAREHOUSE_MIN_FREE_CAPACITY = int(os.getenv('WAREHOUSE_MIN_FREE_CAPACITY', 10))
+WAREHOUSE_RECOMMENDATION_USE_ML = os.getenv('WAREHOUSE_RECOMMENDATION_USE_ML', 'False') == 'True'
+ML_MODEL_PATH = os.getenv('ML_MODEL_PATH', '')
+
+# CORS configuration to allow local frontend access
 CORS_ALLOW_ALL_ORIGINS = True
-CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_CREDENTIALS = True
+
