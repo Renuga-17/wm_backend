@@ -9,6 +9,7 @@ from apps.warehouse.infrastructure.persistence.models import Zone, ZoneBoundary
 from .layout_serializers import WarehouseLayoutSerializer, LayoutUploadSerializer, LayoutAnalysisSerializer
 from apps.warehouse.application.services.layout_parser import LayoutParser
 from integrations.ai_service_client import AIServiceClient
+from common.permissions import ReadOnlyOrAuthenticated
 import logging
 
 logger = logging.getLogger(__name__)
@@ -52,7 +53,7 @@ class LayoutUploadView(APIView):
 
 
 class LayoutDetailView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [ReadOnlyOrAuthenticated]
 
     def get(self, request, layout_id):
         try:
@@ -216,7 +217,7 @@ class LayoutAnalyzeView(APIView):
 
 
 class LayoutEntitiesView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [ReadOnlyOrAuthenticated]
 
     def get(self, request):
         layout_id = request.query_params.get('layout_id')
@@ -393,7 +394,7 @@ class GenerateTopologyView(APIView):
 
 
 class LayoutGraphView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [ReadOnlyOrAuthenticated]
 
     def get(self, request):
         layout_id = request.query_params.get('layout_id')
