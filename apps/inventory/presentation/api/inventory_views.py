@@ -25,6 +25,7 @@ from .serializers import (
 )
 
 from django.core.exceptions import ValidationError
+from common.permissions import ReadOnlyOrAuthenticated
 
 def get_bin(bin_id):
     try:
@@ -93,6 +94,7 @@ def sync_inventory_total(product):
 
 
 class InventoryViewSet(viewsets.ModelViewSet):
+    permission_classes = [ReadOnlyOrAuthenticated]
     queryset = Inventory.objects.all()
     serializer_class = InventorySerializer
 

@@ -16,6 +16,8 @@ class BinAllocation(models.Model):
     rack = models.ForeignKey('warehouse.Rack', on_delete=models.PROTECT, related_name='bin_allocations')
     shelf = models.ForeignKey('warehouse.Shelf', on_delete=models.PROTECT, related_name='bin_allocations')
     bin = models.ForeignKey('warehouse.Bin', on_delete=models.PROTECT, related_name='bin_allocations')
+    inbound_line = models.ForeignKey('inbound.InboundShipmentLine', on_delete=models.SET_NULL, null=True, blank=True, related_name='bin_allocations', db_column='inbound_line_id')
+    inbound_shipment = models.ForeignKey('inbound.InboundShipment', on_delete=models.SET_NULL, null=True, blank=True, related_name='bin_allocations', db_column='inbound_shipment_id')
     
     allocation_score = models.FloatField()
     allocation_reason = models.TextField()

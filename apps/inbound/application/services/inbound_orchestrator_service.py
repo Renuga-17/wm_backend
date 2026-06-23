@@ -77,7 +77,8 @@ class InboundOrchestratorService:
                     shipment_code=shipment_code,
                     supplier_name=supplier_name,
                     expected_arrival=expected_arrival,
-                    status='RECEIVED'
+                    status='RECEIVED',
+                    ocr_document=ocr_document
                 )
 
                 # Step B: Loop products & create
@@ -153,6 +154,30 @@ class InboundOrchestratorService:
                         }
                     )
 
+                    # Create InboundShipmentLine
+                    from apps.inbound.infrastructure.persistence.inbound_models import InboundShipmentLine
+                    
+                    qty_val = prod_item.get('quantity') or prod_item.get('qty') or prod_item.get('verifiedQuantity') or 50
+                    if isinstance(dim_data, dict):
+                        l = dim_data.get('length') or 0.0
+                        w = dim_data.get('width') or 0.0
+                        h = dim_data.get('height') or 0.0
+                        dim_str = f"{l}x{w}x{h} cm" if (l or w or h) else "10x8x6 cm"
+                    else:
+                        dim_str = str(dim_data)
+                    
+                    shipment_line = InboundShipmentLine.objects.create(
+                        shipment=shipment,
+                        product=product_obj,
+                        sku=sku,
+                        product_name=product_obj.product_name,
+                        quantity=qty_val,
+                        weight=weight_val,
+                        dimensions=dim_str,
+                        storage_type=storage_type,
+                        recommendation_status='WAITING_FOR_BIN_ASSIGNMENT'
+                    )
+
                     # Step C: Storage Recommendation
                     rec_svc = StorageRecommendationService()
                     rec_svc.generate_recommendation(product_obj.id)
@@ -160,6 +185,15 @@ class InboundOrchestratorService:
                     # Step D: Bin Allocation
                     alloc_svc = BinAllocationService()
                     allocation = alloc_svc.generate_bin_allocation(product_obj.id)
+
+                    # Link BinAllocation back to inbound line & shipment
+                    allocation.inbound_line = shipment_line
+                    allocation.inbound_shipment = shipment
+                    allocation.save()
+
+                    # Update shipment line recommendation status
+                    shipment_line.recommendation_status = 'RECOMMENDED'
+                    shipment_line.save()
 
                     # Step E: 3D Placement
                     opt_3d_svc = ThreeDOptimizationService()
