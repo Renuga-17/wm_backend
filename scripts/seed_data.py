@@ -30,11 +30,13 @@ def batch_insert(cursor, table, columns, records):
             if "date" in name_lower or "time" in name_lower or "joined" in name_lower:
                 val = datetime.utcnow()
             elif "is_" in name_lower or name_lower in ["active", "staff", "superuser"]:
-                val = 0
+                val = False
             elif "int" in name_lower or "qty" in name_lower or "quantity" in name_lower:
                 val = 0
             elif col_info.type_code in ["integer", "real", "numeric"] or "int" in str(col_info.type_code).lower():
                 val = 0
+            elif col_info.type_code in [3802, "jsonb", "json"] or "json" in str(col_info.type_code).lower():
+                val = "[]"
                 
             columns.append(col_name)
             for i, r in enumerate(records):
@@ -664,9 +666,9 @@ def seed_db():
             for u in users:
                 username = u["email"].split('@')[0]
                 password = "pbkdf2_sha256$260000$dummy$dummy"
-                is_superuser = 0
-                is_staff = 0
-                is_active = 1
+                is_superuser = False
+                is_staff = False
+                is_active = True
                 user_records.append([
                     u["id"], u["full_name"], u["email"], u["role"],
                     username, password, is_superuser, is_staff, is_active

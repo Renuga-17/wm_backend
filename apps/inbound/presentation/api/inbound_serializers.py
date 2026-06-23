@@ -23,6 +23,7 @@ class InboundSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = InboundShipment
+<<<<<<< HEAD
         fields = [
             'id', 'shipment_code', 'supplier_name', 'supplier',
             'expected_arrival', 'status', 'ocr_document', 'document_reference',
@@ -137,3 +138,6 @@ class InboundSerializer(serializers.ModelSerializer):
         rep['supplierName'] = instance.supplier_name
         
         return rep
+=======
+        fields = '__all__'
+>>>>>>> aa8d66f5b9fd6bb95bb4e3703639135fd7dc4ec4

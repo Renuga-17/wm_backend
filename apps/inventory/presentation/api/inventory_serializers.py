@@ -22,8 +22,9 @@ class InventorySerializer(serializers.ModelSerializer):
             rep['product_name'] = product.product_name
             rep['category'] = category_name
             
-            # Fetch dimensions if any
-            dim = product.dimensions.first()
+            # Fetch dimensions if any (use prefetched list to avoid N+1 query)
+            dims = list(product.dimensions.all())
+            dim = dims[0] if dims else None
             if dim:
                 rep['product']['dimensions'] = f"{dim.length}x{dim.width}x{dim.height}"
             else:
@@ -33,9 +34,9 @@ class InventorySerializer(serializers.ModelSerializer):
             rep['product']['name'] = product.product_name
             rep['product']['category'] = category_name
 
-        # Resolve bin code from StorageAllocation
-        from apps.inventory.infrastructure.persistence.movement_models import StorageAllocation
-        allocation = StorageAllocation.objects.filter(product=product).first()
+        # Resolve bin code from StorageAllocation (use prefetched list to avoid N+1 query)
+        allocations = list(product.allocations.all()) if product else []
+        allocation = allocations[0] if allocations else None
         
         bin_code = ""
         shelf_num = ""
