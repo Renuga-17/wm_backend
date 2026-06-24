@@ -1,5 +1,8 @@
 from rest_framework import viewsets
-from apps.warehouse.infrastructure.persistence.models import Zone, ZoneBoundary, ZoneGroup, Aisle
+from django.db.models import Count, Q
+from django.db import connection
+from apps.warehouse.infrastructure.persistence.models import Zone, ZoneBoundary, ZoneGroup, Aisle, WarehouseHeatmap, Bin
+from apps.inventory.infrastructure.persistence.models import CongestionPrediction, SlottingScore
 from .serializers import ZoneSerializer, ZoneBoundarySerializer, ZoneGroupSerializer, AisleSerializer
 from common.permissions import ReadOnlyOrAuthenticated
 
@@ -13,15 +16,7 @@ class ZoneGroupViewSet(viewsets.ModelViewSet):
 class AisleViewSet(viewsets.ModelViewSet):
     queryset = Aisle.objects.all().order_by('id')
     serializer_class = AisleSerializer
-<<<<<<< HEAD
     permission_classes = [ReadOnlyOrAuthenticated]
-
-=======
-from apps.inventory.infrastructure.persistence.models import CongestionPrediction, SlottingScore
-from apps.warehouse.infrastructure.persistence.models import WarehouseHeatmap, Bin
-from django.db.models import Count, Q
-from django.db import connection
->>>>>>> aa8d66f5b9fd6bb95bb4e3703639135fd7dc4ec4
 
 class ZoneViewSet(viewsets.ModelViewSet):
     queryset = Zone.objects.all().order_by('id')

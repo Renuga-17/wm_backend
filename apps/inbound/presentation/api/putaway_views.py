@@ -267,7 +267,7 @@ class PutawayTaskViewSet(viewsets.ModelViewSet):
                 "reportedBy": task.operator or "Operator",
                 "reportedAt": task.updated_at.isoformat() if task.updated_at else None
             }
-
+        
         return {
             "id": str(task.id),
             "inboundId": str(task.inbound_shipment.id) if task.inbound_shipment else None,
@@ -277,16 +277,22 @@ class PutawayTaskViewSet(viewsets.ModelViewSet):
             "priority": "High" if task.quantity > 100 else "Medium",
             "status": task.status,
             "pickupLocation": task.source_dock,
-            "destinationBin": task.destination_bin.bin_code,
+            "destinationBin": task.destination_bin.bin_code if task.destination_bin else None,
             "destinationZone": task.destination_bin.shelf.rack.zone.zone_name if task.destination_bin else "Zone A",
             "destinationRack": task.destination_bin.shelf.rack.rack_code if task.destination_bin else "Rack 1",
             "destinationShelf": f"Level {task.destination_bin.shelf.shelf_number}" if task.destination_bin else "Level 1",
-            "bin": task.destination_bin.bin_code,
+            "bin": task.destination_bin.bin_code if task.destination_bin else None,
             "routePath": alloc.navigation_instructions if alloc else "Dock -> Zone",
+            "orientation": alloc.selected_orientation if alloc else None,
+            "maxUnitsFit": alloc.max_units if alloc else None,
+            "utilizationScore": alloc.utilization_score if alloc else None,
+            "recommendationReason": alloc.allocation_reason if alloc else None,
+            "placementInstruction": alloc.placement_instructions if alloc else None,
             "estTime": "5 mins",
             "distance": "45 meters",
             "operator": task.operator,
             "issue": issue_payload,
             "created_at": task.created_at.isoformat() if task.created_at else None,
             "completed_at": task.completed_at.isoformat() if task.completed_at else None
+
         }

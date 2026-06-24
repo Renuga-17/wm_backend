@@ -1,9 +1,8 @@
-<<<<<<< HEAD
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.db import transaction
-from django.db.models import F, Sum
+from django.db.models import F, Sum, Prefetch
 from django.utils import timezone
 from decimal import Decimal
 
@@ -96,14 +95,6 @@ def sync_inventory_total(product):
 
 class InventoryViewSet(viewsets.ModelViewSet):
     permission_classes = [ReadOnlyOrAuthenticated]
-    queryset = Inventory.objects.all()
-=======
-from rest_framework import viewsets
-from django.db.models import Prefetch
-from apps.inventory.infrastructure.persistence.models import Inventory, StorageAllocation
-from .serializers import InventorySerializer
-
-class InventoryViewSet(viewsets.ModelViewSet):
     queryset = Inventory.objects.all().select_related(
         'product',
         'product__category'
@@ -120,7 +111,6 @@ class InventoryViewSet(viewsets.ModelViewSet):
             )
         )
     )
->>>>>>> aa8d66f5b9fd6bb95bb4e3703639135fd7dc4ec4
     serializer_class = InventorySerializer
 
     @action(detail=False, methods=['post'], url_path='relocate')

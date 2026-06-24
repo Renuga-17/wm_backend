@@ -53,7 +53,8 @@ class BinSelectionService:
                 product_height=p_h,
                 bin_len=bin_obj.length,
                 bin_width=bin_obj.width,
-                bin_height=bin_obj.height
+                bin_height=bin_obj.height,
+                allow_vertical_stack=not getattr(product, 'is_fragile', False)
             )
             if not compat['fits']:
                 logger.info(
@@ -69,21 +70,22 @@ class BinSelectionService:
             capacity_score = (max_cap - curr_cap) / max_cap if max_cap > 0.0 else 0.0
             capacity_score = max(0.0, min(1.0, capacity_score))
 
-            # 4.2 Utilisation Score (inverse of current utilisation)
-            utilisation_score = 1.0 - (curr_cap / max_cap) if max_cap > 0.0 else 0.0
+            # 4.2 Utilisation Score from compatibility service (volume based)
+            utilisation_score = compat.get('utilization_score', 0.0)
             utilisation_score = max(0.0, min(1.0, utilisation_score))
 
             # 4.3 Weight Score (rack/shelf headroom)
             rack = bin_obj.shelf.rack
             shelf = bin_obj.shelf
 
-            # Sum existing weights
+            # Sum existing weights on rack
             rack_alloc = BinAllocation.objects.filter(rack=rack).aggregate(total_w=Sum('product__weight'))['total_w'] or Decimal('0.00')
             rack_curr = Decimal(str(rack_alloc))
             rack_max = Decimal(str(rack.max_weight))
             rack_headroom = float(rack_max - rack_curr - product_weight) / float(rack_max) if rack_max > 0.0 else 0.0
             rack_headroom = max(0.0, min(1.0, rack_headroom))
 
+            # Sum existing weights on shelf
             shelf_alloc = BinAllocation.objects.filter(shelf=shelf).aggregate(total_w=Sum('product__weight'))['total_w'] or Decimal('0.00')
             shelf_curr = Decimal(str(shelf_alloc))
             shelf_max = Decimal(str(shelf.max_weight))
@@ -97,7 +99,7 @@ class BinSelectionService:
             if aisle and rack.x is not None and rack.y is not None:
                 aisle_x = float(aisle.start_x + aisle.end_x) / 2.0
                 aisle_y = float(aisle.start_y + aisle.end_y) / 2.0
-                dist = math.sqrt((float(rack.x) - aisle_x)**2 + (float(rack.y) - aisle_y)**2)
+                dist = math.sqrt((float(rack.x) - aisle_x) ** 2 + (float(rack.y) - aisle_y) ** 2)
                 proximity_score = 1.0 / (1.0 + dist)
             else:
                 proximity_score = 0.5
@@ -114,8 +116,10 @@ class BinSelectionService:
                 shelf_height_score = 1.0
             shelf_height_score = max(0.0, min(1.0, shelf_height_score))
 
-            # Composite Score
-            # Weights: Capacity (35%), Utilisation (25%), Weight (20%), Proximity (15%), Height (5%)
+            # 4.6 Max Units (for reporting)
+            max_units = compat.get('max_units', 1)
+
+            # Composite Score (adjusted to include utilization_score)
             score = (
                 0.35 * capacity_score +
                 0.25 * utilisation_score +
@@ -129,10 +133,11 @@ class BinSelectionService:
                 'bin': bin_obj,
                 'orientation': compat['orientation_str'],
                 'score': score,
+                'max_units': max_units,
                 'reasons': (
                     f"CapScore: {capacity_score:.2f}, UtilScore: {utilisation_score:.2f}, "
                     f"WeightScore: {weight_score:.2f}, ProxScore: {proximity_score:.2f}, "
-                    f"HeightScore: {shelf_height_score:.2f}"
+                    f"HeightScore: {shelf_height_score:.2f}, MaxUnits: {max_units}"
                 )
             })
 

@@ -24,6 +24,8 @@ class BinAllocation(models.Model):
     allocation_source = models.CharField(max_length=20, choices=AllocationSource.choices, default=AllocationSource.RULE_ENGINE)
     allocation_version = models.CharField(max_length=10, default='v1')
     selected_orientation = models.CharField(max_length=50)
+    max_units = models.IntegerField(default=1)
+    utilization_score = models.FloatField(default=0.0)
     
     navigation_instructions = models.TextField(blank=True, null=True)
     placement_instructions = models.TextField(blank=True, null=True)

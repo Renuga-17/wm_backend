@@ -41,6 +41,9 @@ class ZoneGroupSelectionService:
         return free_percent
 
     def select(self, movement_type: str, storage_type: str) -> ZoneGroup:
+        from .db_healer import ensure_default_setup
+        ensure_default_setup()
+
         # Step 1: matching rules
         rules = RecommendationRule.objects.filter(
             movement_type=movement_type,
@@ -51,12 +54,17 @@ class ZoneGroupSelectionService:
             rules.count(), movement_type, storage_type,
         )
         min_free = getattr(settings, "WAREHOUSE_MIN_FREE_CAPACITY", 10)
+        first_valid_zg = None
         for rule in rules:
             try:
                 zg = ZoneGroup.objects.get(zone_group_type=rule.zone_group_type)
             except ZoneGroup.DoesNotExist:
                 logger.warning("ZoneGroup %s does not exist", rule.zone_group_type)
                 continue
+            
+            if first_valid_zg is None:
+                first_valid_zg = zg
+
             free_pct = self._free_capacity_percentage(zg)
             logger.debug(
                 "Evaluated ZoneGroup %s: free_pct=%.2f (min required=%s)",
@@ -65,5 +73,13 @@ class ZoneGroupSelectionService:
             if free_pct >= min_free:
                 logger.info("Selected ZoneGroup %s based on rule %s", zg.zone_group_type, rule.id)
                 return zg
+        
+        if first_valid_zg:
+            logger.warning(
+                "ZoneGroupSelectionService: No ZoneGroup met the minimum free capacity of %s%%. Falling back to %s.",
+                min_free, first_valid_zg.zone_group_type
+            )
+            return first_valid_zg
+
         logger.error("No suitable ZoneGroup found for %s/%s", movement_type, storage_type)
         raise ValueError("No suitable ZoneGroup found")

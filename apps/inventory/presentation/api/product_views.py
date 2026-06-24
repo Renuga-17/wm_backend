@@ -5,8 +5,14 @@ from .serializers import ProductSerializer, ProductDimensionSerializer, ProductS
 
 class ProductViewSet(viewsets.ModelViewSet):
     permission_classes = [ReadOnlyOrAuthenticated]
-    queryset = Product.objects.all()
     serializer_class = ProductSerializer
+
+    def get_queryset(self):
+        queryset = Product.objects.all().order_by('-id')
+        sku = self.request.query_params.get('sku')
+        if sku:
+            queryset = queryset.filter(sku=sku)
+        return queryset
 
 class ProductDimensionViewSet(viewsets.ModelViewSet):
     permission_classes = [ReadOnlyOrAuthenticated]
