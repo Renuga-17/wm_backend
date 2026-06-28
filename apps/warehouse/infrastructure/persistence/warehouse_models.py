@@ -7,6 +7,13 @@ class Warehouse(models.Model):
     name = models.CharField(max_length=100)
     location = models.TextField(blank=True, null=True)
     total_area_sqft = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
+    x_coordinate = models.DecimalField(max_digits=10, decimal_places=4, null=True, blank=True)
+    y_coordinate = models.DecimalField(max_digits=10, decimal_places=4, null=True, blank=True)
+    z_coordinate = models.DecimalField(max_digits=10, decimal_places=4, null=True, blank=True)
+    width = models.DecimalField(max_digits=10, decimal_places=4, null=True, blank=True)
+    depth = models.DecimalField(max_digits=10, decimal_places=4, null=True, blank=True)
+    height = models.DecimalField(max_digits=10, decimal_places=4, null=True, blank=True)
+    rotation = models.DecimalField(max_digits=8, decimal_places=4, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

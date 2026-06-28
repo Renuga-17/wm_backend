@@ -232,6 +232,8 @@ class InboundOrchestratorService:
                 ocr_document.processing_status = OCRDocument.ProcessingStatus.COMPLETED
                 ocr_document.error_message = None
                 ocr_document.save()
+                logger.info("[OCR PIPELINE] OCR document ID %s status updated to: %s (Ingestion completed successfully)", 
+                            ocr_document.id, ocr_document.processing_status)
 
             # The database transaction has successfully committed!
             logger.info("InboundOrchestratorService: DB ingestion successful.")

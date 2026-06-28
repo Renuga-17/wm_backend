@@ -9,6 +9,12 @@ class Shelf(models.Model):
     shelf_number = models.IntegerField()
     max_weight = models.DecimalField(max_digits=10, decimal_places=2)
     height_from_ground = models.DecimalField(max_digits=10, decimal_places=2)
+    x_coordinate = models.DecimalField(max_digits=10, decimal_places=4, null=True, blank=True)
+    y_coordinate = models.DecimalField(max_digits=10, decimal_places=4, null=True, blank=True)
+    z_coordinate = models.DecimalField(max_digits=10, decimal_places=4, null=True, blank=True)
+    width = models.DecimalField(max_digits=10, decimal_places=4, null=True, blank=True)
+    depth = models.DecimalField(max_digits=10, decimal_places=4, null=True, blank=True)
+    height = models.DecimalField(max_digits=10, decimal_places=4, null=True, blank=True)
 
     class Meta:
         db_table = 'shelves'
@@ -26,6 +32,10 @@ class Bin(models.Model):
     width  = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     height = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     is_occupied = models.BooleanField(default=False)
+    x_coordinate = models.DecimalField(max_digits=10, decimal_places=4, null=True, blank=True)
+    y_coordinate = models.DecimalField(max_digits=10, decimal_places=4, null=True, blank=True)
+    z_coordinate = models.DecimalField(max_digits=10, decimal_places=4, null=True, blank=True)
+    rotation = models.DecimalField(max_digits=8, decimal_places=4, null=True, blank=True)
 
     class Meta:
         db_table = 'bins'

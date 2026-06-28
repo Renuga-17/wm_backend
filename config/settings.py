@@ -222,7 +222,8 @@ OCR_SERVICE_SETTINGS = {
 }
 
 # RAG Microservice settings
-RAG_BASE_URL = os.getenv('RAG_BASE_URL', 'http://localhost:8001')
+# RAG service URL — set RAG_BASE_URL env var to the ngrok URL if running remotely
+RAG_BASE_URL = os.getenv('RAG_BASE_URL', 'http://localhost:8003')
 try:
     RAG_TIMEOUT = int(os.getenv('RAG_TIMEOUT', '30'))
 except ValueError:
@@ -238,6 +239,7 @@ CELERY_BROKER_URL = os.getenv('REDIS_URL', 'redis://127.0.0.1:6379/1')
 CELERY_RESULT_BACKEND = os.getenv('REDIS_URL', 'redis://127.0.0.1:6379/1')
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
+CELERY_TASK_ALWAYS_EAGER = os.getenv('CELERY_TASK_ALWAYS_EAGER', 'True') == 'True'
 
 # Redirect Django migrations to the Clean Architecture Infrastructure layer
 MIGRATION_MODULES = {

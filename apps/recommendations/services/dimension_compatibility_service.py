@@ -16,13 +16,13 @@ class DimensionCompatibilityService:
             max_units: int – maximum number of product units that can be placed with this orientation
             utilization_score: float – (product_volume * max_units) / bin_volume
         """
-        p_l = Decimal(str(product_len))
-        p_w = Decimal(str(product_width))
-        p_h = Decimal(str(product_height))
+        p_l = Decimal(str(product_len)) if product_len is not None else Decimal('0.00')
+        p_w = Decimal(str(product_width)) if product_width is not None else Decimal('0.00')
+        p_h = Decimal(str(product_height)) if product_height is not None else Decimal('0.00')
         
-        b_l = Decimal(str(bin_len))
-        b_w = Decimal(str(bin_width))
-        b_h = Decimal(str(bin_height))
+        b_l = Decimal(str(bin_len)) if bin_len is not None else Decimal('100.00')
+        b_w = Decimal(str(bin_width)) if bin_width is not None else Decimal('100.00')
+        b_h = Decimal(str(bin_height)) if bin_height is not None else Decimal('100.00')
         
         # The 6 rotations
         rotations = [
