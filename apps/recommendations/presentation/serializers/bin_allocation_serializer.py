@@ -6,6 +6,8 @@ from apps.warehouse.infrastructure.persistence.models import NavigationNode
 
 class BinAllocationInputSerializer(serializers.Serializer):
     product_id = serializers.UUIDField(required=True)
+    inbound_line_id = serializers.UUIDField(required=False, allow_null=True)
+    inbound_id = serializers.UUIDField(required=False, allow_null=True)
 
 class BinAllocationOutputSerializer(serializers.ModelSerializer):
     product_id = serializers.UUIDField(source='product.id')

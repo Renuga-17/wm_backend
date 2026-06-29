@@ -5,6 +5,7 @@ from pathlib import Path
 import os
 from dotenv import load_dotenv
 from datetime import timedelta
+import socket
 
 
 # Load environment variables
@@ -97,8 +98,14 @@ else:
     }
 
 def _is_redis_running():
-    # Force bypass Redis checks
-    return False
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.settimeout(0.2)
+        s.connect((os.getenv('REDIS_HOST', '127.0.0.1'), 6379))
+        s.close()
+        return True
+    except Exception:
+        return False
 
 if _is_redis_running():
     CHANNEL_LAYERS = {
@@ -161,12 +168,10 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-from datetime import timedelta
-
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'common.authentication.LocalDevAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'common.authentication.LocalDevAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
@@ -176,27 +181,33 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=20),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
+    'REFRESH_TOKEN_LIFETIME': timedelta(minutes=10),
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': False,
     'UPDATE_LAST_LOGIN': False,
 }
 
+# MongoDB Settings
+MONGODB_SETTINGS = {
+    'URI': os.getenv('MONGODB_URI', 'mongodb://localhost:27017/'),
+    'DB_NAME': os.getenv('MONGODB_DB_NAME', 'wm_mongodb'),
+}
+
 # ClickHouse Settings
 CLICKHOUSE_SETTINGS = {
-    "HOST": "jj8tk9yx2g.ap-south-1.aws.clickhouse.cloud",
-    "PORT": 8443,
-    "USERNAME": "default",
-    "PASSWORD": "YOUR_ACTUAL_PASSWORD",
-    "DATABASE": "wm_clickhouse",
-    "SECURE": True,
+    "HOST": os.getenv('CLICKHOUSE_HOST', 'jj8tk9yx2g.ap-south-1.aws.clickhouse.cloud'),
+    "PORT": int(os.getenv('CLICKHOUSE_PORT', '8443')),
+    "USERNAME": os.getenv('CLICKHOUSE_USER', 'default'),
+    "PASSWORD": os.getenv('CLICKHOUSE_PASSWORD', 'YOUR_ACTUAL_PASSWORD'),
+    "DATABASE": os.getenv('CLICKHOUSE_DB', 'wm_clickhouse'),
+    "SECURE": os.getenv('CLICKHOUSE_SECURE', 'True') == 'True',
 }
 
 # Qdrant Settings
 QDRANT_SETTINGS = {
-    'URL': os.getenv('QDRANT_URL', 'http://localhost:6333'),
-    'API_KEY': os.getenv('QDRANT_API_KEY', ''),
+    'URL': os.getenv('QDRANT_URL', 'https://8154ed87-b188-4ddc-996e-d80d11e64562.eu-west-2-0.aws.cloud.qdrant.io/'),
+    'API_KEY': os.getenv('QDRANT_API_KEY', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiJtIiwic3ViamVjdCI6ImFwaS1rZXk6ZTAxYTczZjMtNjE4Ny00NDNmLTljMjMtZjJiNDBjOGFkNTBhIn0.9EnkXICnLSqMY5T-vQlyVoZ5Xh4HU3vyav0m3uxadNc'),
 }
 
 # FastAPI AI Service settings
@@ -207,15 +218,16 @@ AI_SERVICE_SETTINGS = {
 
 # OCR Microservice settings
 OCR_SERVICE_SETTINGS = {
-    'BASE_URL': os.getenv('OCR_SERVICE_URL', 'http://localhost:8001'),
+    'BASE_URL': os.getenv('OCR_SERVICE_URL', 'http://localhost:8002'),
 }
 
 # RAG Microservice settings
-RAG_BASE_URL = os.getenv('RAG_BASE_URL', 'http://localhost:8002')
+# RAG service URL — set RAG_BASE_URL env var to the ngrok URL if running remotely
+RAG_BASE_URL = os.getenv('RAG_BASE_URL', 'http://localhost:8003')
 try:
-    RAG_TIMEOUT = int(os.getenv('RAG_TIMEOUT', '120'))
+    RAG_TIMEOUT = int(os.getenv('RAG_TIMEOUT', '30'))
 except ValueError:
-    RAG_TIMEOUT = 120
+    RAG_TIMEOUT = 30
 
 
 # Media File Storage Settings
@@ -223,20 +235,15 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Celery Settings
-CELERY_BROKER_URL = 'memory://'
-CELERY_RESULT_BACKEND = None
+if _is_redis_running():
+    CELERY_BROKER_URL = os.getenv('REDIS_URL', 'redis://127.0.0.1:6379/1')
+    CELERY_RESULT_BACKEND = os.getenv('REDIS_URL', 'redis://127.0.0.1:6379/1')
+else:
+    CELERY_BROKER_URL = 'memory://'
+    CELERY_RESULT_BACKEND = None
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
-CELERY_TASK_ALWAYS_EAGER = True
-
-# JWT Settings
-SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),  
-    'REFRESH_TOKEN_LIFETIME': timedelta(minutes=10),  
-    'ROTATE_REFRESH_TOKENS': False,
-    'BLACKLIST_AFTER_ROTATION': False,
-    'UPDATE_LAST_LOGIN': False,
-}
+CELERY_TASK_ALWAYS_EAGER = os.getenv('CELERY_TASK_ALWAYS_EAGER', 'True') == 'True'
 
 # Redirect Django migrations to the Clean Architecture Infrastructure layer
 MIGRATION_MODULES = {
@@ -275,5 +282,3 @@ CORS_ALLOW_HEADERS = [
     'x-mock-user-email',
     'x-mock-user-role',
 ]
-
-

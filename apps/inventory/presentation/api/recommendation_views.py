@@ -1,3 +1,4 @@
+import logging
 from django.utils import timezone
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
@@ -18,6 +19,9 @@ from django.db import transaction
 from apps.inventory.infrastructure.persistence.models import StorageAllocation
 from apps.inventory.application.ai.feedback_loop import AIFeedbackLoop
 from apps.inventory.application.ai.operational_scoring import OperationalScoringEngine
+from decimal import Decimal
+
+logger = logging.getLogger(__name__)
 
 class RecommendationViewSet(viewsets.ModelViewSet):
     queryset = Recommendation.objects.all()
@@ -40,64 +44,47 @@ class RecommendationViewSet(viewsets.ModelViewSet):
             if not product:
                 return Response({"error": f"Product not found for ID or SKU: {product_id}"}, status=status.HTTP_404_NOT_FOUND)
 
-        # Get product specs
-        product_data = {
-            "id": str(product.id),
-            "sku": product.sku,
-            "product_name": product.product_name,
-            "weight": float(product.weight),
-            "is_fragile": product.is_fragile,
-            "is_hazardous": product.is_hazardous,
-            "category": product.category.category_name if product.category else None
-        }
+        try:
+            # Resolve warehouse_id
+            layout = WarehouseLayout.objects.first()
+            warehouse_id = layout.warehouse_id if layout else None
+            if not warehouse_id:
+                from apps.warehouse.infrastructure.persistence.models import Warehouse
+                warehouse = Warehouse.objects.first()
+                warehouse_id = warehouse.id if warehouse else None
 
-        # Fetch warehouse layout details
-        layout = WarehouseLayout.objects.first()
-        warehouse_layout = {}
-        if layout:
-            warehouse_layout = {
-                "layout_id": str(layout.id),
-                "layout_name": layout.layout_name,
-                "width": float(layout.width),
-                "height": float(layout.height),
-                "depth": float(layout.depth),
-            }
+            if not warehouse_id:
+                raise ValueError("No warehouse or warehouse layout configured in system")
 
-        # Query external AI Service
-        client = AIServiceClient()
-        ai_res = client.get_storage_recommendation(product_data, warehouse_layout)
-
-        # Retrieve recommended bin or fallback
-        recommended_bin_id = ai_res.get('recommended_bin_id')
-        bin_obj = None
-        if recommended_bin_id:
-            try:
-                bin_obj = Bin.objects.get(id=recommended_bin_id)
-            except (Bin.DoesNotExist, ValueError):
-                bin_obj = Bin.objects.filter(bin_code=recommended_bin_id).first()
-
-        if not bin_obj:
-            # Fallback: Find first non-occupied bin
+            # Invoke local AI slotting calculation
+            recommendation = AISlottingEngine.optimize_slotting(product.id, warehouse_id)
+            bin_obj = recommendation.recommended_bin
+            confidence = float(recommendation.confidence_score)
+            reasoning_text = recommendation.reasoning.get("logic", "AI optimized location.")
+            
+            logger.info("Local AI recommendation used")
+        except Exception as e:
+            # Local database fallback
             bin_obj = Bin.objects.filter(is_occupied=False).first() or Bin.objects.first()
-
-        if not bin_obj:
-            return Response({"error": "No available bins found in warehouse"}, status=status.HTTP_404_NOT_FOUND)
-
-        # Save recommendation
-        confidence = ai_res.get('confidence_score', 0.90)
-        reasoning_text = ai_res.get('reasoning', "Optimal turnover allocation.")
-        
-        recommendation = AllocationRecommendation.objects.create(
-            product=product,
-            recommended_bin=bin_obj,
-            confidence_score=confidence if confidence is not None else 0.90,
-            reasoning={"logic": reasoning_text}
-        )
+            if not bin_obj:
+                return Response({"error": "No available bins found in warehouse"}, status=status.HTTP_404_NOT_FOUND)
+            
+            confidence = 0.0
+            reasoning_text = f"Fallback due to AI Service unavailability (local calculation failed: {str(e)})"
+            
+            recommendation = AllocationRecommendation.objects.create(
+                product=product,
+                recommended_bin=bin_obj,
+                confidence_score=Decimal(str(confidence)),
+                reasoning={"logic": reasoning_text}
+            )
+            
+            logger.info("Fallback recommendation used")
 
         return Response({
             "success": True,
             "recommended_bin_id": str(bin_obj.id),
-            "confidence_score": float(recommendation.confidence_score),
+            "confidence_score": float(confidence),
             "reasoning": reasoning_text
         })
 
@@ -141,8 +128,7 @@ class RecommendationViewSet(viewsets.ModelViewSet):
                 bin=bin_obj,
                 quantity=quantity
             )
-            # Placeholder for future occupancy update
-            self.update_bin_occupancy(bin_obj)
+            self.update_bin_occupancy(bin_obj, quantity)
 
         return Response({
             "allocation_id": str(allocation.id),
@@ -154,9 +140,15 @@ class RecommendationViewSet(viewsets.ModelViewSet):
             "quantity": quantity
         }, status=status.HTTP_201_CREATED)
 
-    def update_bin_occupancy(self, bin_obj):
-        """Placeholder for future Digital Twin occupancy update."""
-        pass
+    def update_bin_occupancy(self, bin_obj, quantity):
+        """Update Digital Twin occupancy via DigitalTwinSyncService."""
+        from apps.warehouse.application.services.digital_twin_sync_service import DigitalTwinSyncService
+        DigitalTwinSyncService.sync_occupancy(
+            bin_id=bin_obj.id,
+            is_occupied=True,
+            capacity_delta=quantity
+        )
+
 
 
 class AIRecommendationViewSet(viewsets.GenericViewSet):

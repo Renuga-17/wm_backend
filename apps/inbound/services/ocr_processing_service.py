@@ -70,11 +70,16 @@ class OCRProcessingService:
         ocr_doc.confidence_score = confidence_score
         ocr_doc.document_type = doc_type
 
+        logger.info("[OCR PIPELINE] Saving extracted raw text and JSON payload into Neon DB for Document ID: %s", ocr_doc.id)
+        ocr_doc.save()
+        logger.info("[OCR PIPELINE] OCR document ID %s successfully saved into Neon DB.", ocr_doc.id)
+
         # 4. Review queue logic (Phase 6): check confidence score
         if confidence_score < 0.85:
             ocr_doc.processing_status = OCRDocument.ProcessingStatus.REVIEW_REQUIRED
             ocr_doc.save()
-            logger.warning("OCRProcessingService: Confidence score %.2f is below threshold. Review required.", confidence_score)
+            logger.info("[OCR PIPELINE] OCR document ID %s status updated to: %s (Confidence score %.2f is below threshold 0.85)", 
+                        ocr_doc.id, ocr_doc.processing_status, confidence_score)
             return
 
         # 5. Domain WMS objects creation via InboundOrchestratorService

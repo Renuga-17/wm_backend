@@ -115,21 +115,16 @@ class ZoneSelectionService:
         best_score = -1.0
         best_metrics = None
         
+        absolute_best_zone = None
+        absolute_best_score = -1.0
+        absolute_best_metrics = None
+
         for zone in zones:
             if not self.is_zone_active(zone):
                 continue
                 
             metrics = self.calculate_zone_capacity_metrics(zone)
             free_pct = metrics['available_capacity_percentage']
-            
-            # Reject zones below WAREHOUSE_MIN_FREE_CAPACITY
-            if free_pct < min_free:
-                logger.warning(
-                    "ZoneSelectionService: Zone %s rejected. Free capacity %.2f%% is below minimum %s%%",
-                    zone.zone_name, free_pct, min_free
-                )
-                continue
-                
             priority = self.get_zone_priority(zone)
             active_status = self.is_zone_active(zone)
             
@@ -139,6 +134,19 @@ class ZoneSelectionService:
                 priority=priority,
                 active=active_status
             )
+            
+            if score > absolute_best_score:
+                absolute_best_score = score
+                absolute_best_zone = zone
+                absolute_best_metrics = metrics
+            
+            # Reject zones below WAREHOUSE_MIN_FREE_CAPACITY
+            if free_pct < min_free:
+                logger.warning(
+                    "ZoneSelectionService: Zone %s rejected. Free capacity %.2f%% is below minimum %s%%",
+                    zone.zone_name, free_pct, min_free
+                )
+                continue
             
             logger.info(
                 "ZoneSelectionService: Zone %s scored %.4f (free_pct=%.2f%%, utilization_pct=%.2f%%, priority=%.2f)",
@@ -151,6 +159,13 @@ class ZoneSelectionService:
                 best_metrics = metrics
                 
         if not best_zone:
+            if absolute_best_zone:
+                logger.warning(
+                    "ZoneSelectionService: No zone met the minimum free capacity of %s%% in group %s. Falling back to %s with score %.4f.",
+                    min_free, zone_group.code, absolute_best_zone.zone_name, absolute_best_score
+                )
+                return absolute_best_zone, absolute_best_score, absolute_best_metrics
+
             logger.error("ZoneSelectionService: No active zone with sufficient free capacity in group %s", zone_group.code)
             raise ValueError(f"No suitable zone found with at least {min_free}% free capacity")
             

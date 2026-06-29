@@ -8,12 +8,14 @@ from apps.warehouse.infrastructure.persistence.models import Bin
 from .layout_serializers import WarehouseLayoutSerializer
 from .serializers import SpatialEntitySerializer, WarehousePathSerializer, NavigationNodeSerializer
 from .twin_serializers import TwinRackSerializer, TwinZoneSerializer
+from common.permissions import ReadOnlyOrAuthenticated
 import logging
 
 logger = logging.getLogger(__name__)
 
+
 class WarehouseTwinDetailView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [ReadOnlyOrAuthenticated]
 
     def get(self, request, layout_id):
         try:
@@ -22,7 +24,7 @@ class WarehouseTwinDetailView(APIView):
             return Response({"error": "Warehouse layout not found"}, status=status.HTTP_404_NOT_FOUND)
 
         warehouse = layout.warehouse
-        
+
         # Query spatial structures
         zones = Zone.objects.filter(warehouse=warehouse).order_by('id')
         racks = Rack.objects.filter(zone__warehouse=warehouse).order_by('id')
@@ -43,7 +45,7 @@ class WarehouseTwinDetailView(APIView):
 
 
 class TwinRacksView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [ReadOnlyOrAuthenticated]
 
     def get(self, request):
         racks = Rack.objects.all().order_by('id')
@@ -51,7 +53,7 @@ class TwinRacksView(APIView):
 
 
 class TwinZonesView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [ReadOnlyOrAuthenticated]
 
     def get(self, request):
         zones = Zone.objects.all().order_by('id')
@@ -59,7 +61,7 @@ class TwinZonesView(APIView):
 
 
 class TwinOccupancyView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [ReadOnlyOrAuthenticated]
 
     def get(self, request):
         # Calculate overall WMS occupancy metrics
@@ -70,103 +72,7 @@ class TwinOccupancyView(APIView):
         # Calculate per-rack occupancy metrics
         racks = Rack.objects.all().order_by('id')
         rack_stats = []
-        
-        for rack in racks:
-            # Query bins belonging to this rack
-            rack_bins = Bin.objects.filter(shelf__rack=rack)
-            rack_total = rack_bins.count()
-            rack_occupied = rack_bins.filter(is_occupied=True).count()
-            rack_pct = (rack_occupied / rack_total * 100.0) if rack_total > 0 else 0.0
 
-            rack_stats.append({
-                "rack_id": str(rack.id),
-                "rack_code": rack.rack_code,
-                "total_bins": rack_total,
-                "occupied_bins": rack_occupied,
-                "occupancy_percentage": round(rack_pct, 2)
-            })
-
-        payload = {
-            "overall": {
-                "total_bins": total_bins,
-                "occupied_bins": occupied_bins,
-                "occupancy_percentage": round(occupancy_percentage, 2)
-            },
-            "racks": rack_stats
-        }
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status, permissions
-from django.db.models import Count, Q
-from apps.warehouse.infrastructure.persistence.models import WarehouseLayout, Rack, SpatialEntity, WarehousePath, NavigationNode, NavigationEdge, Warehouse
-from apps.warehouse.infrastructure.persistence.models import Zone
-from apps.warehouse.infrastructure.persistence.models import Bin
-from .layout_serializers import WarehouseLayoutSerializer
-from .serializers import SpatialEntitySerializer, WarehousePathSerializer, NavigationNodeSerializer
-from .twin_serializers import TwinRackSerializer, TwinZoneSerializer
-import logging
-
-logger = logging.getLogger(__name__)
-
-class WarehouseTwinDetailView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
-
-    def get(self, request, layout_id):
-        try:
-            layout = WarehouseLayout.objects.get(id=layout_id)
-        except WarehouseLayout.DoesNotExist:
-            return Response({"error": "Warehouse layout not found"}, status=status.HTTP_404_NOT_FOUND)
-
-        warehouse = layout.warehouse
-        
-        # Query spatial structures
-        zones = Zone.objects.filter(warehouse=warehouse).order_by('id')
-        racks = Rack.objects.filter(zone__warehouse=warehouse).order_by('id')
-        entities = SpatialEntity.objects.filter(warehouse=warehouse).order_by('id')
-        paths = WarehousePath.objects.filter(warehouse=warehouse).order_by('id')
-        nodes = NavigationNode.objects.filter(warehouse=warehouse).order_by('id')
-
-        # Compile consolidated digital twin
-        payload = {
-            "layout": WarehouseLayoutSerializer(layout).data,
-            "zones": TwinZoneSerializer(zones, many=True).data,
-            "racks": TwinRackSerializer(racks, many=True).data,
-            "spatial_entities": SpatialEntitySerializer(entities, many=True).data,
-            "paths": WarehousePathSerializer(paths, many=True).data,
-            "navigation_nodes": NavigationNodeSerializer(nodes, many=True).data
-        }
-        return Response(payload, status=status.HTTP_200_OK)
-
-
-class TwinRacksView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
-
-    def get(self, request):
-        racks = Rack.objects.all().order_by('id')
-        return Response(TwinRackSerializer(racks, many=True).data, status=status.HTTP_200_OK)
-
-
-class TwinZonesView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
-
-    def get(self, request):
-        zones = Zone.objects.all().order_by('id')
-        return Response(TwinZoneSerializer(zones, many=True).data, status=status.HTTP_200_OK)
-
-
-class TwinOccupancyView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
-
-    def get(self, request):
-        # Calculate overall WMS occupancy metrics
-        total_bins = Bin.objects.count()
-        occupied_bins = Bin.objects.filter(is_occupied=True).count()
-        occupancy_percentage = (occupied_bins / total_bins * 100.0) if total_bins > 0 else 0.0
-
-        # Calculate per-rack occupancy metrics
-        racks = Rack.objects.all().order_by('id')
-        rack_stats = []
-        
         for rack in racks:
             # Query bins belonging to this rack
             rack_bins = Bin.objects.filter(shelf__rack=rack)
@@ -194,7 +100,7 @@ class TwinOccupancyView(APIView):
 
 
 class TwinPathsView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [ReadOnlyOrAuthenticated]
 
     def get(self, request):
         try:
@@ -210,7 +116,7 @@ class TwinPathsView(APIView):
                 # Add edges with weight (distance)
                 for edge in NavigationEdge.objects.filter(warehouse=nodes.first().warehouse):
                     G.add_edge(str(edge.from_node.id), str(edge.to_node.id), weight=float(edge.edge_weight))
-                # Compute all‑pairs shortest paths (fallback when no stored paths)
+                # Compute all-pairs shortest paths (fallback when no stored paths)
                 fallback_paths = []
                 for source in G.nodes:
                     lengths, paths_dict = nx.single_source_dijkstra(G, source, weight='weight')
@@ -235,10 +141,12 @@ class TwinPathsView(APIView):
             logger.exception("Error retrieving twin paths")
             return Response({"error": "Unable to retrieve paths"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+
 from .summary_serializers import TwinSummarySerializer
 
+
 class TwinSummaryView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [ReadOnlyOrAuthenticated]
 
     def get(self, request):
         total_warehouses = Warehouse.objects.count()

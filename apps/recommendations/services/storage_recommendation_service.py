@@ -9,6 +9,8 @@ from .zone_selection_service import ZoneSelectionService
 
 logger = logging.getLogger(__name__)
 
+from .db_healer import ensure_default_setup
+
 class StorageRecommendationService:
     """Orchestrates validation, runs orchestrator to get recommendations, and persists the decision.
     """
@@ -20,6 +22,9 @@ class StorageRecommendationService:
     def generate_recommendation(self, product_id) -> StorageRecommendation:
         logger.info("StorageRecommendationService: Received request for product_id: %s", product_id)
         
+        # Run database self-healing check
+        ensure_default_setup()
+        
         # Validation 1: Product exists
         try:
             product = Product.objects.get(id=product_id)
@@ -27,12 +32,23 @@ class StorageRecommendationService:
             logger.error("StorageRecommendationService: Product not found with ID %s", product_id)
             raise ValueError(f"Product not found for ID: {product_id}")
             
-        # Validation 2: ProductClassification exists
+        # Validation 2: ProductClassification exists (or auto-create default)
         try:
             classification = ProductClassification.objects.get(product=product)
         except ProductClassification.DoesNotExist:
-            logger.error("StorageRecommendationService: ProductClassification not found for product %s", product.sku)
-            raise ValueError(f"Product classification does not exist for product: {product.sku}")
+            logger.info("StorageRecommendationService: ProductClassification not found for product %s. Auto-creating default.", product.sku)
+            movement_type = 'FAST'
+            if product.is_fragile:
+                movement_type = 'FRAGILE'
+            elif product.is_hazardous:
+                movement_type = 'HAZARDOUS'
+                
+            storage_type = 'GENERAL'
+            classification = ProductClassification.objects.create(
+                product=product,
+                movement_type=movement_type,
+                storage_type=storage_type
+            )
             
         # Run orchestrator
         rec_data = self.orchestrator.get_recommendation(product)

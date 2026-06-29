@@ -40,6 +40,7 @@ def django_db_setup(
         }
     }
     settings.ALLOWED_HOSTS = ['*']
+    settings.CELERY_TASK_ALWAYS_EAGER = True
 
     with django_db_blocker.unblock():
         db_cfg = setup_databases(

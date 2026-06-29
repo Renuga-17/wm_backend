@@ -9,6 +9,7 @@ from apps.warehouse.infrastructure.persistence.models import Zone, ZoneBoundary
 from .layout_serializers import WarehouseLayoutSerializer, LayoutUploadSerializer, LayoutAnalysisSerializer
 from apps.warehouse.application.services.layout_parser import LayoutParser
 from integrations.ai_service_client import AIServiceClient
+from common.permissions import ReadOnlyOrAuthenticated
 import logging
 
 logger = logging.getLogger(__name__)
@@ -52,7 +53,7 @@ class LayoutUploadView(APIView):
 
 
 class LayoutDetailView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [ReadOnlyOrAuthenticated]
 
     def get(self, request, layout_id):
         try:
@@ -94,8 +95,15 @@ class LayoutAnalyzeView(APIView):
         
         # 1. Parse geometries
         entities = []
-        if ext in ['.dxf', '.dwg']:
-            # Call local DXF parser
+        if ext == '.dwg':
+            try:
+                from apps.warehouse.application.services.dwg_conversion_service import DWGConversionService
+                dxf_path = DWGConversionService.convert_dwg_to_dxf(file_path)
+                entities = LayoutParser.parse_dxf(dxf_path)
+            except Exception as dwg_err:
+                logger.error(f"DWG conversion failed: {dwg_err}")
+                entities = LayoutParser.parse_dxf(file_path)
+        elif ext == '.dxf':
             entities = LayoutParser.parse_dxf(file_path)
         
         # 2. Call external AI Service Client for Vision / YOLO / OCR enhancement
@@ -209,7 +217,7 @@ class LayoutAnalyzeView(APIView):
 
 
 class LayoutEntitiesView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [ReadOnlyOrAuthenticated]
 
     def get(self, request):
         layout_id = request.query_params.get('layout_id')
@@ -242,3 +250,190 @@ class LayoutEntitiesView(APIView):
             })
 
         return Response(results, status=status.HTTP_200_OK)
+
+
+class GenerateTopologyView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        from .layout_serializers import GenerateTopologySerializer
+        from apps.warehouse.application.services.topology_generation_service import TopologyGenerationService
+        from apps.warehouse.application.services.navigation_graph_generator_service import NavigationGraphGeneratorService
+        from apps.warehouse.application.services.digital_twin_sync_service import DigitalTwinSyncService
+        
+        serializer = GenerateTopologySerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        layout_id = serializer.validated_data['layout_id']
+        shelves_per_rack = serializer.validated_data['shelves_per_rack']
+        bins_per_shelf = serializer.validated_data['bins_per_shelf']
+
+        try:
+            layout = WarehouseLayout.objects.get(id=layout_id)
+        except WarehouseLayout.DoesNotExist:
+            return Response({"error": "Warehouse layout not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        warehouse = layout.warehouse
+        racks = Rack.objects.filter(zone__warehouse=warehouse)
+        
+        shelves_created = 0
+        bins_created = 0
+
+        # 1. Generate shelves and bins for all racks
+        for rack in racks:
+            sh, bn = TopologyGenerationService.generate_rack_topology(
+                rack, 
+                shelves_per_rack=shelves_per_rack, 
+                bins_per_shelf=bins_per_shelf
+            )
+            shelves_created += len(sh)
+            bins_created += len(bn)
+
+        # 2. Fetch path CADObjects to build navigation graph
+        path_objects = CADObject.objects.filter(layout=layout, object_type='path')
+        path_entities = []
+        for obj in path_objects:
+            extraction = MLExtraction.objects.filter(object=obj).first()
+            if extraction and isinstance(extraction.extracted_data, dict):
+                path_entities.append(extraction.extracted_data)
+
+        # 3. Generate navigation nodes, edges, and mappings
+        nodes = NavigationGraphGeneratorService.generate_navigation_graph(warehouse, path_entities)
+
+        # 4. Initialize Digital Twin
+        all_bins = Bin.objects.filter(shelf__rack__zone__warehouse=warehouse)
+        from decimal import Decimal
+        for b in all_bins:
+            DigitalTwinSyncService.sync_occupancy(
+                bin_id=b.id,
+                is_occupied=False,
+                current_capacity=Decimal('0.00')
+            )
+
+        return Response({
+            "success": True,
+            "layout_id": str(layout.id),
+            "warehouse_id": str(warehouse.id),
+            "racks_processed": racks.count(),
+            "shelves_created": shelves_created,
+            "bins_created": bins_created,
+            "navigation_nodes_created": len(nodes)
+        }, status=status.HTTP_200_OK)
+
+
+class GenerateTopologyView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        from .layout_serializers import GenerateTopologySerializer
+        from apps.warehouse.application.services.topology_generation_service import TopologyGenerationService
+        from apps.warehouse.application.services.navigation_graph_generator_service import NavigationGraphGeneratorService
+        from apps.warehouse.application.services.digital_twin_sync_service import DigitalTwinSyncService
+        from apps.warehouse.models import Bin
+        
+        serializer = GenerateTopologySerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        layout_id = serializer.validated_data['layout_id']
+        shelves_per_rack = serializer.validated_data['shelves_per_rack']
+        bins_per_shelf = serializer.validated_data['bins_per_shelf']
+
+        try:
+            layout = WarehouseLayout.objects.get(id=layout_id)
+        except WarehouseLayout.DoesNotExist:
+            return Response({"error": "Warehouse layout not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        warehouse = layout.warehouse
+        racks = Rack.objects.filter(zone__warehouse=warehouse)
+        
+        shelves_created = 0
+        bins_created = 0
+
+        # 1. Generate shelves and bins for all racks
+        for rack in racks:
+            sh, bn = TopologyGenerationService.generate_rack_topology(
+                rack, 
+                shelves_per_rack=shelves_per_rack, 
+                bins_per_shelf=bins_per_shelf
+            )
+            shelves_created += len(sh)
+            bins_created += len(bn)
+
+        # 2. Fetch path CADObjects to build navigation graph
+        path_objects = CADObject.objects.filter(layout=layout, object_type='path')
+        path_entities = []
+        for obj in path_objects:
+            extraction = MLExtraction.objects.filter(object=obj).first()
+            if extraction and isinstance(extraction.extracted_data, dict):
+                path_entities.append(extraction.extracted_data)
+
+        # 3. Generate navigation nodes, edges, and mappings
+        nodes = NavigationGraphGeneratorService.generate_navigation_graph(warehouse, path_entities)
+
+        # 4. Initialize Digital Twin
+        all_bins = Bin.objects.filter(shelf__rack__zone__warehouse=warehouse)
+        from decimal import Decimal
+        for b in all_bins:
+            DigitalTwinSyncService.sync_occupancy(
+                bin_id=b.id,
+                is_occupied=False,
+                current_capacity=Decimal('0.00')
+            )
+
+        return Response({
+            "success": True,
+            "layout_id": str(layout.id),
+            "warehouse_id": str(warehouse.id),
+            "racks_processed": racks.count(),
+            "shelves_created": shelves_created,
+            "bins_created": bins_created,
+            "navigation_nodes_created": len(nodes)
+        }, status=status.HTTP_200_OK)
+
+
+class LayoutGraphView(APIView):
+    permission_classes = [ReadOnlyOrAuthenticated]
+
+    def get(self, request):
+        layout_id = request.query_params.get('layout_id')
+        if not layout_id:
+            return Response({"error": "layout_id query parameter is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            layout = WarehouseLayout.objects.get(id=layout_id)
+        except WarehouseLayout.DoesNotExist:
+            return Response({"error": "Warehouse layout not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        from apps.warehouse.models import NavigationNode, NavigationEdge
+        warehouse = layout.warehouse
+        nodes = NavigationNode.objects.filter(warehouse=warehouse)
+        edges = NavigationEdge.objects.filter(warehouse=warehouse)
+
+        nodes_data = [
+            {
+                "node_id": str(n.id),
+                "node_name": n.node_name,
+                "node_type": n.node_type,
+                "coordinates": [float(n.x), float(n.y), float(n.z)]
+            }
+            for n in nodes
+        ]
+
+        edges_data = [
+            {
+                "edge_id": str(e.id),
+                "from_node_id": str(e.from_node_id),
+                "to_node_id": str(e.to_node_id),
+                "weight": float(e.edge_weight),
+                "congestion_score": float(e.congestion_score),
+                "is_blocked": e.is_blocked
+            }
+            for e in edges
+        ]
+
+        return Response({
+            "nodes": nodes_data,
+            "edges": edges_data
+        }, status=status.HTTP_200_OK)

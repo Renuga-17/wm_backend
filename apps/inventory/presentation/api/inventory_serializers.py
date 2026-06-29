@@ -66,3 +66,44 @@ class InventorySerializer(serializers.ModelSerializer):
         
         return rep
 
+
+class ProductRelocationSerializer(serializers.Serializer):
+    product_id = serializers.CharField(max_length=100)
+    from_bin_id = serializers.CharField(max_length=100)
+    to_bin_id = serializers.CharField(max_length=100)
+    quantity = serializers.IntegerField(min_value=1)
+    operator = serializers.CharField(max_length=150, required=False, allow_blank=True, default='')
+
+
+class BinTransferSerializer(serializers.Serializer):
+    product_id = serializers.CharField(max_length=100)
+    from_bin_id = serializers.CharField(max_length=100)
+    to_bin_id = serializers.CharField(max_length=100)
+    quantity = serializers.IntegerField(min_value=1)
+    operator = serializers.CharField(max_length=150, required=False, allow_blank=True, default='')
+
+
+class StockAdjustmentSerializer(serializers.Serializer):
+    product_id = serializers.CharField(max_length=100)
+    bin_id = serializers.CharField(max_length=100)
+    quantity = serializers.IntegerField()
+    reason = serializers.CharField(max_length=255, required=False, allow_blank=True, default='Manual adjustment')
+    operator = serializers.CharField(max_length=150, required=False, allow_blank=True, default='')
+
+
+class DamageReportSerializer(serializers.Serializer):
+    product_id = serializers.CharField(max_length=100)
+    bin_id = serializers.CharField(max_length=100)
+    quantity = serializers.IntegerField(min_value=1)
+    reason = serializers.CharField(max_length=255, required=False, allow_blank=True, default='Damaged')
+    operator = serializers.CharField(max_length=150, required=False, allow_blank=True, default='')
+
+
+class InventoryAuditSerializer(serializers.Serializer):
+    product_id = serializers.CharField(max_length=100)
+    bin_id = serializers.CharField(max_length=100)
+    physical_count = serializers.IntegerField(min_value=0)
+    reason = serializers.CharField(max_length=255, required=False, allow_blank=True, default='Stocktake audit')
+    operator = serializers.CharField(max_length=150, required=False, allow_blank=True, default='')
+
+

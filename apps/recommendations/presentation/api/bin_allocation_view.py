@@ -30,10 +30,31 @@ class BinAllocationView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         product_id = serializer.validated_data['product_id']
+        inbound_line_id = serializer.validated_data.get('inbound_line_id')
+        inbound_id = serializer.validated_data.get('inbound_id')
         service = BinAllocationService()
 
         try:
             allocation = service.generate_bin_allocation(product_id)
+            
+            # Find the corresponding InboundShipmentLine & InboundShipment
+            from apps.inbound.infrastructure.persistence.inbound_models import InboundShipmentLine
+            shipment_line = None
+            if inbound_line_id:
+                shipment_line = InboundShipmentLine.objects.filter(id=inbound_line_id).first()
+            elif inbound_id:
+                shipment_line = InboundShipmentLine.objects.filter(shipment_id=inbound_id, product_id=product_id).first()
+            else:
+                shipment_line = InboundShipmentLine.objects.filter(product_id=product_id).exclude(recommendation_status='STORED').first()
+
+            if shipment_line:
+                allocation.inbound_line = shipment_line
+                allocation.inbound_shipment = shipment_line.shipment
+                allocation.save()
+                
+                shipment_line.recommendation_status = 'RECOMMENDED'
+                shipment_line.save()
+
             output_serializer = BinAllocationOutputSerializer(allocation)
             logger.info("BinAllocationView: Successfully allocated bin for product: %s", product_id)
             return Response(output_serializer.data, status=status.HTTP_201_CREATED)

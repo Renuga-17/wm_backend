@@ -101,7 +101,7 @@ class StorageCompletionTestCase(TestCase):
         )
 
     @patch('django.db.models.signals.post_save.send')
-    @patch('apps.recommendations.presentation.api.bin_allocation_complete_view.get_channel_layer')
+    @patch('channels.layers.get_channel_layer')
     def test_storage_completion_success(self, mock_get_channel_layer, mock_post_save):
         """Test a valid patch request marks storage complete and syncs state."""
         # Mock WebSocket channel layer

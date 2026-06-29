@@ -119,3 +119,59 @@ CREATE TABLE IF NOT EXISTS demand_forecasts
 )
 ENGINE = MergeTree()
 ORDER BY (forecast_time, product_id);
+
+-- ============================================================
+--  OPERATIONAL ANALYTICS TABLES (4 TABLES)
+-- ============================================================
+
+-- 8. warehouse_events (Generic operational event log for all warehouse activities)
+CREATE TABLE IF NOT EXISTS warehouse_events
+(
+    event_id UUID,
+    event_type String,
+    warehouse_id String,
+    entity_type String,
+    entity_id String,
+    timestamp DateTime,
+    metadata_json String
+)
+ENGINE = MergeTree()
+ORDER BY (timestamp, warehouse_id, event_type);
+
+-- 9. recommendation_metrics (Recommendation scoring and acceptance tracking)
+CREATE TABLE IF NOT EXISTS recommendation_metrics
+(
+    recommendation_id String,
+    warehouse_id String,
+    score Float32,
+    accepted UInt8,
+    travel_distance Float32,
+    timestamp DateTime
+)
+ENGINE = MergeTree()
+ORDER BY (timestamp, warehouse_id);
+
+-- 10. occupancy_metrics (Zone/rack occupancy percentages over time)
+CREATE TABLE IF NOT EXISTS occupancy_metrics
+(
+    warehouse_id String,
+    zone_id String,
+    rack_id String,
+    occupancy_percentage Float32,
+    timestamp DateTime
+)
+ENGINE = MergeTree()
+ORDER BY (timestamp, warehouse_id, zone_id);
+
+-- 11. route_metrics (Route distance, nodes visited, and optimization scores)
+CREATE TABLE IF NOT EXISTS route_metrics
+(
+    route_id String,
+    warehouse_id String,
+    distance Float32,
+    nodes_visited UInt32,
+    optimization_score Float32,
+    timestamp DateTime
+)
+ENGINE = MergeTree()
+ORDER BY (timestamp, warehouse_id);

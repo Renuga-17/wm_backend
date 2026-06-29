@@ -1,0 +1,317 @@
+admin/ | GET/POST | None | index | index
+admin/auth/group/ | GET/POST | None | changelist_view | auth_group_changelist
+admin/auth/group/<path:object_id>/ | GET/POST | None | view | None
+admin/auth/group/<path:object_id>/change/ | GET/POST | None | change_view | auth_group_change
+admin/auth/group/<path:object_id>/delete/ | GET/POST | None | delete_view | auth_group_delete
+admin/auth/group/<path:object_id>/history/ | GET/POST | None | history_view | auth_group_history
+admin/auth/group/add/ | GET/POST | None | add_view | auth_group_add
+admin/autocomplete/ | GET/POST | None | autocomplete_view | autocomplete
+admin/identity/auditlog/ | GET/POST | None | changelist_view | identity_auditlog_changelist
+admin/identity/auditlog/<path:object_id>/ | GET/POST | None | view | None
+admin/identity/auditlog/<path:object_id>/change/ | GET/POST | None | change_view | identity_auditlog_change
+admin/identity/auditlog/<path:object_id>/delete/ | GET/POST | None | delete_view | identity_auditlog_delete
+admin/identity/auditlog/<path:object_id>/history/ | GET/POST | None | history_view | identity_auditlog_history
+admin/identity/auditlog/add/ | GET/POST | None | add_view | identity_auditlog_add
+admin/identity/scanlog/ | GET/POST | None | changelist_view | identity_scanlog_changelist
+admin/identity/scanlog/<path:object_id>/ | GET/POST | None | view | None
+admin/identity/scanlog/<path:object_id>/change/ | GET/POST | None | change_view | identity_scanlog_change
+admin/identity/scanlog/<path:object_id>/delete/ | GET/POST | None | delete_view | identity_scanlog_delete
+admin/identity/scanlog/<path:object_id>/history/ | GET/POST | None | history_view | identity_scanlog_history
+admin/identity/scanlog/add/ | GET/POST | None | add_view | identity_scanlog_add
+admin/identity/user/ | GET/POST | None | changelist_view | identity_user_changelist
+admin/identity/user/<id>/password/ | GET/POST | None | user_change_password | auth_user_password_change
+admin/identity/user/<path:object_id>/ | GET/POST | None | view | None
+admin/identity/user/<path:object_id>/change/ | GET/POST | None | change_view | identity_user_change
+admin/identity/user/<path:object_id>/delete/ | GET/POST | None | delete_view | identity_user_delete
+admin/identity/user/<path:object_id>/history/ | GET/POST | None | history_view | identity_user_history
+admin/identity/user/add/ | GET/POST | None | add_view | identity_user_add
+admin/inbound/inboundshipment/ | GET/POST | None | changelist_view | inbound_inboundshipment_changelist
+admin/inbound/inboundshipment/<path:object_id>/ | GET/POST | None | view | None
+admin/inbound/inboundshipment/<path:object_id>/change/ | GET/POST | None | change_view | inbound_inboundshipment_change
+admin/inbound/inboundshipment/<path:object_id>/delete/ | GET/POST | None | delete_view | inbound_inboundshipment_delete
+admin/inbound/inboundshipment/<path:object_id>/history/ | GET/POST | None | history_view | inbound_inboundshipment_history
+admin/inbound/inboundshipment/add/ | GET/POST | None | add_view | inbound_inboundshipment_add
+admin/inbound/ocrdocument/ | GET/POST | None | changelist_view | inbound_ocrdocument_changelist
+admin/inbound/ocrdocument/<path:object_id>/ | GET/POST | None | view | None
+admin/inbound/ocrdocument/<path:object_id>/change/ | GET/POST | None | change_view | inbound_ocrdocument_change
+admin/inbound/ocrdocument/<path:object_id>/delete/ | GET/POST | None | delete_view | inbound_ocrdocument_delete
+admin/inbound/ocrdocument/<path:object_id>/history/ | GET/POST | None | history_view | inbound_ocrdocument_history
+admin/inbound/ocrdocument/add/ | GET/POST | None | add_view | inbound_ocrdocument_add
+admin/inventory/allocationrecommendation/ | GET/POST | None | changelist_view | inventory_allocationrecommendation_changelist
+admin/inventory/allocationrecommendation/<path:object_id>/ | GET/POST | None | view | None
+admin/inventory/allocationrecommendation/<path:object_id>/change/ | GET/POST | None | change_view | inventory_allocationrecommendation_change
+admin/inventory/allocationrecommendation/<path:object_id>/delete/ | GET/POST | None | delete_view | inventory_allocationrecommendation_delete
+admin/inventory/allocationrecommendation/<path:object_id>/history/ | GET/POST | None | history_view | inventory_allocationrecommendation_history
+admin/inventory/allocationrecommendation/add/ | GET/POST | None | add_view | inventory_allocationrecommendation_add
+admin/inventory/inventory/ | GET/POST | None | changelist_view | inventory_inventory_changelist
+admin/inventory/inventory/<path:object_id>/ | GET/POST | None | view | None
+admin/inventory/inventory/<path:object_id>/change/ | GET/POST | None | change_view | inventory_inventory_change
+admin/inventory/inventory/<path:object_id>/delete/ | GET/POST | None | delete_view | inventory_inventory_delete
+admin/inventory/inventory/<path:object_id>/history/ | GET/POST | None | history_view | inventory_inventory_history
+admin/inventory/inventory/add/ | GET/POST | None | add_view | inventory_inventory_add
+admin/inventory/product/ | GET/POST | None | changelist_view | inventory_product_changelist
+admin/inventory/product/<path:object_id>/ | GET/POST | None | view | None
+admin/inventory/product/<path:object_id>/change/ | GET/POST | None | change_view | inventory_product_change
+admin/inventory/product/<path:object_id>/delete/ | GET/POST | None | delete_view | inventory_product_delete
+admin/inventory/product/<path:object_id>/history/ | GET/POST | None | history_view | inventory_product_history
+admin/inventory/product/add/ | GET/POST | None | add_view | inventory_product_add
+admin/inventory/productdimension/ | GET/POST | None | changelist_view | inventory_productdimension_changelist
+admin/inventory/productdimension/<path:object_id>/ | GET/POST | None | view | None
+admin/inventory/productdimension/<path:object_id>/change/ | GET/POST | None | change_view | inventory_productdimension_change
+admin/inventory/productdimension/<path:object_id>/delete/ | GET/POST | None | delete_view | inventory_productdimension_delete
+admin/inventory/productdimension/<path:object_id>/history/ | GET/POST | None | history_view | inventory_productdimension_history
+admin/inventory/productdimension/add/ | GET/POST | None | add_view | inventory_productdimension_add
+admin/inventory/productstoragerule/ | GET/POST | None | changelist_view | inventory_productstoragerule_changelist
+admin/inventory/productstoragerule/<path:object_id>/ | GET/POST | None | view | None
+admin/inventory/productstoragerule/<path:object_id>/change/ | GET/POST | None | change_view | inventory_productstoragerule_change
+admin/inventory/productstoragerule/<path:object_id>/delete/ | GET/POST | None | delete_view | inventory_productstoragerule_delete
+admin/inventory/productstoragerule/<path:object_id>/history/ | GET/POST | None | history_view | inventory_productstoragerule_history
+admin/inventory/productstoragerule/add/ | GET/POST | None | add_view | inventory_productstoragerule_add
+admin/inventory/robottask/ | GET/POST | None | changelist_view | inventory_robottask_changelist
+admin/inventory/robottask/<path:object_id>/ | GET/POST | None | view | None
+admin/inventory/robottask/<path:object_id>/change/ | GET/POST | None | change_view | inventory_robottask_change
+admin/inventory/robottask/<path:object_id>/delete/ | GET/POST | None | delete_view | inventory_robottask_delete
+admin/inventory/robottask/<path:object_id>/history/ | GET/POST | None | history_view | inventory_robottask_history
+admin/inventory/robottask/add/ | GET/POST | None | add_view | inventory_robottask_add
+admin/inventory/routeoptimization/ | GET/POST | None | changelist_view | inventory_routeoptimization_changelist
+admin/inventory/routeoptimization/<path:object_id>/ | GET/POST | None | view | None
+admin/inventory/routeoptimization/<path:object_id>/change/ | GET/POST | None | change_view | inventory_routeoptimization_change
+admin/inventory/routeoptimization/<path:object_id>/delete/ | GET/POST | None | delete_view | inventory_routeoptimization_delete
+admin/inventory/routeoptimization/<path:object_id>/history/ | GET/POST | None | history_view | inventory_routeoptimization_history
+admin/inventory/routeoptimization/add/ | GET/POST | None | add_view | inventory_routeoptimization_add
+admin/inventory/stockmovement/ | GET/POST | None | changelist_view | inventory_stockmovement_changelist
+admin/inventory/stockmovement/<path:object_id>/ | GET/POST | None | view | None
+admin/inventory/stockmovement/<path:object_id>/change/ | GET/POST | None | change_view | inventory_stockmovement_change
+admin/inventory/stockmovement/<path:object_id>/delete/ | GET/POST | None | delete_view | inventory_stockmovement_delete
+admin/inventory/stockmovement/<path:object_id>/history/ | GET/POST | None | history_view | inventory_stockmovement_history
+admin/inventory/stockmovement/add/ | GET/POST | None | add_view | inventory_stockmovement_add
+admin/inventory/storageallocation/ | GET/POST | None | changelist_view | inventory_storageallocation_changelist
+admin/inventory/storageallocation/<path:object_id>/ | GET/POST | None | view | None
+admin/inventory/storageallocation/<path:object_id>/change/ | GET/POST | None | change_view | inventory_storageallocation_change
+admin/inventory/storageallocation/<path:object_id>/delete/ | GET/POST | None | delete_view | inventory_storageallocation_delete
+admin/inventory/storageallocation/<path:object_id>/history/ | GET/POST | None | history_view | inventory_storageallocation_history
+admin/inventory/storageallocation/add/ | GET/POST | None | add_view | inventory_storageallocation_add
+admin/jsi18n/ | GET/POST | None | i18n_javascript | jsi18n
+admin/login/ | GET/POST | None | login | login
+admin/logout/ | GET/POST | None | logout | logout
+admin/orders/outboundshipment/ | GET/POST | None | changelist_view | orders_outboundshipment_changelist
+admin/orders/outboundshipment/<path:object_id>/ | GET/POST | None | view | None
+admin/orders/outboundshipment/<path:object_id>/change/ | GET/POST | None | change_view | orders_outboundshipment_change
+admin/orders/outboundshipment/<path:object_id>/delete/ | GET/POST | None | delete_view | orders_outboundshipment_delete
+admin/orders/outboundshipment/<path:object_id>/history/ | GET/POST | None | history_view | orders_outboundshipment_history
+admin/orders/outboundshipment/add/ | GET/POST | None | add_view | orders_outboundshipment_add
+admin/password_change/ | GET/POST | None | password_change | password_change
+admin/password_change/done/ | GET/POST | None | password_change_done | password_change_done
+admin/r/<int:content_type_id>/<path:object_id>/ | GET/POST | None | shortcut | view_on_site
+admin/recommendations/bin3dplacement/ | GET/POST | None | changelist_view | recommendations_bin3dplacement_changelist
+admin/recommendations/bin3dplacement/<path:object_id>/ | GET/POST | None | view | None
+admin/recommendations/bin3dplacement/<path:object_id>/change/ | GET/POST | None | change_view | recommendations_bin3dplacement_change
+admin/recommendations/bin3dplacement/<path:object_id>/delete/ | GET/POST | None | delete_view | recommendations_bin3dplacement_delete
+admin/recommendations/bin3dplacement/<path:object_id>/history/ | GET/POST | None | history_view | recommendations_bin3dplacement_history
+admin/recommendations/bin3dplacement/add/ | GET/POST | None | add_view | recommendations_bin3dplacement_add
+admin/recommendations/binallocation/ | GET/POST | None | changelist_view | recommendations_binallocation_changelist
+admin/recommendations/binallocation/<path:object_id>/ | GET/POST | None | view | None
+admin/recommendations/binallocation/<path:object_id>/change/ | GET/POST | None | change_view | recommendations_binallocation_change
+admin/recommendations/binallocation/<path:object_id>/delete/ | GET/POST | None | delete_view | recommendations_binallocation_delete
+admin/recommendations/binallocation/<path:object_id>/history/ | GET/POST | None | history_view | recommendations_binallocation_history
+admin/recommendations/binallocation/add/ | GET/POST | None | add_view | recommendations_binallocation_add
+admin/recommendations/productclassification/ | GET/POST | None | changelist_view | recommendations_productclassification_changelist
+admin/recommendations/productclassification/<path:object_id>/ | GET/POST | None | view | None
+admin/recommendations/productclassification/<path:object_id>/change/ | GET/POST | None | change_view | recommendations_productclassification_change
+admin/recommendations/productclassification/<path:object_id>/delete/ | GET/POST | None | delete_view | recommendations_productclassification_delete
+admin/recommendations/productclassification/<path:object_id>/history/ | GET/POST | None | history_view | recommendations_productclassification_history
+admin/recommendations/productclassification/add/ | GET/POST | None | add_view | recommendations_productclassification_add
+admin/recommendations/recommendationrule/ | GET/POST | None | changelist_view | recommendations_recommendationrule_changelist
+admin/recommendations/recommendationrule/<path:object_id>/ | GET/POST | None | view | None
+admin/recommendations/recommendationrule/<path:object_id>/change/ | GET/POST | None | change_view | recommendations_recommendationrule_change
+admin/recommendations/recommendationrule/<path:object_id>/delete/ | GET/POST | None | delete_view | recommendations_recommendationrule_delete
+admin/recommendations/recommendationrule/<path:object_id>/history/ | GET/POST | None | history_view | recommendations_recommendationrule_history
+admin/recommendations/recommendationrule/add/ | GET/POST | None | add_view | recommendations_recommendationrule_add
+admin/recommendations/storagerecommendation/ | GET/POST | None | changelist_view | recommendations_storagerecommendation_changelist
+admin/recommendations/storagerecommendation/<path:object_id>/ | GET/POST | None | view | None
+admin/recommendations/storagerecommendation/<path:object_id>/change/ | GET/POST | None | change_view | recommendations_storagerecommendation_change
+admin/recommendations/storagerecommendation/<path:object_id>/delete/ | GET/POST | None | delete_view | recommendations_storagerecommendation_delete
+admin/recommendations/storagerecommendation/<path:object_id>/history/ | GET/POST | None | history_view | recommendations_storagerecommendation_history
+admin/recommendations/storagerecommendation/add/ | GET/POST | None | add_view | recommendations_storagerecommendation_add
+admin/warehouse/aisle/ | GET/POST | None | changelist_view | warehouse_aisle_changelist
+admin/warehouse/aisle/<path:object_id>/ | GET/POST | None | view | None
+admin/warehouse/aisle/<path:object_id>/change/ | GET/POST | None | change_view | warehouse_aisle_change
+admin/warehouse/aisle/<path:object_id>/delete/ | GET/POST | None | delete_view | warehouse_aisle_delete
+admin/warehouse/aisle/<path:object_id>/history/ | GET/POST | None | history_view | warehouse_aisle_history
+admin/warehouse/aisle/add/ | GET/POST | None | add_view | warehouse_aisle_add
+admin/warehouse/bin/ | GET/POST | None | changelist_view | warehouse_bin_changelist
+admin/warehouse/bin/<path:object_id>/ | GET/POST | None | view | None
+admin/warehouse/bin/<path:object_id>/change/ | GET/POST | None | change_view | warehouse_bin_change
+admin/warehouse/bin/<path:object_id>/delete/ | GET/POST | None | delete_view | warehouse_bin_delete
+admin/warehouse/bin/<path:object_id>/history/ | GET/POST | None | history_view | warehouse_bin_history
+admin/warehouse/bin/add/ | GET/POST | None | add_view | warehouse_bin_add
+admin/warehouse/rack/ | GET/POST | None | changelist_view | warehouse_rack_changelist
+admin/warehouse/rack/<path:object_id>/ | GET/POST | None | view | None
+admin/warehouse/rack/<path:object_id>/change/ | GET/POST | None | change_view | warehouse_rack_change
+admin/warehouse/rack/<path:object_id>/delete/ | GET/POST | None | delete_view | warehouse_rack_delete
+admin/warehouse/rack/<path:object_id>/history/ | GET/POST | None | history_view | warehouse_rack_history
+admin/warehouse/rack/add/ | GET/POST | None | add_view | warehouse_rack_add
+admin/warehouse/warehouse/ | GET/POST | None | changelist_view | warehouse_warehouse_changelist
+admin/warehouse/warehouse/<path:object_id>/ | GET/POST | None | view | None
+admin/warehouse/warehouse/<path:object_id>/change/ | GET/POST | None | change_view | warehouse_warehouse_change
+admin/warehouse/warehouse/<path:object_id>/delete/ | GET/POST | None | delete_view | warehouse_warehouse_delete
+admin/warehouse/warehouse/<path:object_id>/history/ | GET/POST | None | history_view | warehouse_warehouse_history
+admin/warehouse/warehouse/add/ | GET/POST | None | add_view | warehouse_warehouse_add
+admin/warehouse/zone/ | GET/POST | None | changelist_view | warehouse_zone_changelist
+admin/warehouse/zone/<path:object_id>/ | GET/POST | None | view | None
+admin/warehouse/zone/<path:object_id>/change/ | GET/POST | None | change_view | warehouse_zone_change
+admin/warehouse/zone/<path:object_id>/delete/ | GET/POST | None | delete_view | warehouse_zone_delete
+admin/warehouse/zone/<path:object_id>/history/ | GET/POST | None | history_view | warehouse_zone_history
+admin/warehouse/zone/add/ | GET/POST | None | add_view | warehouse_zone_add
+admin/warehouse/zonegroup/ | GET/POST | None | changelist_view | warehouse_zonegroup_changelist
+admin/warehouse/zonegroup/<path:object_id>/ | GET/POST | None | view | None
+admin/warehouse/zonegroup/<path:object_id>/change/ | GET/POST | None | change_view | warehouse_zonegroup_change
+admin/warehouse/zonegroup/<path:object_id>/delete/ | GET/POST | None | delete_view | warehouse_zonegroup_delete
+admin/warehouse/zonegroup/<path:object_id>/history/ | GET/POST | None | history_view | warehouse_zonegroup_history
+admin/warehouse/zonegroup/add/ | GET/POST | None | add_view | warehouse_zonegroup_add
+admin/{app_label}/ | GET/POST | None | app_index | app_list
+admin/{url} | GET/POST | None | catch_all_view | None
+api/ai/ | GET | None | APIRootView | api-root
+api/ai/alerts/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | None | AIRecommendationViewSet | ai-recommendations-alerts
+api/ai/congestion-risk/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | None | AIRecommendationViewSet | ai-recommendations-congestion-risk
+api/ai/feedback/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | None | AIRecommendationViewSet | ai-recommendations-feedback
+api/ai/hotspot-prevention/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | None | AIRecommendationViewSet | ai-recommendations-hotspot-prevention
+api/ai/operational-scores/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | None | AIRecommendationViewSet | ai-recommendations-operational-scores
+api/ai/optimize-slotting/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | None | AIRecommendationViewSet | ai-recommendations-optimize-slotting
+api/ai/predict-demand/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | None | AIRecommendationViewSet | ai-recommendations-predict-demand
+api/ai/query/ | POST | None | RAGQueryView | rag-query
+api/ai/rag-health/ | GET | None | RAGHealthView | rag-health
+api/ai/recommendations/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | None | AIRecommendationViewSet | ai-recommendations-recommendations
+api/ai/slotting-score/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | None | AIRecommendationViewSet | ai-recommendations-slotting-score
+api/audit-logs/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | AuditLogSerializer | AuditLogViewSet | audit_logs-list
+api/audit-logs/ | GET | None | APIRootView | api-root
+api/audit-logs/scan-logs/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | ScanLogSerializer | ScanLogViewSet | scan-logs-list
+api/audit-logs/scan-logs/{pk}/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | ScanLogSerializer | ScanLogViewSet | scan-logs-detail
+api/audit-logs/{pk}/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | AuditLogSerializer | AuditLogViewSet | audit_logs-detail
+api/bins/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | BinSerializer | BinViewSet | bins-list
+api/bins/ | GET | None | APIRootView | api-root
+api/bins/{pk}/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | BinSerializer | BinViewSet | bins-detail
+api/dashboards/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | DashboardSerializer | DashboardViewSet | dashboards-list
+api/dashboards/ | GET | None | APIRootView | api-root
+api/dashboards/analytics/bin-heatmap/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | None | AnalyticsViewSet | analytics-bin-heatmap
+api/dashboards/analytics/heatmaps/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | None | AnalyticsViewSet | analytics-heatmaps
+api/dashboards/analytics/inbound-metrics/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | None | AnalyticsViewSet | analytics-inbound-metrics
+api/dashboards/analytics/inventory-movements/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | None | AnalyticsViewSet | analytics-inventory-movements
+api/dashboards/analytics/occupancy-trends/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | None | AnalyticsViewSet | analytics-occupancy-trends
+api/dashboards/analytics/outbound-metrics/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | None | AnalyticsViewSet | analytics-outbound-metrics
+api/dashboards/analytics/rack-heatmap/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | None | AnalyticsViewSet | analytics-rack-heatmap
+api/dashboards/analytics/recommendation-metrics/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | None | AnalyticsViewSet | analytics-recommendation-metrics
+api/dashboards/analytics/route-metrics/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | None | AnalyticsViewSet | analytics-route-metrics
+api/dashboards/analytics/routes/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | None | AnalyticsViewSet | analytics-routes
+api/dashboards/analytics/telemetry/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | None | AnalyticsViewSet | analytics-telemetry
+api/dashboards/analytics/throughput/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | None | AnalyticsViewSet | analytics-throughput
+api/dashboards/analytics/top-zones/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | None | AnalyticsViewSet | analytics-top-zones
+api/dashboards/analytics/warehouse-kpis/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | None | AnalyticsViewSet | analytics-warehouse-kpis
+api/dashboards/analytics/zone-heatmap/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | None | AnalyticsViewSet | analytics-zone-heatmap
+api/dashboards/robot-tasks/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | RobotTaskSerializer | RobotTaskViewSet | robot-tasks-list
+api/dashboards/robot-tasks/{pk}/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | RobotTaskSerializer | RobotTaskViewSet | robot-tasks-detail
+api/dashboards/route-optimizations/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | RouteOptimizationSerializer | RouteOptimizationViewSet | route-optimizations-list
+api/dashboards/route-optimizations/{pk}/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | RouteOptimizationSerializer | RouteOptimizationViewSet | route-optimizations-detail
+api/dashboards/{pk}/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | DashboardSerializer | DashboardViewSet | dashboards-detail
+api/inbound/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | InboundSerializer | InboundViewSet | inbound-list
+api/inbound/ | GET | None | APIRootView | api-root
+api/inbound/{pk}/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | InboundSerializer | InboundViewSet | inbound-detail
+api/inventory/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | InventorySerializer | InventoryViewSet | inventory-list
+api/inventory/ | GET | None | APIRootView | api-root
+api/inventory/adjust/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | InventorySerializer | InventoryViewSet | inventory-adjust
+api/inventory/audit/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | InventorySerializer | InventoryViewSet | inventory-audit
+api/inventory/relocate/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | InventorySerializer | InventoryViewSet | inventory-relocate
+api/inventory/report-damage/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | InventorySerializer | InventoryViewSet | inventory-report-damage
+api/inventory/transfer/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | InventorySerializer | InventoryViewSet | inventory-transfer
+api/inventory/{pk}/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | InventorySerializer | InventoryViewSet | inventory-detail
+api/layout/<uuid:layout_id> | GET | None | LayoutDetailView | layout-detail
+api/layout/analyze | POST | None | LayoutAnalyzeView | layout-analyze
+api/layout/entities | GET | None | LayoutEntitiesView | layout-entities
+api/layout/generate-topology | POST | None | GenerateTopologyView | layout-generate-topology
+api/layout/graph | GET | None | LayoutGraphView | layout-graph
+api/layout/upload | POST | None | LayoutUploadView | layout-upload
+api/movements/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | MovementSerializer | MovementViewSet | movements-list
+api/movements/ | GET | None | APIRootView | api-root
+api/movements/allocations/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | StorageAllocationSerializer | StorageAllocationViewSet | storage-allocations-list
+api/movements/allocations/{pk}/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | StorageAllocationSerializer | StorageAllocationViewSet | storage-allocations-detail
+api/movements/{pk}/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | MovementSerializer | MovementViewSet | movements-detail
+api/ocr/ | GET | None | APIRootView | api-root
+api/ocr/documents/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | OCRDocumentSerializer | OCRDocumentViewSet | ocr-documents-list
+api/ocr/documents/review-queue/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | OCRDocumentSerializer | OCRDocumentViewSet | ocr-documents-review-queue
+api/ocr/documents/{pk}/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | OCRDocumentSerializer | OCRDocumentViewSet | ocr-documents-detail
+api/ocr/documents/{pk}/approve/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | OCRDocumentSerializer | OCRDocumentViewSet | ocr-documents-approve
+api/ocr/documents/{pk}/reject/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | OCRDocumentSerializer | OCRDocumentViewSet | ocr-documents-reject
+api/ocr/documents/{pk}/sync-rag/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | OCRDocumentSerializer | OCRDocumentViewSet | ocr-documents-sync-rag
+api/ocr/review-queue/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | OCRDocumentSerializer | OCRDocumentViewSet | ocr-review-queue
+api/ocr/upload/ | POST | None | OCRUploadView | ocr-upload
+api/orders/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | OrderSerializer | OrderViewSet | orders-list
+api/orders/ | GET | None | APIRootView | api-root
+api/orders/assign-picker/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | OrderSerializer | OrderViewSet | orders-assign-picker
+api/orders/close/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | OrderSerializer | OrderViewSet | orders-close
+api/orders/dispatch/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | OrderSerializer | OrderViewSet | orders-dispatch-shipment
+api/orders/generate-picklist/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | OrderSerializer | OrderViewSet | orders-generate-picklist
+api/orders/optimize-route/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | OrderSerializer | OrderViewSet | orders-optimize-route
+api/orders/pack/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | OrderSerializer | OrderViewSet | orders-pack
+api/orders/{pk}/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | OrderSerializer | OrderViewSet | orders-detail
+api/product-classifications/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | ProductClassificationSerializer | ProductClassificationViewSet | product-classifications-list
+api/product-classifications/ | GET | None | APIRootView | api-root
+api/product-classifications/{pk}/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | ProductClassificationSerializer | ProductClassificationViewSet | product-classifications-detail
+api/product-dimensions/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | ProductDimensionSerializer | ProductDimensionViewSet | product-dimensions-list
+api/product-dimensions/ | GET | None | APIRootView | api-root
+api/product-dimensions/storage-rules/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | ProductStorageRuleSerializer | ProductStorageRuleViewSet | product-storage-rules-list
+api/product-dimensions/storage-rules/{pk}/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | ProductStorageRuleSerializer | ProductStorageRuleViewSet | product-storage-rules-detail
+api/product-dimensions/{pk}/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | ProductDimensionSerializer | ProductDimensionViewSet | product-dimensions-detail
+api/products/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | ProductSerializer | ProductViewSet | products-list
+api/products/ | GET | None | APIRootView | api-root
+api/products/{pk}/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | ProductSerializer | ProductViewSet | products-detail
+api/recommendations/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | RecommendationSerializer | RecommendationViewSet | recommendations-list
+api/recommendations/ | GET | None | APIRootView | api-root
+api/recommendations/3d-placement/ | POST | None | ThreeDPlacementView | three-d-placement
+api/recommendations/allocate/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | RecommendationSerializer | RecommendationViewSet | recommendations-allocate
+api/recommendations/bin-allocation/ | POST | None | BinAllocationView | bin-allocation
+api/recommendations/bin-allocation/<int:pk>/complete/ | PATCH | None | BinAllocationCompleteView | bin-allocation-complete
+api/recommendations/storage/ | POST | None | StorageRecommendationView | storage-recommendation
+api/recommendations/suggest-bin/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | RecommendationSerializer | RecommendationViewSet | recommendations-suggest-bin
+api/recommendations/{pk}/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | RecommendationSerializer | RecommendationViewSet | recommendations-detail
+api/routes/ | GET | None | APIRootView | api-root
+api/routes/block-path/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | OptimizedRouteSerializer | RouteViewSet | routes-block-path
+api/routes/congestion/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | OptimizedRouteSerializer | RouteViewSet | routes-congestion
+api/routes/generate/ | POST | None | GenerateRouteView | generate-route
+api/routes/multi-pick/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | OptimizedRouteSerializer | RouteViewSet | routes-multi-pick
+api/routes/optimize/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | OptimizedRouteSerializer | RouteViewSet | routes-optimize
+api/routes/recalculate/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | OptimizedRouteSerializer | RouteViewSet | routes-recalculate
+api/routes/{pk}/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | OptimizedRouteSerializer | RouteViewSet | routes-detail
+api/twin/layout/<uuid:layout_id> | GET | None | WarehouseTwinDetailView | twin-layout-detail
+api/twin/occupancy | GET | None | TwinOccupancyView | twin-occupancy
+api/twin/paths | GET | None | TwinPathsView | twin-paths
+api/twin/racks | GET | None | TwinRacksView | twin-racks
+api/twin/summary | GET | None | TwinSummaryView | twin-summary
+api/twin/zones | GET | None | TwinZonesView | twin-zones
+api/users/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | UserSerializer | UserViewSet | users-list
+api/users/ | GET | None | APIRootView | api-root
+api/users/login/ | POST | None | TokenObtainPairView | token_obtain_pair
+api/users/token/refresh/ | POST | None | TokenRefreshView | token_refresh
+api/users/{pk}/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | UserSerializer | UserViewSet | users-detail
+api/warehouses/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | WarehouseSerializer | WarehouseViewSet | warehouses-list
+api/warehouses/ | GET | None | APIRootView | api-root
+api/warehouses/navigation-nodes/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | NavigationNodeSerializer | NavigationNodeViewSet | navigation-nodes-list
+api/warehouses/navigation-nodes/{pk}/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | NavigationNodeSerializer | NavigationNodeViewSet | navigation-nodes-detail
+api/warehouses/paths/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | WarehousePathSerializer | WarehousePathViewSet | paths-list
+api/warehouses/paths/{pk}/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | WarehousePathSerializer | WarehousePathViewSet | paths-detail
+api/warehouses/rack-coordinates/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | RackCoordinateSerializer | RackCoordinateViewSet | rack-coordinates-list
+api/warehouses/rack-coordinates/{pk}/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | RackCoordinateSerializer | RackCoordinateViewSet | rack-coordinates-detail
+api/warehouses/racks/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | RackSerializer | RackViewSet | racks-list
+api/warehouses/racks/{pk}/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | RackSerializer | RackViewSet | racks-detail
+api/warehouses/spatial-entities/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | SpatialEntitySerializer | SpatialEntityViewSet | spatial-entities-list
+api/warehouses/spatial-entities/{pk}/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | SpatialEntitySerializer | SpatialEntityViewSet | spatial-entities-detail
+api/warehouses/{pk}/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | WarehouseSerializer | WarehouseViewSet | warehouses-detail
+api/zones/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | ZoneSerializer | ZoneViewSet | zones-list
+api/zones/ | GET | None | APIRootView | api-root
+api/zones/aisles/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | AisleSerializer | AisleViewSet | aisles-list
+api/zones/aisles/{pk}/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | AisleSerializer | AisleViewSet | aisles-detail
+api/zones/boundaries/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | ZoneBoundarySerializer | ZoneBoundaryViewSet | zone-boundaries-list
+api/zones/boundaries/{pk}/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | ZoneBoundarySerializer | ZoneBoundaryViewSet | zone-boundaries-detail
+api/zones/zone-groups/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | ZoneGroupSerializer | ZoneGroupViewSet | zone-groups-list
+api/zones/zone-groups/{pk}/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | ZoneGroupSerializer | ZoneGroupViewSet | zone-groups-detail
+api/zones/{pk}/ | GET, POST, PUT, PATCH, DELETE (ViewSet) | ZoneSerializer | ZoneViewSet | zones-detail
+media/{path} | GET/POST | None | serve | None

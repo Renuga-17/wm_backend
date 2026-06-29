@@ -46,6 +46,11 @@ class LocalDevAuthentication(BaseAuthentication):
                 if db_user:
                     return (db_user, None)
             
+            import sys
+            if 'pytest' in sys.modules or 'test' in sys.argv:
+                print("[LocalDevAuthentication] Under test environment and no mock headers provided. Skipping fallback...")
+                return None
+
             # Default fallback
             import sys
             if 'test' in sys.argv or 'pytest' in sys.modules:

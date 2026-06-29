@@ -1,4 +1,5 @@
 import logging
+from decimal import Decimal
 from django.db import transaction
 from django.utils import timezone
 from rest_framework.views import APIView
@@ -11,6 +12,7 @@ from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 
 logger = logging.getLogger(__name__)
+
 
 
 class BinAllocationCompleteView(APIView):
@@ -50,16 +52,46 @@ class BinAllocationCompleteView(APIView):
                 allocation.operator = operator_val
                 allocation.save()
 
-                # 2. Update Bin
-                bin_obj.is_occupied = True
-                bin_obj.save()
+                qty_val = 1
+                if allocation.inbound_line:
+                    qty_val = allocation.inbound_line.quantity
+                    
+                    # Update inbound line
+                    line = allocation.inbound_line
+                    line.recommendation_status = 'STORED'
+                    line.save()
+                    
+                    # Update shipment status
+                    shipment = line.shipment
+                    if shipment:
+                        if not shipment.line_items.exclude(recommendation_status='STORED').exists():
+                            shipment.status = 'STORED'
+                        else:
+                            shipment.status = 'PARTIALLY_STORED'
+                        shipment.save()
+                    
+                    # Update associated putaway task
+                    from apps.inbound.infrastructure.persistence.inbound_models import PutawayTask
+                    PutawayTask.objects.filter(inbound_line=line).update(
+                        status=PutawayTask.PutawayStatus.COMPLETED,
+                        completed_at=timezone.now(),
+                        operator=operator_val
+                    )
+
+                # 2. Update Bin and Sync Digital Twin metrics
+                from apps.warehouse.application.services.digital_twin_sync_service import DigitalTwinSyncService
+                DigitalTwinSyncService.sync_occupancy(
+                    bin_id=bin_obj.id,
+                    is_occupied=True,
+                    capacity_delta=Decimal(str(qty_val))
+                )
 
                 # 3. Update Inventory
                 inventory_record, _ = Inventory.objects.get_or_create(
                     product=product,
                     defaults={'total_quantity': 0, 'reserved_quantity': 0, 'damaged_quantity': 0}
                 )
-                inventory_record.total_quantity = inventory_record.total_quantity + 1
+                inventory_record.total_quantity = inventory_record.total_quantity + qty_val
                 inventory_record.save()
 
                 # 4. Log Stock Movement
@@ -67,7 +99,7 @@ class BinAllocationCompleteView(APIView):
                     product=product,
                     from_bin=None,
                     to_bin=bin_obj,
-                    quantity=1,
+                    quantity=qty_val,
                     movement_type='INBOUND_STORAGE_COMPLETED',
                     operator=operator_val
                 )
@@ -81,25 +113,7 @@ class BinAllocationCompleteView(APIView):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
-        # 5. Broadcast Occupancy to Digital Twin WebSocket Consumer
-        try:
-            channel_layer = get_channel_layer()
-            if channel_layer:
-                async_to_sync(channel_layer.group_send)(
-                    'occupancy_updates',
-                    {
-                        'type': 'occupancy_message',
-                        'message': {
-                            'bin_code': bin_obj.bin_code,
-                            'is_occupied': bin_obj.is_occupied,
-                            'current_capacity': float(bin_obj.current_capacity)
-                        }
-                    }
-                )
-                logger.info("BinAllocationCompleteView: Websocket broadcast succeeded.")
-        except Exception as ws_err:
-            logger.warning("BinAllocationCompleteView: Websocket broadcast failed: %s", ws_err)
-
         # Return serialized allocation output
         serializer = BinAllocationOutputSerializer(allocation)
         return Response(serializer.data, status=status.HTTP_200_OK)
+

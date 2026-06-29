@@ -30,6 +30,7 @@ class Zone(models.Model):
     width = models.DecimalField(max_digits=10, decimal_places=4)
     height = models.DecimalField(max_digits=10, decimal_places=4)
     depth = models.DecimalField(max_digits=10, decimal_places=4)
+    rotation = models.DecimalField(max_digits=8, decimal_places=4, null=True, blank=True)
 
     class Meta:
         db_table = 'zones'

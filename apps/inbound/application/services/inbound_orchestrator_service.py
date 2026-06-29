@@ -77,7 +77,8 @@ class InboundOrchestratorService:
                     shipment_code=shipment_code,
                     supplier_name=supplier_name,
                     expected_arrival=expected_arrival,
-                    status='RECEIVED'
+                    status='RECEIVED',
+                    ocr_document=ocr_document
                 )
 
                 # Step B: Loop products & create
@@ -153,6 +154,30 @@ class InboundOrchestratorService:
                         }
                     )
 
+                    # Create InboundShipmentLine
+                    from apps.inbound.infrastructure.persistence.inbound_models import InboundShipmentLine
+                    
+                    qty_val = prod_item.get('quantity') or prod_item.get('qty') or prod_item.get('verifiedQuantity') or 50
+                    if isinstance(dim_data, dict):
+                        l = dim_data.get('length') or 0.0
+                        w = dim_data.get('width') or 0.0
+                        h = dim_data.get('height') or 0.0
+                        dim_str = f"{l}x{w}x{h} cm" if (l or w or h) else "10x8x6 cm"
+                    else:
+                        dim_str = str(dim_data)
+                    
+                    shipment_line = InboundShipmentLine.objects.create(
+                        shipment=shipment,
+                        product=product_obj,
+                        sku=sku,
+                        product_name=product_obj.product_name,
+                        quantity=qty_val,
+                        weight=weight_val,
+                        dimensions=dim_str,
+                        storage_type=storage_type,
+                        recommendation_status='WAITING_FOR_BIN_ASSIGNMENT'
+                    )
+
                     # Step C: Storage Recommendation
                     rec_svc = StorageRecommendationService()
                     rec_svc.generate_recommendation(product_obj.id)
@@ -160,6 +185,15 @@ class InboundOrchestratorService:
                     # Step D: Bin Allocation
                     alloc_svc = BinAllocationService()
                     allocation = alloc_svc.generate_bin_allocation(product_obj.id)
+
+                    # Link BinAllocation back to inbound line & shipment
+                    allocation.inbound_line = shipment_line
+                    allocation.inbound_shipment = shipment
+                    allocation.save()
+
+                    # Update shipment line recommendation status
+                    shipment_line.recommendation_status = 'RECOMMENDED'
+                    shipment_line.save()
 
                     # Step E: 3D Placement
                     opt_3d_svc = ThreeDOptimizationService()
@@ -198,6 +232,8 @@ class InboundOrchestratorService:
                 ocr_document.processing_status = OCRDocument.ProcessingStatus.COMPLETED
                 ocr_document.error_message = None
                 ocr_document.save()
+                logger.info("[OCR PIPELINE] OCR document ID %s status updated to: %s (Ingestion completed successfully)", 
+                            ocr_document.id, ocr_document.processing_status)
 
             # The database transaction has successfully committed!
             logger.info("InboundOrchestratorService: DB ingestion successful.")
@@ -213,36 +249,12 @@ class InboundOrchestratorService:
             )
             raise e
 
-        # Step G: Send to RAG ingestion if text is available (outside database transaction)
-        ocr_document.rag_status = "INGESTING"
-        ocr_document.save()
-
+        # Step G: Send to RAG ingestion asynchronously (non-blocking, outside database transaction)
         try:
-            res = send_to_rag(
-                ocr_document_id=str(ocr_document.id),
-                document_type="OCRDocument",
-                warehouse_id=rag_metadata["warehouse_id"],
-                text=ocr_document.raw_text,
-                sku=rag_metadata["sku"],
-                product_id=rag_metadata["product_id"],
-                category=rag_metadata["category"],
-                zone=rag_metadata["zone"],
-                rack=rag_metadata["rack"],
-                shelf=rag_metadata["shelf"],
-                bin=rag_metadata["bin"],
-            )
-            if res.get("success"):
-                ocr_document.rag_status = "INGESTED"
-                ocr_document.chunk_count = res.get("chunks_created", 0)
-                ocr_document.rag_error_message = None
-            else:
-                ocr_document.rag_status = "FAILED"
-                ocr_document.rag_error_message = res.get("error", "Unknown ingestion error")
-            ocr_document.save()
+            from apps.inbound.tasks import sync_rag_task
+            sync_rag_task.delay(str(ocr_document.id))
+            logger.info("InboundOrchestratorService: RAG sync task queued successfully.")
         except Exception as rag_err:
-            logger.warning("InboundOrchestratorService: RAG ingestion trigger failed: %s", rag_err)
-            ocr_document.rag_status = "FAILED"
-            ocr_document.rag_error_message = str(rag_err)
-            ocr_document.save()
+            logger.warning("InboundOrchestratorService: Queueing RAG ingestion failed: %s", rag_err)
 
         return shipment

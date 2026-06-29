@@ -1,10 +1,9 @@
 import logging
 import requests
 from typing import Optional
+from django.conf import settings
 
 logger = logging.getLogger(__name__)
-
-from django.conf import settings
 
 RAG_BASE_URL = getattr(settings, 'RAG_BASE_URL', 'http://localhost:8002').rstrip('/')
 RAG_ENDPOINT = f"{RAG_BASE_URL}/api/rag/ingest"
@@ -40,8 +39,13 @@ def send_to_rag(
         "shelf": shelf,
         "bin": bin,
     }
+    
+    base_url = getattr(settings, 'RAG_BASE_URL', 'http://localhost:8002').rstrip('/')
+    endpoint = f"{base_url}/api/rag/ingest"
+    timeout = getattr(settings, 'RAG_TIMEOUT', TIMEOUT_SECONDS)
+    
     try:
-        response = requests.post(RAG_ENDPOINT, json=payload, timeout=TIMEOUT_SECONDS)
+        response = requests.post(endpoint, json=payload, timeout=timeout)
         response.raise_for_status()
         data = response.json()
         chunks_created = data.get("chunks_created", 0)
@@ -63,3 +67,90 @@ def send_to_rag(
             "RAG ingestion failed for OCR document %s: %s", ocr_document_id, error_msg
         )
         return {"success": False, "error": error_msg}
+    except Exception as exc:
+        logger.error(
+            "RAG ingestion failed for OCR document %s: %s", ocr_document_id, exc
+        )
+        return {"success": False, "error": str(exc)}
+
+
+def sync_document_to_rag(ocr_document) -> dict:
+    """Extract WMS metadata for the OCR Document and send it to RAG, updating database status."""
+    logger.info("sync_document_to_rag: Extracting metadata for OCR Document %s", ocr_document.id)
+    
+    # Update status to INGESTING
+    ocr_document.rag_status = "INGESTING"
+    ocr_document.save()
+    
+    sku = None
+    product_id = None
+    category = None
+    warehouse_id = "WH001"
+    zone = None
+    rack = None
+    shelf = None
+    bin_code = None
+
+    try:
+        payload = ocr_document.extracted_json or {}
+        extracted_data = payload.get('extracted_data', {})
+        products_list = extracted_data.get('products', [])
+        if not products_list:
+            products_list = payload.get('storage_payloads', {}).get('product_payload', [])
+
+        from apps.inventory.infrastructure.persistence.models import Product
+        from apps.recommendations.models.bin_allocation import BinAllocation
+
+        for prod_item in products_list:
+            item_sku = prod_item.get('sku')
+            if not item_sku:
+                continue
+
+            product = Product.objects.filter(sku=item_sku).first()
+            if product:
+                sku = item_sku
+                product_id = str(product.id)
+                category = product.category.category_name if product.category else None
+                
+                # Fetch the latest allocation for this product
+                allocation = BinAllocation.objects.filter(product=product).first()
+                if allocation:
+                    warehouse_id = str(allocation.zone.warehouse_id)
+                    zone = allocation.zone.zone_name
+                    rack = allocation.rack.rack_code
+                    shelf = str(allocation.shelf.shelf_number)
+                    bin_code = allocation.bin.bin_code
+                break  # Standard representative product
+    except Exception as e:
+        logger.warning("sync_document_to_rag: WMS metadata extraction failed: %s", e)
+
+    try:
+        res = send_to_rag(
+            ocr_document_id=str(ocr_document.id),
+            document_type="OCRDocument",
+            warehouse_id=warehouse_id,
+            text=ocr_document.raw_text,
+            sku=sku,
+            product_id=product_id,
+            category=category,
+            zone=zone,
+            rack=rack,
+            shelf=shelf,
+            bin=bin_code,
+        )
+        
+        if res.get("success"):
+            ocr_document.rag_status = "INGESTED"
+            ocr_document.chunk_count = res.get("chunks_created", 0)
+            ocr_document.rag_error_message = None
+        else:
+            ocr_document.rag_status = "FAILED"
+            ocr_document.rag_error_message = res.get("error", "Unknown ingestion error")
+        ocr_document.save()
+        return res
+    except Exception as exc:
+        logger.error("sync_document_to_rag: RAG ingestion trigger failed: %s", exc)
+        ocr_document.rag_status = "FAILED"
+        ocr_document.rag_error_message = str(exc)
+        ocr_document.save()
+        return {"success": False, "error": str(exc)}

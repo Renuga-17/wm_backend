@@ -7,6 +7,8 @@ from ..models.storage_recommendation import StorageRecommendation
 
 logger = logging.getLogger(__name__)
 
+from .db_healer import ensure_default_setup
+
 class RecommendationOrchestrator:
     """Orchestrates the selection of ZoneGroup and Zone.
     Routes queries to the ML Recommendation Service if enabled and available,
@@ -23,12 +25,26 @@ class RecommendationOrchestrator:
         """
         logger.info("RecommendationOrchestrator: Starting recommendation process for product ID: %s", product.id)
         
-        # 1. Fetch Product Classification
+        # Run database self-healing check
+        ensure_default_setup()
+        
+        # 1. Fetch Product Classification (or auto-create default)
         try:
             classification = ProductClassification.objects.get(product=product)
         except ProductClassification.DoesNotExist:
-            logger.error("RecommendationOrchestrator: ProductClassification does not exist for product ID: %s", product.id)
-            raise ValueError(f"Product {product.sku} has not been classified")
+            logger.info("RecommendationOrchestrator: ProductClassification does not exist for product ID: %s. Auto-creating default.", product.id)
+            movement_type = 'FAST'
+            if product.is_fragile:
+                movement_type = 'FRAGILE'
+            elif product.is_hazardous:
+                movement_type = 'HAZARDOUS'
+                
+            storage_type = 'GENERAL'
+            classification = ProductClassification.objects.create(
+                product=product,
+                movement_type=movement_type,
+                storage_type=storage_type
+            )
             
         movement_type = classification.movement_type
         storage_type = classification.storage_type
