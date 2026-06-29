@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.urls import path, include
+from apps.inbound.presentation.api.ocr_views import RAGRetryView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,6 +29,10 @@ urlpatterns = [
     
     path('api/inbound/', include('apps.inbound.presentation.api.inbound_urls')),
     path('api/ocr/', include('apps.inbound.presentation.api.ocr_urls')),
+    
+    # RAG Ingestion Retry
+    path('api/rag/retry/<str:document_id>', RAGRetryView.as_view(), name='rag-retry'),
+    path('api/rag/retry/<str:document_id>/', RAGRetryView.as_view(), name='rag-retry-slash'),
 ]
 
 from django.conf import settings

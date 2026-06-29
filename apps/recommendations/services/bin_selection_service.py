@@ -5,6 +5,12 @@ from django.db.models import Sum, Max
 from apps.warehouse.models import Bin, Shelf
 from apps.recommendations.models.bin_allocation import BinAllocation
 from .dimension_compatibility_service import DimensionCompatibilityService
+from .dimension_validation import (
+    validate_bin_dimensions,
+    validate_product_dimensions,
+    DimensionValidationError,
+    safe_decimal
+)
 
 logger = logging.getLogger(__name__)
 
@@ -27,10 +33,13 @@ class BinSelectionService:
         bins = Bin.objects.filter(shelf__in=shelves)
         candidate_bins = []
 
-        product_weight = Decimal(str(product.weight))
-        p_l = Decimal(str(product_dimension.length))
-        p_w = Decimal(str(product_dimension.width))
-        p_h = Decimal(str(product_dimension.height))
+        product_weight = safe_decimal(product.weight, Decimal('0.00'), 'weight', product.sku)
+        
+        try:
+            p_dim = validate_product_dimensions(product_dimension)
+        except DimensionValidationError as e:
+            logger.error("BinSelectionService: Invalid product dimensions: %s", str(e))
+            return None, None, 0.0, f"Invalid product dimensions: {str(e)}"
 
         for bin_obj in bins:
             # 1. Occupancy check
@@ -47,18 +56,20 @@ class BinSelectionService:
                 continue
 
             # 3. Dimension Compatibility Check (evaluating all 6 product rotations)
+            try:
+                b_dim = validate_bin_dimensions(bin_obj)
+            except DimensionValidationError as e:
+                logger.warning("BinSelectionService: Skipping bin %s due to dimension validation error: %s", bin_obj.bin_code, str(e))
+                continue
+
             compat = self.dimension_service.check_compatibility(
-                product_len=p_l,
-                product_width=p_w,
-                product_height=p_h,
-                bin_len=bin_obj.length,
-                bin_width=bin_obj.width,
-                bin_height=bin_obj.height
+                product_dim=p_dim,
+                bin_dim=b_dim
             )
             if not compat['fits']:
                 logger.info(
                     "BinSelectionService: Product dimensions %s did not fit in bin %s (%s, %s, %s), skipping.",
-                    f"{p_l}x{p_w}x{p_h}", bin_obj.bin_code, bin_obj.length, bin_obj.width, bin_obj.height
+                    f"{p_dim.length}x{p_dim.width}x{p_dim.height}", bin_obj.bin_code, b_dim.length, b_dim.width, b_dim.height
                 )
                 continue
 
@@ -76,17 +87,18 @@ class BinSelectionService:
             # 4.3 Weight Score (rack/shelf headroom)
             rack = bin_obj.shelf.rack
             shelf = bin_obj.shelf
+            warehouse_id = getattr(rack.zone.warehouse, 'id', None)
 
             # Sum existing weights
             rack_alloc = BinAllocation.objects.filter(rack=rack).aggregate(total_w=Sum('product__weight'))['total_w'] or Decimal('0.00')
-            rack_curr = Decimal(str(rack_alloc))
-            rack_max = Decimal(str(rack.max_weight))
+            rack_curr = safe_decimal(rack_alloc, Decimal('0.00'), 'rack_alloc', rack.rack_code, warehouse_id)
+            rack_max = safe_decimal(rack.max_weight, Decimal('0.00'), 'max_weight', rack.rack_code, warehouse_id)
             rack_headroom = float(rack_max - rack_curr - product_weight) / float(rack_max) if rack_max > 0.0 else 0.0
             rack_headroom = max(0.0, min(1.0, rack_headroom))
 
             shelf_alloc = BinAllocation.objects.filter(shelf=shelf).aggregate(total_w=Sum('product__weight'))['total_w'] or Decimal('0.00')
-            shelf_curr = Decimal(str(shelf_alloc))
-            shelf_max = Decimal(str(shelf.max_weight))
+            shelf_curr = safe_decimal(shelf_alloc, Decimal('0.00'), 'shelf_alloc', shelf.id, warehouse_id)
+            shelf_max = safe_decimal(shelf.max_weight, Decimal('0.00'), 'max_weight', shelf.id, warehouse_id)
             shelf_headroom = float(shelf_max - shelf_curr - product_weight) / float(shelf_max) if shelf_max > 0.0 else 0.0
             shelf_headroom = max(0.0, min(1.0, shelf_headroom))
 
@@ -106,10 +118,11 @@ class BinSelectionService:
             # 4.5 Shelf Height Score (lower is better)
             all_shelves = Shelf.objects.filter(rack=rack)
             max_height = all_shelves.aggregate(max_h=Max('height_from_ground'))['max_h'] or Decimal('0.00')
-            max_height = float(max_height)
-            shelf_height = float(shelf.height_from_ground)
-            if max_height > 0.0:
-                shelf_height_score = 1.0 - (shelf_height / max_height)
+            max_height_dec = safe_decimal(max_height, Decimal('0.00'), 'max_height_from_ground', rack.rack_code, warehouse_id)
+            max_height_val = float(max_height_dec)
+            shelf_height = float(safe_decimal(shelf.height_from_ground, Decimal('0.00'), 'height_from_ground', shelf.id, warehouse_id))
+            if max_height_val > 0.0:
+                shelf_height_score = 1.0 - (shelf_height / max_height_val)
             else:
                 shelf_height_score = 1.0
             shelf_height_score = max(0.0, min(1.0, shelf_height_score))

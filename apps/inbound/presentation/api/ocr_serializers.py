@@ -23,6 +23,17 @@ class OCRDocumentSerializer(serializers.ModelSerializer):
             'rejection_reason',
             'created_at',
             'updated_at',
+            'warehouse_id',
+            'sku',
+            'product_id',
+            'category',
+            'zone',
+            'rack',
+            'shelf',
+            'bin',
+            'chunk_count',
+            'rag_status',
+            'rag_error_message',
         ]
         read_only_fields = (
             'document_id',
@@ -35,6 +46,17 @@ class OCRDocumentSerializer(serializers.ModelSerializer):
             'rejection_reason',
             'created_at',
             'updated_at',
+            'warehouse_id',
+            'sku',
+            'product_id',
+            'category',
+            'zone',
+            'rack',
+            'shelf',
+            'bin',
+            'chunk_count',
+            'rag_status',
+            'rag_error_message',
         )
 
 

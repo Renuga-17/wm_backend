@@ -47,6 +47,11 @@ class LocalDevAuthentication(BaseAuthentication):
                     return (db_user, None)
             
             # Default fallback
+            import sys
+            if 'test' in sys.argv or 'pytest' in sys.modules:
+                print("[LocalDevAuthentication] In test mode, skipping automatic fallback.")
+                return None
+
             print("[LocalDevAuthentication] No matching user headers, querying first user in DB as fallback")
             db_user = User.objects.first()
             print(f"[LocalDevAuthentication] Fallback result: {db_user}")

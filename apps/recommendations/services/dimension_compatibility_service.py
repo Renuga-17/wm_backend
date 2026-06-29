@@ -1,10 +1,11 @@
 import logging
 from decimal import Decimal
+from .dimension_validation import ValidatedDimension
 
 logger = logging.getLogger(__name__)
 
 class DimensionCompatibilityService:
-    def check_compatibility(self, product_len, product_width, product_height, bin_len, bin_width, bin_height):
+    def check_compatibility(self, product_dim: ValidatedDimension, bin_dim: ValidatedDimension):
         """
         Evaluates all 6 possible product rotations:
         - L×W×H
@@ -16,13 +17,13 @@ class DimensionCompatibilityService:
         
         Returns the first orientation that fits as a dictionary.
         """
-        p_l = Decimal(str(product_len))
-        p_w = Decimal(str(product_width))
-        p_h = Decimal(str(product_height))
+        p_l = product_dim.length
+        p_w = product_dim.width
+        p_h = product_dim.height
         
-        b_l = Decimal(str(bin_len))
-        b_w = Decimal(str(bin_width))
-        b_h = Decimal(str(bin_height))
+        b_l = bin_dim.length
+        b_w = bin_dim.width
+        b_h = bin_dim.height
         
         # The 6 rotations
         rotations = [

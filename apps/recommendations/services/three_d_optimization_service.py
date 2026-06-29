@@ -4,6 +4,12 @@ from apps.warehouse.models import Bin
 from apps.inventory.infrastructure.persistence.models import Product, ProductDimension
 from ..models.bin_allocation import BinAllocation
 from ..models.bin_3d_placement import Bin3DPlacement
+from .dimension_validation import (
+    validate_bin_dimensions,
+    validate_product_dimensions,
+    DimensionValidationError,
+    safe_decimal
+)
 
 logger = logging.getLogger(__name__)
 
@@ -16,6 +22,12 @@ class ThreeDOptimizationService:
         
         product = bin_allocation.product
         bin_obj = bin_allocation.bin
+        warehouse_id = None
+        try:
+            if bin_obj.shelf and bin_obj.shelf.rack and bin_obj.shelf.rack.zone:
+                warehouse_id = getattr(bin_obj.shelf.rack.zone.warehouse, 'id', None)
+        except Exception:
+            pass
 
         # 1. Get ProductDimension
         product_dim = ProductDimension.objects.filter(product=product).first()
@@ -23,14 +35,18 @@ class ThreeDOptimizationService:
             logger.error("ThreeDOptimizationService: ProductDimension not found for product %s", product.sku)
             raise ValueError("Product dimensions not found")
 
+        # Validate early
+        p_dim = validate_product_dimensions(product_dim)
+        b_dim = validate_bin_dimensions(bin_obj)
+
         # 2. Get existing placements in the same bin (excluding the current one)
         existing_placements = Bin3DPlacement.objects.filter(
             bin_allocation__bin=bin_obj
         ).exclude(bin_allocation=bin_allocation)
 
         # 3. Calculate volumes
-        bin_vol = Decimal(str(bin_obj.length)) * Decimal(str(bin_obj.width)) * Decimal(str(bin_obj.height))
-        product_vol = Decimal(str(product_dim.length)) * Decimal(str(product_dim.width)) * Decimal(str(product_dim.height))
+        bin_vol = b_dim.length * b_dim.width * b_dim.height
+        product_vol = p_dim.length * p_dim.width * p_dim.height
         
         occupied_vol = Decimal('0.00')
         for placement in existing_placements:
@@ -42,19 +58,26 @@ class ThreeDOptimizationService:
                 # Fallback if selected_orientation parsing fails
                 dim = ProductDimension.objects.filter(product=alloc.product).first()
                 if dim:
-                    occupied_vol += Decimal(str(dim.length)) * Decimal(str(dim.width)) * Decimal(str(dim.height))
+                    try:
+                        validated_dim = validate_product_dimensions(dim)
+                        occupied_vol += validated_dim.length * validated_dim.width * validated_dim.height
+                    except Exception:
+                        dl = safe_decimal(dim.length, Decimal('0.00'), 'length', alloc.product.sku, warehouse_id)
+                        dw = safe_decimal(dim.width, Decimal('0.00'), 'width', alloc.product.sku, warehouse_id)
+                        dh = safe_decimal(dim.height, Decimal('0.00'), 'height', alloc.product.sku, warehouse_id)
+                        occupied_vol += dl * dw * dh
 
         # Check total remaining volume
         remaining_vol = bin_vol - occupied_vol
         
         # 4. Evaluate orientations
-        p_l = Decimal(str(product_dim.length))
-        p_w = Decimal(str(product_dim.width))
-        p_h = Decimal(str(product_dim.height))
+        p_l = p_dim.length
+        p_w = p_dim.width
+        p_h = p_dim.height
 
-        b_l = Decimal(str(bin_obj.length))
-        b_w = Decimal(str(bin_obj.width))
-        b_h = Decimal(str(bin_obj.height))
+        b_l = b_dim.length
+        b_w = b_dim.width
+        b_h = b_dim.height
 
         rotations = [
             (p_l, p_w, p_h, Bin3DPlacement.LabelDirection.FRONT), # L x W x H
@@ -100,11 +123,15 @@ class ThreeDOptimizationService:
                 try:
                     l_prev, w_prev, h_prev = map(float, p.bin_allocation.selected_orientation.split('x'))
                 except Exception:
-                    l_prev, w_prev, h_prev = float(product_dim.length), float(product_dim.width), float(product_dim.height)
+                    l_prev, w_prev, h_prev = float(p_dim.length), float(p_dim.width), float(p_dim.height)
                 
-                max_x = max(max_x, p.position_x + Decimal(str(l_prev)))
-                max_y = max(max_y, p.position_y + Decimal(str(w_prev)))
-                max_z = max(max_z, p.position_z + Decimal(str(h_prev)))
+                pos_x = safe_decimal(p.position_x, Decimal('0.00'), 'position_x', p.id, warehouse_id)
+                pos_y = safe_decimal(p.position_y, Decimal('0.00'), 'position_y', p.id, warehouse_id)
+                pos_z = safe_decimal(p.position_z, Decimal('0.00'), 'position_z', p.id, warehouse_id)
+
+                max_x = max(max_x, pos_x + Decimal(str(l_prev)))
+                max_y = max(max_y, pos_y + Decimal(str(w_prev)))
+                max_z = max(max_z, pos_z + Decimal(str(h_prev)))
 
             # Evaluate orientations to find one that fits at candidate positions
             placed = False

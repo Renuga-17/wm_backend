@@ -9,6 +9,7 @@ class TestRAGIngestMetadata:
     def test_send_to_rag_success(self, mock_post):
         # Mock successful post
         mock_post.return_value.status_code = 200
+        mock_post.return_value.json.return_value = {"chunks_created": 3}
 
         res = send_to_rag(
             ocr_document_id="doc-12345",
@@ -24,7 +25,8 @@ class TestRAGIngestMetadata:
             bin="Bin 45",
         )
 
-        assert res is True
+        assert res["success"] is True
+        assert res["chunks_created"] == 3
         mock_post.assert_called_once()
         args, kwargs = mock_post.call_args
         payload = kwargs["json"]
@@ -51,18 +53,21 @@ class TestRAGIngestMetadata:
             text="Failing text",
         )
 
-        assert res is False
+        assert res["success"] is False
+        assert "Network error" in res["error"]
 
     @patch("apps.inbound.application.services.rag_service.requests.post")
     def test_send_to_rag_default_values(self, mock_post):
         mock_post.return_value.status_code = 200
+        mock_post.return_value.json.return_value = {"chunks_created": 1}
 
         res = send_to_rag(
             ocr_document_id="doc-defaults",
             text="Minimal parameters text",
         )
 
-        assert res is True
+        assert res["success"] is True
+        assert res["chunks_created"] == 1
         mock_post.assert_called_once()
         args, kwargs = mock_post.call_args
         payload = kwargs["json"]

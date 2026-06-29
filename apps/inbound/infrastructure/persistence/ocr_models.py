@@ -34,6 +34,28 @@ class OCRDocument(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    # WMS Metadata fields for RAG
+    warehouse_id = models.CharField(max_length=100, null=True, blank=True)
+    sku = models.CharField(max_length=100, null=True, blank=True)
+    product_id = models.CharField(max_length=100, null=True, blank=True)
+    category = models.CharField(max_length=100, null=True, blank=True)
+    zone = models.CharField(max_length=100, null=True, blank=True)
+    rack = models.CharField(max_length=100, null=True, blank=True)
+    shelf = models.CharField(max_length=100, null=True, blank=True)
+    bin = models.CharField(max_length=100, null=True, blank=True)
+    chunk_count = models.IntegerField(default=0)
+    rag_status = models.CharField(
+        max_length=50,
+        choices=[
+            ('PENDING', 'Pending'),
+            ('INGESTING', 'Ingesting'),
+            ('INGESTED', 'Ingested'),
+            ('FAILED', 'Failed')
+        ],
+        default='PENDING'
+    )
+    rag_error_message = models.TextField(null=True, blank=True)
+
     class Meta:
         db_table = 'ocr_documents'
         ordering = ['-created_at']

@@ -96,17 +96,9 @@ else:
         }
     }
 
-import socket
-
 def _is_redis_running():
-    try:
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.settimeout(0.2)
-        s.connect((os.getenv('REDIS_HOST', '127.0.0.1'), 6379))
-        s.close()
-        return True
-    except Exception:
-        return False
+    # Force bypass Redis checks
+    return False
 
 if _is_redis_running():
     CHANNEL_LAYERS = {
@@ -191,12 +183,6 @@ SIMPLE_JWT = {
     'UPDATE_LAST_LOGIN': False,
 }
 
-# MongoDB Settings
-MONGODB_SETTINGS = {
-    'URI': os.getenv('MONGODB_URI', 'mongodb://localhost:27017/'),
-    'DB_NAME': os.getenv('MONGODB_DB_NAME', 'wm_mongodb'),
-}
-
 # ClickHouse Settings
 CLICKHOUSE_SETTINGS = {
     "HOST": "jj8tk9yx2g.ap-south-1.aws.clickhouse.cloud",
@@ -221,15 +207,15 @@ AI_SERVICE_SETTINGS = {
 
 # OCR Microservice settings
 OCR_SERVICE_SETTINGS = {
-    'BASE_URL': os.getenv('OCR_SERVICE_URL', 'http://localhost:8002'),
+    'BASE_URL': os.getenv('OCR_SERVICE_URL', 'http://localhost:8001'),
 }
 
 # RAG Microservice settings
-RAG_BASE_URL = os.getenv('RAG_BASE_URL', 'http://localhost:8001')
+RAG_BASE_URL = os.getenv('RAG_BASE_URL', 'http://localhost:8002')
 try:
-    RAG_TIMEOUT = int(os.getenv('RAG_TIMEOUT', '30'))
+    RAG_TIMEOUT = int(os.getenv('RAG_TIMEOUT', '120'))
 except ValueError:
-    RAG_TIMEOUT = 30
+    RAG_TIMEOUT = 120
 
 
 # Media File Storage Settings
@@ -237,10 +223,11 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Celery Settings
-CELERY_BROKER_URL = os.getenv('REDIS_URL', 'redis://127.0.0.1:6379/1')
-CELERY_RESULT_BACKEND = os.getenv('REDIS_URL', 'redis://127.0.0.1:6379/1')
+CELERY_BROKER_URL = 'memory://'
+CELERY_RESULT_BACKEND = None
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
+CELERY_TASK_ALWAYS_EAGER = True
 
 # JWT Settings
 SIMPLE_JWT = {
@@ -265,6 +252,12 @@ MIGRATION_MODULES = {
 WAREHOUSE_MIN_FREE_CAPACITY = int(os.getenv('WAREHOUSE_MIN_FREE_CAPACITY', 10))
 WAREHOUSE_RECOMMENDATION_USE_ML = os.getenv('WAREHOUSE_RECOMMENDATION_USE_ML', 'False') == 'True'
 ML_MODEL_PATH = os.getenv('ML_MODEL_PATH', '')
+
+# Centralized Warehouse Defaults
+from decimal import Decimal
+DEFAULT_BIN_LENGTH = Decimal(os.getenv('DEFAULT_BIN_LENGTH', '20.0'))
+DEFAULT_BIN_WIDTH = Decimal(os.getenv('DEFAULT_BIN_WIDTH', '15.0'))
+DEFAULT_BIN_HEIGHT = Decimal(os.getenv('DEFAULT_BIN_HEIGHT', '10.0'))
 
 # CORS configuration to allow local frontend access
 CORS_ALLOW_ALL_ORIGINS = True

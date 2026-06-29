@@ -214,8 +214,11 @@ class InboundOrchestratorService:
             raise e
 
         # Step G: Send to RAG ingestion if text is available (outside database transaction)
+        ocr_document.rag_status = "INGESTING"
+        ocr_document.save()
+
         try:
-            send_to_rag(
+            res = send_to_rag(
                 ocr_document_id=str(ocr_document.id),
                 document_type="OCRDocument",
                 warehouse_id=rag_metadata["warehouse_id"],
@@ -228,7 +231,18 @@ class InboundOrchestratorService:
                 shelf=rag_metadata["shelf"],
                 bin=rag_metadata["bin"],
             )
+            if res.get("success"):
+                ocr_document.rag_status = "INGESTED"
+                ocr_document.chunk_count = res.get("chunks_created", 0)
+                ocr_document.rag_error_message = None
+            else:
+                ocr_document.rag_status = "FAILED"
+                ocr_document.rag_error_message = res.get("error", "Unknown ingestion error")
+            ocr_document.save()
         except Exception as rag_err:
             logger.warning("InboundOrchestratorService: RAG ingestion trigger failed: %s", rag_err)
+            ocr_document.rag_status = "FAILED"
+            ocr_document.rag_error_message = str(rag_err)
+            ocr_document.save()
 
         return shipment

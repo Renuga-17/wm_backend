@@ -11,6 +11,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 django.setup()
 
+from django.conf import settings
 from django.db import connection
 
 def batch_insert(cursor, table, columns, records):
@@ -174,7 +175,10 @@ def seed_db():
                 "code": bin_code,
                 "max_capacity": 100.0,
                 "current_capacity": 0.0,
-                "is_occupied": False
+                "is_occupied": False,
+                "length": float(settings.DEFAULT_BIN_LENGTH),
+                "width": float(settings.DEFAULT_BIN_WIDTH),
+                "height": float(settings.DEFAULT_BIN_HEIGHT)
             })
 
     # 7. CAD Objects
@@ -567,8 +571,8 @@ def seed_db():
                 
             # 6. Bins
             print("Inserting Bins...")
-            batch_insert(cursor, "bins", ["bin_id", "shelf_id", "bin_code", "max_capacity", "current_capacity", "is_occupied"],
-                         [[b["id"], b["shelf_id"], b["code"], b["max_capacity"], b["current_capacity"], b["is_occupied"]] for b in bins])
+            batch_insert(cursor, "bins", ["bin_id", "shelf_id", "bin_code", "max_capacity", "current_capacity", "is_occupied", "length", "width", "height"],
+                         [[b["id"], b["shelf_id"], b["code"], b["max_capacity"], b["current_capacity"], b["is_occupied"], b["length"], b["width"], b["height"]] for b in bins])
                 
             # 7. CAD Objects
             print("Inserting CAD Objects...")

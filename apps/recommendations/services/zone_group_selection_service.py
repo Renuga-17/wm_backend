@@ -52,18 +52,19 @@ class ZoneGroupSelectionService:
         )
         min_free = getattr(settings, "WAREHOUSE_MIN_FREE_CAPACITY", 10)
         for rule in rules:
-            try:
-                zg = ZoneGroup.objects.get(zone_group_type=rule.zone_group_type)
-            except ZoneGroup.DoesNotExist:
+            zgs = ZoneGroup.objects.filter(zone_group_type=rule.zone_group_type)
+            if not zgs.exists():
                 logger.warning("ZoneGroup %s does not exist", rule.zone_group_type)
                 continue
-            free_pct = self._free_capacity_percentage(zg)
-            logger.debug(
-                "Evaluated ZoneGroup %s: free_pct=%.2f (min required=%s)",
-                zg.zone_group_type, free_pct, min_free,
-            )
-            if free_pct >= min_free:
-                logger.info("Selected ZoneGroup %s based on rule %s", zg.zone_group_type, rule.id)
-                return zg
+            
+            for zg in zgs:
+                free_pct = self._free_capacity_percentage(zg)
+                logger.debug(
+                    "Evaluated ZoneGroup %s: free_pct=%.2f (min required=%s)",
+                    zg.zone_group_type, free_pct, min_free,
+                )
+                if free_pct >= min_free:
+                    logger.info("Selected ZoneGroup %s based on rule %s", zg.zone_group_type, rule.id)
+                    return zg
         logger.error("No suitable ZoneGroup found for %s/%s", movement_type, storage_type)
         raise ValueError("No suitable ZoneGroup found")

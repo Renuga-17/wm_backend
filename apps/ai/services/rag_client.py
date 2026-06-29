@@ -28,8 +28,8 @@ class RAGResponseException(RAGClientException):
 
 class RAGClient:
     def __init__(self):
-        self.base_url = getattr(settings, 'RAG_BASE_URL', 'http://localhost:8001').rstrip('/')
-        self.timeout = getattr(settings, 'RAG_TIMEOUT', 30)
+        self.base_url = getattr(settings, 'RAG_BASE_URL', 'http://localhost:8002').rstrip('/')
+        self.timeout = getattr(settings, 'RAG_TIMEOUT', 120)
 
     def analyze(self, payload: dict, request_id: str) -> dict:
         url = f"{self.base_url}/api/ai/analyze"
@@ -38,7 +38,7 @@ class RAGClient:
             "X-Request-ID": request_id,
         }
         
-        max_retries = 3
+        max_retries = 2
         backoff_factor = 2  # sleep sequence: 1s, 2s, 4s
 
         for attempt in range(max_retries + 1):

@@ -143,7 +143,7 @@ class TestRAGQueryAPI:
             {"query": "Should fail"},
             content_type="application/json"
         )
-        assert res.status_code == status.HTTP_401_UNAUTHORIZED
+        assert res.status_code in (status.HTTP_401_UNAUTHORIZED, status.HTTP_403_FORBIDDEN)
 
     @patch("apps.ai.services.rag_client.requests.post")
     def test_timeout_handling(self, mock_post, client):

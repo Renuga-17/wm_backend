@@ -133,7 +133,7 @@ class OCRIntegrationTestCase(TestCase):
             if 'ocr/extract' in url:
                 mock_res.json.return_value = self.mock_success_payload
             else:
-                mock_res.json.return_value = {"status": "SUCCESS"}
+                mock_res.json.return_value = {"status": "SUCCESS", "chunks_created": 5}
             return mock_res
         mock_post.side_effect = mock_post_side_effect
 
@@ -153,6 +153,8 @@ class OCRIntegrationTestCase(TestCase):
         # 4. Verify OCRDocument is stored properly in DB
         doc = OCRDocument.objects.get(id=doc_id)
         self.assertEqual(doc.processing_status, OCRDocument.ProcessingStatus.COMPLETED)
+        self.assertEqual(doc.rag_status, 'INGESTED')
+        self.assertEqual(doc.chunk_count, 5)
         self.assertEqual(doc.file_name, 'invoice_test.png')
         self.assertEqual(doc.confidence_score, 0.96)
         self.assertEqual(doc.raw_text, self.mock_success_payload['raw_text'])
@@ -383,3 +385,54 @@ class OCRIntegrationTestCase(TestCase):
         type_results = res_type.data['results'] if isinstance(res_type.data, dict) and 'results' in res_type.data else res_type.data
         self.assertEqual(len(type_results), 1)
         self.assertEqual(type_results[0]['file_name'], 'doc_2.pdf')
+
+    @patch('apps.inbound.presentation.api.ocr_views.send_to_rag')
+    def test_rag_retry_success(self, mock_send_to_rag):
+        mock_send_to_rag.return_value = {"success": True, "chunks_created": 10}
+
+        doc = OCRDocument.objects.create(
+            file_name='retry_test.png',
+            file_path='ocr_documents/retry_test.png',
+            document_type='invoice',
+            raw_text='Some raw extracted ocr text',
+            processing_status=OCRDocument.ProcessingStatus.COMPLETED,
+            rag_status='FAILED',
+            rag_error_message='Timeout'
+        )
+
+        url = f'/api/rag/retry/{doc.id}'
+        response = self.client.post(url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(response.data['success'])
+        
+        # Verify DB updates
+        doc.refresh_from_db()
+        self.assertEqual(doc.rag_status, 'INGESTED')
+        self.assertEqual(doc.chunk_count, 10)
+        self.assertIsNone(doc.rag_error_message)
+
+    @patch('apps.inbound.presentation.api.ocr_views.send_to_rag')
+    def test_rag_retry_failure(self, mock_send_to_rag):
+        mock_send_to_rag.return_value = {"success": False, "error": "RAG Service Offline"}
+
+        doc = OCRDocument.objects.create(
+            file_name='retry_fail_test.png',
+            file_path='ocr_documents/retry_fail_test.png',
+            document_type='invoice',
+            raw_text='Some raw extracted ocr text',
+            processing_status=OCRDocument.ProcessingStatus.COMPLETED,
+            rag_status='FAILED',
+            rag_error_message='Timeout'
+        )
+
+        url = f'/api/rag/retry/{doc.id}/'
+        response = self.client.post(url)
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertFalse(response.data['success'])
+        
+        # Verify DB updates
+        doc.refresh_from_db()
+        self.assertEqual(doc.rag_status, 'FAILED')
+        self.assertEqual(doc.rag_error_message, 'RAG Service Offline')

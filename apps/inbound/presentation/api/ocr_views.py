@@ -10,6 +10,7 @@ from rest_framework.decorators import action
 from apps.inbound.infrastructure.persistence.models import OCRDocument
 from .ocr_serializers import OCRDocumentSerializer, OCRDocumentApprovalSerializer
 from ...tasks import process_ocr_document_task
+from apps.inbound.application.services.rag_service import send_to_rag
 
 logger = logging.getLogger(__name__)
 
@@ -125,7 +126,18 @@ class OCRDocumentViewSet(viewsets.ReadOnlyModelViewSet):
                 "rejection_reason": instance.rejection_reason,
                 "error_message": instance.error_message,
                 "created_at": instance.created_at,
-                "updated_at": instance.updated_at
+                "updated_at": instance.updated_at,
+                "rag_status": instance.rag_status,
+                "rag_error_message": instance.rag_error_message,
+                "chunk_count": instance.chunk_count,
+                "warehouse_id": instance.warehouse_id,
+                "sku": instance.sku,
+                "product_id": instance.product_id,
+                "category": instance.category,
+                "zone": instance.zone,
+                "rack": instance.rack,
+                "shelf": instance.shelf,
+                "bin": instance.bin
             }, status=status.HTTP_200_OK)
         except Exception as e:
             logger.error("OCRDocumentViewSet: Retrieve failed: %s", e)
@@ -220,4 +232,74 @@ class OCRDocumentViewSet(viewsets.ReadOnlyModelViewSet):
             "document_id": str(ocr_doc.id),
             "processing_status": ocr_doc.processing_status
         }, status=status.HTTP_200_OK)
+
+
+class RAGRetryView(APIView):
+    """
+    POST /api/rag/retry/{document_id}
+    Retries RAG ingestion for a document. Does not re-run OCR.
+    """
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, document_id, *args, **kwargs):
+        try:
+            ocr_doc = OCRDocument.objects.get(id=document_id)
+        except (OCRDocument.DoesNotExist, ValueError):
+            return Response({"error": "Document not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        if ocr_doc.processing_status not in [OCRDocument.ProcessingStatus.COMPLETED, OCRDocument.ProcessingStatus.APPROVED]:
+            return Response(
+                {"error": f"Cannot retry RAG ingestion. OCR must be COMPLETED or APPROVED (current status: {ocr_doc.processing_status})"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # Set status to INGESTING
+        ocr_doc.rag_status = "INGESTING"
+        ocr_doc.save()
+
+        try:
+            res = send_to_rag(
+                ocr_document_id=str(ocr_doc.id),
+                document_type=ocr_doc.document_type or "OCRDocument",
+                warehouse_id=ocr_doc.warehouse_id or "WH001",
+                text=ocr_doc.raw_text,
+                sku=ocr_doc.sku,
+                product_id=ocr_doc.product_id,
+                category=ocr_doc.category,
+                zone=ocr_doc.zone,
+                rack=ocr_doc.rack,
+                shelf=ocr_doc.shelf,
+                bin=ocr_doc.bin,
+            )
+            if res.get("success"):
+                ocr_doc.rag_status = "INGESTED"
+                ocr_doc.chunk_count = res.get("chunks_created", 0)
+                ocr_doc.rag_error_message = None
+                ocr_doc.save()
+                return Response({
+                    "success": True,
+                    "message": "RAG ingestion retry completed successfully.",
+                    "document_id": str(ocr_doc.id),
+                    "rag_status": ocr_doc.rag_status,
+                    "chunk_count": ocr_doc.chunk_count
+                }, status=status.HTTP_200_OK)
+            else:
+                ocr_doc.rag_status = "FAILED"
+                ocr_doc.rag_error_message = res.get("error", "Unknown ingestion error")
+                ocr_doc.save()
+                return Response({
+                    "success": False,
+                    "error": ocr_doc.rag_error_message,
+                    "rag_status": ocr_doc.rag_status
+                }, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            logger.error("RAGRetryView: Retry failed: %s", e)
+            ocr_doc.rag_status = "FAILED"
+            ocr_doc.rag_error_message = str(e)
+            ocr_doc.save()
+            return Response({
+                "success": False,
+                "error": str(e),
+                "rag_status": ocr_doc.rag_status
+            }, status=status.HTTP_400_BAD_REQUEST)
 
