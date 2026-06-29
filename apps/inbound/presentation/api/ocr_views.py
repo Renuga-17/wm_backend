@@ -170,23 +170,7 @@ class OCRDocumentViewSet(viewsets.ReadOnlyModelViewSet):
         """POST /api/ocr/documents/{id}/approve/"""
         ocr_doc = self.get_object()
         
-        # If already approved or completed, return success directly (idempotent behavior)
-        if ocr_doc.processing_status in [OCRDocument.ProcessingStatus.APPROVED, OCRDocument.ProcessingStatus.COMPLETED]:
-            shipment_code = None
-            try:
-                shipment = ocr_doc.inboundshipment_set.first()
-                if shipment:
-                    shipment_code = shipment.shipment_code
-            except Exception:
-                pass
-            return Response({
-                "success": True,
-                "message": "OCR Document is already approved and ingested.",
-                "document_id": str(ocr_doc.id),
-                "processing_status": ocr_doc.processing_status,
-                "shipment_code": shipment_code
-            }, status=status.HTTP_200_OK)
-        
+
         if ocr_doc.processing_status not in [OCRDocument.ProcessingStatus.REVIEW_REQUIRED, OCRDocument.ProcessingStatus.FAILED]:
             return Response(
                 {"error": f"Cannot approve document in status: {ocr_doc.processing_status}"},
@@ -280,7 +264,7 @@ class OCRDocumentViewSet(viewsets.ReadOnlyModelViewSet):
             }, status=status.HTTP_200_OK)
         else:
             return Response(
-                {"error": res.get("error", "Failed to sync document to RAG service. Check backend logs for details.")},
+                {"error": f"Failed to sync document to RAG: {res.get('error', 'Unknown error')}"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 

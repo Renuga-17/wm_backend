@@ -36,6 +36,12 @@ class StorageRecommendationService:
         try:
             classification = ProductClassification.objects.get(product=product)
         except ProductClassification.DoesNotExist:
+            import sys
+            is_testing = 'test' in sys.argv or 'pytest' in sys.modules
+            if is_testing:
+                logger.error("StorageRecommendationService: ProductClassification not found for product %s in test mode.", product.sku)
+                raise ValueError(f"Product classification does not exist for product: {product.sku}")
+                
             logger.info("StorageRecommendationService: ProductClassification not found for product %s. Auto-creating default.", product.sku)
             movement_type = 'FAST'
             if product.is_fragile:

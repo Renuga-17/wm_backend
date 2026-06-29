@@ -103,6 +103,7 @@ class RAGSyncTestCase(TestCase):
         """Test that sync_document_to_rag correctly extracts product and allocation metadata and calls send_to_rag."""
         mock_response = MagicMock()
         mock_response.status_code = 200
+        mock_response.json.return_value = {"chunks_created": 1}
         mock_post.return_value = mock_response
 
         # Create OCRDocument, Product, BinAllocation in completed state
@@ -158,6 +159,7 @@ class RAGSyncTestCase(TestCase):
         """Test the POST /api/ocr/documents/{id}/sync-rag/ custom action view endpoint on success."""
         mock_response = MagicMock()
         mock_response.status_code = 200
+        mock_response.json.return_value = {"chunks_created": 1}
         mock_post.return_value = mock_response
 
         ocr_doc = OCRDocument.objects.create(

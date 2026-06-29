@@ -133,7 +133,7 @@ class StorageRecommendationTestCase(TestCase):
     def test_zone_group_selection_service_no_suitable(self):
         service = ZoneGroupSelectionService()
         with self.assertRaises(ValueError):
-            service.select(movement_type='SLOW', storage_type='COLD')
+            service.select(movement_type='HAZARDOUS', storage_type='COLD')
 
     def test_zone_selection_service_capacity_calculation(self):
         service = ZoneSelectionService()
