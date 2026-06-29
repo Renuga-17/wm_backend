@@ -30,7 +30,14 @@ class BinSelectionService:
             len(shelves), product.sku
         )
         
-        bins = Bin.objects.filter(shelf__in=shelves)
+        # Load bins using select_related to resolve rack/shelf FKs in a single query
+        bins = Bin.objects.filter(shelf__in=shelves).select_related(
+            'shelf',
+            'shelf__rack',
+            'shelf__rack__aisle',
+            'shelf__rack__zone',
+            'shelf__rack__zone__warehouse'
+        )
         candidate_bins = []
 
         product_weight = safe_decimal(product.weight, Decimal('0.00'), 'weight', product.sku)
@@ -40,6 +47,31 @@ class BinSelectionService:
         except DimensionValidationError as e:
             logger.error("BinSelectionService: Invalid product dimensions: %s", str(e))
             return None, None, 0.0, f"Invalid product dimensions: {str(e)}"
+
+        # Pre-aggregate shelf and rack allocations in bulk
+        racks = list(set(shelf.rack for shelf in shelves))
+        
+        rack_allocs = BinAllocation.objects.filter(
+            rack__in=racks
+        ).values('rack_id').annotate(
+            total_w=Sum('product__weight')
+        )
+        rack_weight_map = {w['rack_id']: w['total_w'] for w in rack_allocs}
+
+        shelf_allocs = BinAllocation.objects.filter(
+            shelf__in=shelves
+        ).values('shelf_id').annotate(
+            total_w=Sum('product__weight')
+        )
+        shelf_weight_map = {w['shelf_id']: w['total_w'] for w in shelf_allocs}
+
+        # Pre-aggregate rack max shelf heights in bulk
+        rack_max_heights = Shelf.objects.filter(
+            rack__in=racks
+        ).values('rack_id').annotate(
+            max_h=Max('height_from_ground')
+        )
+        rack_max_height_map = {h['rack_id']: h['max_h'] for h in rack_max_heights}
 
         for bin_obj in bins:
             # 1. Occupancy check
@@ -90,15 +122,15 @@ class BinSelectionService:
             shelf = bin_obj.shelf
             warehouse_id = getattr(rack.zone.warehouse, 'id', None)
 
-            # Sum existing weights on rack
-            rack_alloc = BinAllocation.objects.filter(rack=rack).aggregate(total_w=Sum('product__weight'))['total_w'] or Decimal('0.00')
+            # Sum existing weights on rack (using cached map value)
+            rack_alloc = rack_weight_map.get(rack.id) or Decimal('0.00')
             rack_curr = safe_decimal(rack_alloc, Decimal('0.00'), 'rack_alloc', rack.rack_code, warehouse_id)
             rack_max = safe_decimal(rack.max_weight, Decimal('0.00'), 'max_weight', rack.rack_code, warehouse_id)
             rack_headroom = float(rack_max - rack_curr - product_weight) / float(rack_max) if rack_max > 0.0 else 0.0
             rack_headroom = max(0.0, min(1.0, rack_headroom))
 
-            # Sum existing weights on shelf
-            shelf_alloc = BinAllocation.objects.filter(shelf=shelf).aggregate(total_w=Sum('product__weight'))['total_w'] or Decimal('0.00')
+            # Sum existing weights on shelf (using cached map value)
+            shelf_alloc = shelf_weight_map.get(shelf.id) or Decimal('0.00')
             shelf_curr = safe_decimal(shelf_alloc, Decimal('0.00'), 'shelf_alloc', shelf.id, warehouse_id)
             shelf_max = safe_decimal(shelf.max_weight, Decimal('0.00'), 'max_weight', shelf.id, warehouse_id)
             shelf_headroom = float(shelf_max - shelf_curr - product_weight) / float(shelf_max) if shelf_max > 0.0 else 0.0
@@ -118,8 +150,7 @@ class BinSelectionService:
             proximity_score = max(0.0, min(1.0, proximity_score))
 
             # 4.5 Shelf Height Score (lower is better)
-            all_shelves = Shelf.objects.filter(rack=rack)
-            max_height = all_shelves.aggregate(max_h=Max('height_from_ground'))['max_h'] or Decimal('0.00')
+            max_height = rack_max_height_map.get(rack.id) or Decimal('0.00')
             max_height_dec = safe_decimal(max_height, Decimal('0.00'), 'max_height_from_ground', rack.rack_code, warehouse_id)
             max_height_val = float(max_height_dec)
             shelf_height = float(safe_decimal(shelf.height_from_ground, Decimal('0.00'), 'height_from_ground', shelf.id, warehouse_id))

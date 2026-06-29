@@ -42,7 +42,12 @@ class ThreeDOptimizationService:
         # 2. Get existing placements in the same bin (excluding the current one)
         existing_placements = Bin3DPlacement.objects.filter(
             bin_allocation__bin=bin_obj
-        ).exclude(bin_allocation=bin_allocation)
+        ).exclude(bin_allocation=bin_allocation).select_related(
+            'bin_allocation',
+            'bin_allocation__product'
+        ).prefetch_related(
+            'bin_allocation__product__dimensions'
+        )
 
         # 3. Calculate volumes
         bin_vol = b_dim.length * b_dim.width * b_dim.height
@@ -56,7 +61,8 @@ class ThreeDOptimizationService:
                 occupied_vol += Decimal(str(l)) * Decimal(str(w)) * Decimal(str(h))
             except Exception:
                 # Fallback if selected_orientation parsing fails
-                dim = ProductDimension.objects.filter(product=alloc.product).first()
+                dims = list(alloc.product.dimensions.all())
+                dim = dims[0] if dims else None
                 if dim:
                     try:
                         validated_dim = validate_product_dimensions(dim)

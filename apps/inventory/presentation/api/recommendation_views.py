@@ -24,7 +24,7 @@ from decimal import Decimal
 logger = logging.getLogger(__name__)
 
 class RecommendationViewSet(viewsets.ModelViewSet):
-    queryset = Recommendation.objects.all()
+    queryset = Recommendation.objects.all().order_by('-created_at', '-id')
     serializer_class = RecommendationSerializer
 
     @action(detail=False, methods=['post'], url_path='suggest-bin')

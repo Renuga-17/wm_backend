@@ -20,7 +20,7 @@ class RecommendationOrchestrator:
         self.z_service = ZoneSelectionService()
         self.ml_service = MLRecommendationService()
 
-    def get_recommendation(self, product) -> dict:
+    def get_recommendation(self, product, classification=None) -> dict:
         """Determines recommended ZoneGroup and Zone for a product.
         """
         logger.info("RecommendationOrchestrator: Starting recommendation process for product ID: %s", product.id)
@@ -28,28 +28,29 @@ class RecommendationOrchestrator:
         # Run database self-healing check
         ensure_default_setup()
         
-        # 1. Fetch Product Classification (or auto-create default)
-        try:
-            classification = ProductClassification.objects.get(product=product)
-        except ProductClassification.DoesNotExist:
-            import sys
-            is_testing = 'test' in sys.argv or 'pytest' in sys.modules
-            if is_testing:
-                raise ValueError(f"Product classification does not exist for product: {product.sku}")
-                
-            logger.info("RecommendationOrchestrator: ProductClassification does not exist for product ID: %s. Auto-creating default.", product.id)
-            movement_type = 'FAST'
-            if product.is_fragile:
-                movement_type = 'FRAGILE'
-            elif product.is_hazardous:
-                movement_type = 'HAZARDOUS'
-                
-            storage_type = 'GENERAL'
-            classification = ProductClassification.objects.create(
-                product=product,
-                movement_type=movement_type,
-                storage_type=storage_type
-            )
+        # 1. Fetch Product Classification (or reuse pre-fetched classification)
+        if not classification:
+            try:
+                classification = ProductClassification.objects.get(product=product)
+            except ProductClassification.DoesNotExist:
+                import sys
+                is_testing = 'test' in sys.argv or 'pytest' in sys.modules
+                if is_testing:
+                    raise ValueError(f"Product classification does not exist for product: {product.sku}")
+                    
+                logger.info("RecommendationOrchestrator: ProductClassification does not exist for product ID: %s. Auto-creating default.", product.id)
+                movement_type = 'FAST'
+                if product.is_fragile:
+                    movement_type = 'FRAGILE'
+                elif product.is_hazardous:
+                    movement_type = 'HAZARDOUS'
+                    
+                storage_type = 'GENERAL'
+                classification = ProductClassification.objects.create(
+                    product=product,
+                    movement_type=movement_type,
+                    storage_type=storage_type
+                )
             
         movement_type = classification.movement_type
         storage_type = classification.storage_type

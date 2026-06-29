@@ -19,19 +19,20 @@ class OCRDocument(models.Model):
     )
     file_name = models.CharField(max_length=255)
     file_path = models.CharField(max_length=512)
-    document_type = models.CharField(max_length=100)
-    document_hash = models.CharField(max_length=64, blank=True, null=True)
+    document_type = models.CharField(max_length=100, db_index=True)
+    document_hash = models.CharField(max_length=64, blank=True, null=True, db_index=True)
     raw_text = models.TextField(blank=True, default='')
     extracted_json = models.JSONField(null=True, blank=True)
     confidence_score = models.FloatField(null=True, blank=True)
     processing_status = models.CharField(
         max_length=50,
         choices=ProcessingStatus.choices,
-        default=ProcessingStatus.UPLOADED
+        default=ProcessingStatus.UPLOADED,
+        db_index=True
     )
     error_message = models.TextField(null=True, blank=True)
     rejection_reason = models.TextField(null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     # WMS Metadata fields for RAG

@@ -3,6 +3,10 @@ from django.contrib.auth import get_user_model
 
 class LocalDevAuthentication(BaseAuthentication):
     def authenticate(self, request):
+        from django.conf import settings
+        if not getattr(settings, 'DEBUG', False):
+            return None
+            
         print(f"[LocalDevAuthentication] Authenticating request for path: {request.path}")
         # Fallback to JWT if standard header exists
         auth_header = request.headers.get('Authorization')

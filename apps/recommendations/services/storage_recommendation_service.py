@@ -57,7 +57,7 @@ class StorageRecommendationService:
             )
             
         # Run orchestrator
-        rec_data = self.orchestrator.get_recommendation(product)
+        rec_data = self.orchestrator.get_recommendation(product, classification=classification)
         zone_group = rec_data['zone_group']
         zone = rec_data['zone']
         

@@ -113,7 +113,12 @@ def sync_document_to_rag(ocr_document) -> dict:
                 category = product.category.category_name if product.category else None
                 
                 # Fetch the latest allocation for this product
-                allocation = BinAllocation.objects.filter(product=product).first()
+                allocation = BinAllocation.objects.filter(product=product).select_related(
+                    'zone',
+                    'rack',
+                    'shelf',
+                    'bin'
+                ).first()
                 if allocation:
                     warehouse_id = str(allocation.zone.warehouse_id)
                     zone = allocation.zone.zone_name

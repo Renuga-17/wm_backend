@@ -15,9 +15,17 @@ class RackSelectionService:
         suitable_racks = []
         racks = Rack.objects.filter(zone=zone)
         
+        # Aggregate allocated weights in a single bulk query to prevent N+1 queries
+        alloc_weights = BinAllocation.objects.filter(
+            rack__in=racks
+        ).values('rack_id').annotate(
+            total_w=Sum('product__weight')
+        )
+        weight_map = {w['rack_id']: w['total_w'] for w in alloc_weights}
+
         for rack in racks:
-            allocated = BinAllocation.objects.filter(rack=rack).aggregate(total_w=Sum('product__weight'))
-            current_weight = safe_decimal(allocated['total_w'], Decimal('0.00'), 'rack_alloc', rack.rack_code, warehouse_id)
+            allocated_weight = weight_map.get(rack.id)
+            current_weight = safe_decimal(allocated_weight, Decimal('0.00'), 'rack_alloc', rack.rack_code, warehouse_id)
             max_weight = safe_decimal(rack.max_weight, Decimal('0.00'), 'max_weight', rack.rack_code, warehouse_id)
             
             if current_weight + p_w <= max_weight:

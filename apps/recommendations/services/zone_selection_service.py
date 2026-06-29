@@ -119,18 +119,50 @@ class ZoneSelectionService:
         absolute_best_score = -1.0
         absolute_best_metrics = None
 
+        # Fetch capacity metrics for all target zones in a single database query to prevent N+1 queries
+        zones_metrics = Bin.objects.filter(
+            shelf__rack__zone__in=zones
+        ).values('shelf__rack__zone_id').annotate(
+            total_cap=Sum('max_capacity'),
+            used_cap=Sum('current_capacity')
+        )
+        metrics_map = {m['shelf__rack__zone_id']: m for m in zones_metrics}
+
         for zone in zones:
             if not self.is_zone_active(zone):
                 continue
                 
-            metrics = self.calculate_zone_capacity_metrics(zone)
-            free_pct = metrics['available_capacity_percentage']
+            # Get pre-computed capacity metrics from mapped bulk query results
+            zone_metrics_data = metrics_map.get(zone.id)
+            if zone_metrics_data:
+                total_capacity = float(zone_metrics_data['total_cap'] or 0.0)
+                used_capacity = float(zone_metrics_data['used_cap'] or 0.0)
+            else:
+                total_capacity = 0.0
+                used_capacity = 0.0
+                
+            if total_capacity <= 0.0:
+                total_capacity = 100.0
+                used_capacity = 0.0
+                
+            available_capacity = total_capacity - used_capacity
+            free_pct = (available_capacity / total_capacity) * 100.0
+            utilization_pct = (used_capacity / total_capacity) * 100.0
+            
+            metrics = {
+                'total_capacity': total_capacity,
+                'used_capacity': used_capacity,
+                'available_capacity': available_capacity,
+                'available_capacity_percentage': free_pct,
+                'current_utilization_percentage': utilization_pct
+            }
+            
             priority = self.get_zone_priority(zone)
             active_status = self.is_zone_active(zone)
             
             score = self.calculate_recommendation_score(
                 capacity_pct=free_pct,
-                utilization_pct=metrics['current_utilization_percentage'],
+                utilization_pct=utilization_pct,
                 priority=priority,
                 active=active_status
             )
@@ -150,7 +182,7 @@ class ZoneSelectionService:
             
             logger.info(
                 "ZoneSelectionService: Zone %s scored %.4f (free_pct=%.2f%%, utilization_pct=%.2f%%, priority=%.2f)",
-                zone.zone_name, score, free_pct, metrics['current_utilization_percentage'], priority
+                zone.zone_name, score, free_pct, utilization_pct, priority
             )
             
             if score > best_score:

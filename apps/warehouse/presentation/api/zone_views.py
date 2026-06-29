@@ -19,7 +19,7 @@ class AisleViewSet(viewsets.ModelViewSet):
     permission_classes = [ReadOnlyOrAuthenticated]
 
 class ZoneViewSet(viewsets.ModelViewSet):
-    queryset = Zone.objects.all().order_by('id')
+    queryset = Zone.objects.all().select_related('warehouse', 'zone_group').order_by('id')
     serializer_class = ZoneSerializer
     permission_classes = [ReadOnlyOrAuthenticated]
 

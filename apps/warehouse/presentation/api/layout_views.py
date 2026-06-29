@@ -224,13 +224,16 @@ class LayoutEntitiesView(APIView):
         if not layout_id:
             return Response({"error": "layout_id query parameter is required"}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Retrieve CADObjects for the layout
-        cad_objects = CADObject.objects.filter(layout_id=layout_id)
+        # Retrieve CADObjects with prefetched ml extractions to prevent N+1 query loop
+        cad_objects = CADObject.objects.filter(layout_id=layout_id).prefetch_related('ml_extractions')
         
         results = []
         for obj in cad_objects:
-            # Get latest ml extraction if it exists
-            extraction = MLExtraction.objects.filter(object=obj).order_by('-processed_at').first()
+            # Retrieve latest ml extraction from prefetch cache
+            extractions = list(obj.ml_extractions.all())
+            extractions.sort(key=lambda x: x.processed_at, reverse=True)
+            extraction = extractions[0] if extractions else None
+            
             results.append({
                 "object_id": str(obj.id),
                 "object_type": obj.object_type,
@@ -250,76 +253,6 @@ class LayoutEntitiesView(APIView):
             })
 
         return Response(results, status=status.HTTP_200_OK)
-
-
-class GenerateTopologyView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
-
-    def post(self, request):
-        from .layout_serializers import GenerateTopologySerializer
-        from apps.warehouse.application.services.topology_generation_service import TopologyGenerationService
-        from apps.warehouse.application.services.navigation_graph_generator_service import NavigationGraphGeneratorService
-        from apps.warehouse.application.services.digital_twin_sync_service import DigitalTwinSyncService
-        
-        serializer = GenerateTopologySerializer(data=request.data)
-        if not serializer.is_valid():
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-        layout_id = serializer.validated_data['layout_id']
-        shelves_per_rack = serializer.validated_data['shelves_per_rack']
-        bins_per_shelf = serializer.validated_data['bins_per_shelf']
-
-        try:
-            layout = WarehouseLayout.objects.get(id=layout_id)
-        except WarehouseLayout.DoesNotExist:
-            return Response({"error": "Warehouse layout not found"}, status=status.HTTP_404_NOT_FOUND)
-
-        warehouse = layout.warehouse
-        racks = Rack.objects.filter(zone__warehouse=warehouse)
-        
-        shelves_created = 0
-        bins_created = 0
-
-        # 1. Generate shelves and bins for all racks
-        for rack in racks:
-            sh, bn = TopologyGenerationService.generate_rack_topology(
-                rack, 
-                shelves_per_rack=shelves_per_rack, 
-                bins_per_shelf=bins_per_shelf
-            )
-            shelves_created += len(sh)
-            bins_created += len(bn)
-
-        # 2. Fetch path CADObjects to build navigation graph
-        path_objects = CADObject.objects.filter(layout=layout, object_type='path')
-        path_entities = []
-        for obj in path_objects:
-            extraction = MLExtraction.objects.filter(object=obj).first()
-            if extraction and isinstance(extraction.extracted_data, dict):
-                path_entities.append(extraction.extracted_data)
-
-        # 3. Generate navigation nodes, edges, and mappings
-        nodes = NavigationGraphGeneratorService.generate_navigation_graph(warehouse, path_entities)
-
-        # 4. Initialize Digital Twin
-        all_bins = Bin.objects.filter(shelf__rack__zone__warehouse=warehouse)
-        from decimal import Decimal
-        for b in all_bins:
-            DigitalTwinSyncService.sync_occupancy(
-                bin_id=b.id,
-                is_occupied=False,
-                current_capacity=Decimal('0.00')
-            )
-
-        return Response({
-            "success": True,
-            "layout_id": str(layout.id),
-            "warehouse_id": str(warehouse.id),
-            "racks_processed": racks.count(),
-            "shelves_created": shelves_created,
-            "bins_created": bins_created,
-            "navigation_nodes_created": len(nodes)
-        }, status=status.HTTP_200_OK)
 
 
 class GenerateTopologyView(APIView):

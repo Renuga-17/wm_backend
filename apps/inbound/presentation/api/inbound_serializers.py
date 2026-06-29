@@ -80,7 +80,8 @@ class InboundSerializer(serializers.ModelSerializer):
         rep = super().to_representation(instance)
         
         # Flattened compatibility for first product in the shipment (for single item UI)
-        first_line = instance.line_items.first()
+        lines = list(instance.line_items.all())
+        first_line = lines[0] if lines else None
         if first_line:
             rep['sku'] = first_line.sku
             rep['product_name'] = first_line.product_name
@@ -98,7 +99,8 @@ class InboundSerializer(serializers.ModelSerializer):
             if first_line.recommendation_status == 'RECOMMENDED':
                 # Check if there is an active BinAllocation confirmed/allocated
                 from apps.recommendations.models.bin_allocation import BinAllocation
-                alloc = BinAllocation.objects.filter(inbound_line=first_line).first()
+                allocs = list(first_line.bin_allocations.all())
+                alloc = allocs[0] if allocs else None
                 if alloc:
                     if alloc.storage_status == BinAllocation.StorageStatus.STORED:
                         mapped_status = 'STORED'

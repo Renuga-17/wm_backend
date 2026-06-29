@@ -195,25 +195,7 @@ class InboundOrchestratorService:
                     shipment_line.recommendation_status = 'RECOMMENDED'
                     shipment_line.save()
 
-                    # Step E: 3D Placement
-                    opt_3d_svc = ThreeDOptimizationService()
-                    opt_3d_svc.evaluate_placement(allocation)
 
-                    # Step F: Route Generation (3D path finding)
-                    warehouse = allocation.bin.shelf.rack.zone.warehouse
-                    start_node = NavigationNode.objects.filter(warehouse=warehouse, node_type__iexact='DOCK').first()
-                    if not start_node:
-                        start_node = NavigationNode.objects.filter(warehouse=warehouse).first()
-
-                    if start_node:
-                        try:
-                            RouteOptimizer.compute_route(
-                                warehouse_id=warehouse.id,
-                                start_location=start_node.node_name,
-                                target_location=allocation.bin.bin_code
-                            )
-                        except Exception as route_err:
-                            logger.warning("InboundOrchestratorService: Route computation failed: %s", route_err)
 
                     # Update metadata for RAG (first product info as representative)
                     if not rag_metadata["sku"]:

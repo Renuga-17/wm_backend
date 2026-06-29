@@ -29,15 +29,15 @@ from common.permissions import ReadOnlyOrAuthenticated
 
 def get_bin(bin_id):
     try:
-        return Bin.objects.get(id=bin_id)
+        return Bin.objects.select_related('shelf__rack__zone__zone_group').get(id=bin_id)
     except (Bin.DoesNotExist, ValueError, ValidationError):
-        return Bin.objects.filter(bin_code=bin_id).first()
+        return Bin.objects.select_related('shelf__rack__zone__zone_group').filter(bin_code=bin_id).first()
 
 def get_product(product_id):
     try:
-        return Product.objects.get(id=product_id)
+        return Product.objects.prefetch_related('dimensions').get(id=product_id)
     except (Product.DoesNotExist, ValueError, ValidationError):
-        return Product.objects.filter(sku=product_id).first()
+        return Product.objects.prefetch_related('dimensions').filter(sku=product_id).first()
 
 def sync_bin_allocation_status(product, bin, current_quantity, operator=""):
     """
@@ -110,7 +110,7 @@ class InventoryViewSet(viewsets.ModelViewSet):
                 'bin__shelf__rack__zone__warehouse'
             )
         )
-    )
+    ).order_by('-updated_at', '-id')
     serializer_class = InventorySerializer
 
     @action(detail=False, methods=['post'], url_path='relocate')
@@ -157,7 +157,8 @@ class InventoryViewSet(viewsets.ModelViewSet):
             )
 
         # 3. Validate dimensions
-        dim = ProductDimension.objects.filter(product=product).first()
+        dims = list(product.dimensions.all())
+        dim = dims[0] if dims else None
         if not dim:
             return Response(
                 {"error": f"Product dimensions not configured for product {product.sku}"},

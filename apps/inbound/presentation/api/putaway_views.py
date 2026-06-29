@@ -19,7 +19,16 @@ class PutawayTaskViewSet(viewsets.ModelViewSet):
     API endpoints for managing Putaway tasks.
     """
     permission_classes = [permissions.IsAuthenticated]
-    queryset = PutawayTask.objects.all().order_by('-created_at')
+
+    def get_queryset(self):
+        return PutawayTask.objects.all().select_related(
+            'inbound_shipment',
+            'product',
+            'inbound_line',
+            'destination_bin__shelf__rack__zone'
+        ).prefetch_related(
+            'inbound_line__bin_allocations'
+        ).order_by('-created_at')
 
     def get_serializer_class(self):
         # We don't necessarily need complex serializers since the payloads are simple.
@@ -257,7 +266,15 @@ class PutawayTaskViewSet(viewsets.ModelViewSet):
     def _serialize_task(self, task):
         # Build compatibility payload for frontend mapping
         # Frontend expects: id, inboundId, sku, product, quantity, priority, status, pickupLocation, destinationBin, etc.
-        alloc = BinAllocation.objects.filter(inbound_line=task.inbound_line).order_by('-created_at').first() if task.inbound_line else None
+        alloc = None
+        if task.inbound_line:
+            # Use prefetch cache if available to resolve N+1 queries
+            if hasattr(task.inbound_line, '_prefetched_objects_cache') and 'bin_allocations' in task.inbound_line._prefetched_objects_cache:
+                allocs = list(task.inbound_line.bin_allocations.all())
+                if allocs:
+                    alloc = allocs[0]
+            else:
+                alloc = BinAllocation.objects.filter(inbound_line=task.inbound_line).order_by('-created_at').first()
         
         issue_payload = None
         if task.issue_type:

@@ -25,9 +25,9 @@ class WarehouseTwinDetailView(APIView):
 
         warehouse = layout.warehouse
 
-        # Query spatial structures
-        zones = Zone.objects.filter(warehouse=warehouse).order_by('id')
-        racks = Rack.objects.filter(zone__warehouse=warehouse).order_by('id')
+        # Query spatial structures with prefetching to avoid N+1 queries
+        zones = Zone.objects.filter(warehouse=warehouse).prefetch_related('boundaries').order_by('id')
+        racks = Rack.objects.filter(zone__warehouse=warehouse).prefetch_related('shelves__bins').order_by('id')
         entities = SpatialEntity.objects.filter(warehouse=warehouse).order_by('id')
         paths = WarehousePath.objects.filter(warehouse=warehouse).order_by('id')
         nodes = NavigationNode.objects.filter(warehouse=warehouse).order_by('id')
@@ -48,7 +48,8 @@ class TwinRacksView(APIView):
     permission_classes = [ReadOnlyOrAuthenticated]
 
     def get(self, request):
-        racks = Rack.objects.all().order_by('id')
+        # Prefetch shelves and bins nested relationship to avoid N+1 queries during serialization
+        racks = Rack.objects.all().prefetch_related('shelves__bins').order_by('id')
         return Response(TwinRackSerializer(racks, many=True).data, status=status.HTTP_200_OK)
 
 
@@ -56,7 +57,8 @@ class TwinZonesView(APIView):
     permission_classes = [ReadOnlyOrAuthenticated]
 
     def get(self, request):
-        zones = Zone.objects.all().order_by('id')
+        # Prefetch boundaries to avoid N+1 queries during serialization
+        zones = Zone.objects.all().prefetch_related('boundaries').order_by('id')
         return Response(TwinZoneSerializer(zones, many=True).data, status=status.HTTP_200_OK)
 
 
@@ -69,15 +71,16 @@ class TwinOccupancyView(APIView):
         occupied_bins = Bin.objects.filter(is_occupied=True).count()
         occupancy_percentage = (occupied_bins / total_bins * 100.0) if total_bins > 0 else 0.0
 
-        # Calculate per-rack occupancy metrics
-        racks = Rack.objects.all().order_by('id')
+        # Calculate per-rack occupancy metrics using annotated SQL to avoid N+1 loop count queries
+        racks = Rack.objects.annotate(
+            total_bins_count=Count('shelves__bins'),
+            occupied_bins_count=Count('shelves__bins', filter=Q(shelves__bins__is_occupied=True))
+        ).order_by('id')
         rack_stats = []
 
         for rack in racks:
-            # Query bins belonging to this rack
-            rack_bins = Bin.objects.filter(shelf__rack=rack)
-            rack_total = rack_bins.count()
-            rack_occupied = rack_bins.filter(is_occupied=True).count()
+            rack_total = rack.total_bins_count
+            rack_occupied = rack.occupied_bins_count
             rack_pct = (rack_occupied / rack_total * 100.0) if rack_total > 0 else 0.0
 
             rack_stats.append({
@@ -114,7 +117,7 @@ class TwinPathsView(APIView):
                 for node in nodes:
                     G.add_node(str(node.id), x=float(node.x), y=float(node.y), z=float(node.z))
                 # Add edges with weight (distance)
-                for edge in NavigationEdge.objects.filter(warehouse=nodes.first().warehouse):
+                for edge in NavigationEdge.objects.filter(warehouse=nodes.first().warehouse).select_related('from_node', 'to_node'):
                     G.add_edge(str(edge.from_node.id), str(edge.to_node.id), weight=float(edge.edge_weight))
                 # Compute all-pairs shortest paths (fallback when no stored paths)
                 fallback_paths = []

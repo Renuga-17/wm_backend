@@ -156,7 +156,7 @@ class RouteViewSet(viewsets.GenericViewSet):
         from apps.warehouse.infrastructure.persistence.models import NavigationEdge
         from apps.warehouse.presentation.api.serializers import NavigationEdgeSerializer
         
-        edges = NavigationEdge.objects.filter(warehouse_id=warehouse_id)
+        edges = NavigationEdge.objects.filter(warehouse_id=warehouse_id).select_related('from_node', 'to_node')
         serializer = NavigationEdgeSerializer(edges, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 

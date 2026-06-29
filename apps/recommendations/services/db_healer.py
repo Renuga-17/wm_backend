@@ -3,11 +3,19 @@ from django.db import transaction
 from apps.warehouse.models import Warehouse, ZoneGroup, Zone
 from apps.recommendations.models.recommendation_rule import RecommendationRule
 
+import sys
+
 logger = logging.getLogger(__name__)
+
+_setup_completed = False
 
 def ensure_default_setup():
     """Self-healing helper to ensure ZoneGroups, Zone linkages, and RecommendationRules exist in the database.
     """
+    global _setup_completed
+    is_testing = 'test' in sys.argv or 'pytest' in sys.modules
+    if _setup_completed and not is_testing:
+        return
     try:
         warehouse = Warehouse.objects.first()
         if not warehouse:

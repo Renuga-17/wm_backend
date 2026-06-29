@@ -22,11 +22,20 @@ class ShelfSelectionService:
         p_w = safe_decimal(product_weight, Decimal('0.00'), 'product_weight', 'racks_list', warehouse_id)
         logger.info("ShelfSelectionService: Selecting shelves for racks and product_weight %s", p_w)
         suitable_shelves = []
-        shelves = Shelf.objects.filter(rack__in=racks)
+        # Pre-fetch rack to avoid N+1 query when logging shelf.rack.rack_code
+        shelves = Shelf.objects.filter(rack__in=racks).select_related('rack')
         
+        # Aggregate allocated weights in a single bulk query to prevent N+1 queries
+        alloc_weights = BinAllocation.objects.filter(
+            shelf__in=shelves
+        ).values('shelf_id').annotate(
+            total_w=Sum('product__weight')
+        )
+        weight_map = {w['shelf_id']: w['total_w'] for w in alloc_weights}
+
         for shelf in shelves:
-            allocated = BinAllocation.objects.filter(shelf=shelf).aggregate(total_w=Sum('product__weight'))
-            current_weight = safe_decimal(allocated['total_w'], Decimal('0.00'), 'shelf_alloc', shelf.id, warehouse_id)
+            allocated_weight = weight_map.get(shelf.id)
+            current_weight = safe_decimal(allocated_weight, Decimal('0.00'), 'shelf_alloc', shelf.id, warehouse_id)
             max_weight = safe_decimal(shelf.max_weight, Decimal('0.00'), 'max_weight', shelf.id, warehouse_id)
             
             if current_weight + p_w <= max_weight:

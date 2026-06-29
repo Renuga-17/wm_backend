@@ -95,7 +95,7 @@ class OCRDocumentViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        queryset = OCRDocument.objects.all().order_by('-created_at')
+        queryset = OCRDocument.objects.all().order_by('-created_at', '-id')
         
         # Filtering (Phase 8)
         status_filter = self.request.query_params.get('status')
