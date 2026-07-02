@@ -277,12 +277,12 @@ class OCRReviewQueueTestCase(TestCase):
         self.assertFalse(Product.objects.filter(sku='SKU-KEYBOARD-01').exists())
 
     def test_ocr_approve_invalid_status_raises_error(self):
-        """Test trying to approve a completed document raises a validation error."""
+        """Test trying to approve a rejected document raises a validation error."""
         doc = OCRDocument.objects.create(
-            file_name='completed_test.png',
-            file_path='ocr_documents/completed_test.png',
+            file_name='rejected_test.png',
+            file_path='ocr_documents/rejected_test.png',
             document_type='invoice',
-            processing_status=OCRDocument.ProcessingStatus.COMPLETED
+            processing_status=OCRDocument.ProcessingStatus.REJECTED
         )
 
         url = f'/api/ocr/documents/{doc.id}/approve/'

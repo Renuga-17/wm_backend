@@ -24,29 +24,27 @@ def ensure_default_setup():
 
         with transaction.atomic():
             # 1. Ensure GENERAL_STORAGE ZoneGroup exists
-            general_zg, created_gen = ZoneGroup.objects.get_or_create(
-                zone_group_type='GENERAL_STORAGE',
-                defaults={
-                    'warehouse': warehouse,
-                    'code': 'ZG-GEN',
-                    'name': 'General Storage Zone Group',
-                    'description': 'Auto-created general storage zone group'
-                }
-            )
-            if created_gen:
+            general_zg = ZoneGroup.objects.filter(zone_group_type='GENERAL_STORAGE').first()
+            if not general_zg:
+                general_zg = ZoneGroup.objects.create(
+                    zone_group_type='GENERAL_STORAGE',
+                    warehouse=warehouse,
+                    code='ZG-GEN',
+                    name='General Storage Zone Group',
+                    description='Auto-created general storage zone group'
+                )
                 logger.info("db_healer: Created GENERAL_STORAGE ZoneGroup.")
 
             # 2. Ensure COLD_STORAGE ZoneGroup exists
-            cold_zg, created_cold = ZoneGroup.objects.get_or_create(
-                zone_group_type='COLD_STORAGE',
-                defaults={
-                    'warehouse': warehouse,
-                    'code': 'ZG-COLD',
-                    'name': 'Cold Storage Zone Group',
-                    'description': 'Auto-created cold storage zone group'
-                }
-            )
-            if created_cold:
+            cold_zg = ZoneGroup.objects.filter(zone_group_type='COLD_STORAGE').first()
+            if not cold_zg:
+                cold_zg = ZoneGroup.objects.create(
+                    zone_group_type='COLD_STORAGE',
+                    warehouse=warehouse,
+                    code='ZG-COLD',
+                    name='Cold Storage Zone Group',
+                    description='Auto-created cold storage zone group'
+                )
                 logger.info("db_healer: Created COLD_STORAGE ZoneGroup.")
 
             # 3. Link unassigned Zones to their respective ZoneGroup based on name

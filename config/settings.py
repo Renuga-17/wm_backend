@@ -182,7 +182,7 @@ REST_FRAMEWORK = {
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
-    'REFRESH_TOKEN_LIFETIME': timedelta(minutes=10),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': False,
     'UPDATE_LAST_LOGIN': False,
@@ -222,8 +222,8 @@ OCR_SERVICE_SETTINGS = {
 }
 
 # RAG Microservice settings
-# RAG service URL — set RAG_BASE_URL env var to the ngrok URL if running remotely
-RAG_BASE_URL = os.getenv('RAG_BASE_URL', 'http://localhost:8003')
+# RAG service URL — set AI_SERVICE_URL/RAG_BASE_URL env var
+RAG_BASE_URL = os.getenv('AI_SERVICE_URL', os.getenv('RAG_BASE_URL', 'http://localhost:8002'))
 try:
     RAG_TIMEOUT = int(os.getenv('RAG_TIMEOUT', '30'))
 except ValueError:

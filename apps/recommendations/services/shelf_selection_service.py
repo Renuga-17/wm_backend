@@ -34,7 +34,7 @@ class ShelfSelectionService:
         weight_map = {w['shelf_id']: w['total_w'] for w in alloc_weights}
 
         for shelf in shelves:
-            allocated_weight = weight_map.get(shelf.id)
+            allocated_weight = weight_map.get(shelf.id) or Decimal('0.00')
             current_weight = safe_decimal(allocated_weight, Decimal('0.00'), 'shelf_alloc', shelf.id, warehouse_id)
             max_weight = safe_decimal(shelf.max_weight, Decimal('0.00'), 'max_weight', shelf.id, warehouse_id)
             

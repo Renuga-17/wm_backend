@@ -9,7 +9,6 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 from apps.inbound.infrastructure.persistence.models import OCRDocument
 from .ocr_serializers import OCRDocumentSerializer, OCRDocumentApprovalSerializer
-from ...tasks import process_ocr_document_task
 from apps.inbound.application.services.rag_service import send_to_rag
 
 logger = logging.getLogger(__name__)
@@ -68,6 +67,7 @@ class OCRUploadView(APIView):
         logger.info("OCRUploadView: Created OCRDocument %s", ocr_doc.id)
 
         # 5. Trigger OCR processing (Phase 3 & 5)
+        from ...tasks import process_ocr_document_task
         is_testing = 'test' in sys.argv or 'pytest' in sys.modules
         if getattr(settings, 'CELERY_TASK_ALWAYS_EAGER', False) or is_testing:
             logger.info("OCRUploadView: Triggering OCR processing synchronously (test/eager mode).")
@@ -171,9 +171,15 @@ class OCRDocumentViewSet(viewsets.ReadOnlyModelViewSet):
         ocr_doc = self.get_object()
         
 
-        if ocr_doc.processing_status not in [OCRDocument.ProcessingStatus.REVIEW_REQUIRED, OCRDocument.ProcessingStatus.FAILED]:
+        initial_status = ocr_doc.processing_status
+        if initial_status not in [
+            OCRDocument.ProcessingStatus.REVIEW_REQUIRED,
+            OCRDocument.ProcessingStatus.FAILED,
+            OCRDocument.ProcessingStatus.COMPLETED,
+            OCRDocument.ProcessingStatus.APPROVED,
+        ]:
             return Response(
-                {"error": f"Cannot approve document in status: {ocr_doc.processing_status}"},
+                {"error": f"Cannot approve document in status: {initial_status}"},
                 status=status.HTTP_400_BAD_REQUEST
             )
             
@@ -184,6 +190,27 @@ class OCRDocumentViewSet(viewsets.ReadOnlyModelViewSet):
         if custom_payload:
             ocr_doc.extracted_json = custom_payload
             ocr_doc.save()
+
+        # If document is already completed or approved, only run RAG sync
+        if initial_status in [OCRDocument.ProcessingStatus.COMPLETED, OCRDocument.ProcessingStatus.APPROVED]:
+            from apps.inbound.application.services.rag_service import sync_document_to_rag
+            logger.info("Starting direct RAG sync")
+            res = sync_document_to_rag(ocr_doc)
+            if res.get("success"):
+                logger.info("RAG ingestion succeeded")
+                logger.info("Direct RAG sync completed")
+                return Response({
+                    "success": True,
+                    "message": "OCR Document RAG sync triggered successfully (already processed).",
+                    "document_id": str(ocr_doc.id),
+                    "processing_status": ocr_doc.processing_status,
+                }, status=status.HTTP_200_OK)
+            else:
+                logger.warning("Direct RAG sync failed: %s", res.get("error"))
+                return Response(
+                    {"error": f"RAG sync failed: {res.get('error', 'Unknown error')}"},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
 
         # Update status to APPROVED
         ocr_doc.processing_status = OCRDocument.ProcessingStatus.APPROVED
@@ -248,9 +275,9 @@ class OCRDocumentViewSet(viewsets.ReadOnlyModelViewSet):
         """POST /api/ocr/documents/{id}/sync-rag/"""
         ocr_doc = self.get_object()
         
-        if ocr_doc.processing_status != OCRDocument.ProcessingStatus.COMPLETED:
+        if ocr_doc.processing_status not in [OCRDocument.ProcessingStatus.COMPLETED, OCRDocument.ProcessingStatus.APPROVED]:
             return Response(
-                {"error": f"Cannot sync to RAG for document in status: {ocr_doc.processing_status}. Document must be COMPLETED."},
+                {"error": f"Cannot sync to RAG for document in status: {ocr_doc.processing_status}. Document must be COMPLETED or APPROVED."},
                 status=status.HTTP_400_BAD_REQUEST
             )
             

@@ -11,7 +11,7 @@ from apps.recommendations.services.bin_allocation_service import BinAllocationSe
 from apps.recommendations.services.three_d_optimization_service import ThreeDOptimizationService
 from apps.warehouse.application.services.route_optimizer import RouteOptimizer
 from apps.warehouse.infrastructure.persistence.models import NavigationNode
-from apps.inbound.application.services.rag_service import send_to_rag
+from apps.inbound.application.services.rag_service import sync_document_to_rag
 
 logger = logging.getLogger(__name__)
 
@@ -36,11 +36,15 @@ class InboundOrchestratorService:
         if not products_list:
             products_list = payload.get('storage_payloads', {}).get('product_payload', [])
 
+        from apps.warehouse.infrastructure.persistence.models import Warehouse
+        warehouse = Warehouse.objects.first()
+        warehouse_id_val = str(warehouse.id) if warehouse else "WH001"
+
         rag_metadata = {
             "ocr_document_id": str(ocr_document.id),
             "document_type": "OCRDocument",
             "text": ocr_document.raw_text,
-            "warehouse_id": "WH001",
+            "warehouse_id": warehouse_id_val,
             "sku": None,
             "product_id": None,
             "category": None,
@@ -231,12 +235,16 @@ class InboundOrchestratorService:
             )
             raise e
 
-        # Step G: Send to RAG ingestion asynchronously (non-blocking, outside database transaction)
+        # Step G: Send to RAG ingestion directly (no Celery/Redis required)
         try:
-            from apps.inbound.tasks import sync_rag_task
-            sync_rag_task.delay(str(ocr_document.id))
-            logger.info("InboundOrchestratorService: RAG sync task queued successfully.")
+            logger.info("Starting direct RAG sync")
+            sync_result = sync_document_to_rag(ocr_document)
+            if sync_result.get("success"):
+                logger.info("RAG ingestion succeeded")
+                logger.info("Direct RAG sync completed")
+            else:
+                logger.warning("Direct RAG sync failed: %s", sync_result.get("error"))
         except Exception as rag_err:
-            logger.warning("InboundOrchestratorService: Queueing RAG ingestion failed: %s", rag_err)
+            logger.exception("Direct RAG sync crashed: %s", rag_err)
 
         return shipment

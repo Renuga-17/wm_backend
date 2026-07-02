@@ -61,7 +61,11 @@ class LocalDevAuthentication(BaseAuthentication):
                 print("[LocalDevAuthentication] In test mode, skipping automatic fallback.")
                 return None
 
-            print("[LocalDevAuthentication] No matching user headers, querying first user in DB as fallback")
+            if not user_email and not user_role:
+                print("[LocalDevAuthentication] No mock headers provided. Skipping fallback...")
+                return None
+
+            print("[LocalDevAuthentication] No matching user found for headers, querying first user in DB as fallback")
             db_user = User.objects.first()
             print(f"[LocalDevAuthentication] Fallback result: {db_user}")
             if db_user:

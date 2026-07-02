@@ -19,6 +19,11 @@ class BinAllocationOutputSerializer(serializers.ModelSerializer):
     placement_3d = Bin3DPlacementSerializer(read_only=True)
     route = serializers.SerializerMethodField()
 
+    orientation = serializers.SerializerMethodField()
+    max_units_fit = serializers.SerializerMethodField()
+    utilization_score = serializers.SerializerMethodField()
+    placement_instruction = serializers.SerializerMethodField()
+
     class Meta:
         model = BinAllocation
         fields = [
@@ -29,6 +34,10 @@ class BinAllocationOutputSerializer(serializers.ModelSerializer):
             'shelf',
             'bin',
             'selected_orientation',
+            'orientation',
+            'max_units_fit',
+            'utilization_score',
+            'placement_instruction',
             'allocation_score',
             'allocation_reason',
             'allocation_source',
@@ -81,4 +90,40 @@ class BinAllocationOutputSerializer(serializers.ModelSerializer):
                 "distance": 0.0,
                 "path": []
             }
+
+    def get_orientation(self, obj):
+        if obj.selected_orientation:
+            return obj.selected_orientation
+        return "N/A"
+
+    def get_max_units_fit(self, obj):
+        if hasattr(obj, 'max_units') and obj.max_units is not None:
+            return obj.max_units
+        try:
+            from apps.inventory.infrastructure.persistence.models import ProductDimension
+            product_dim = ProductDimension.objects.filter(product=obj.product).first()
+            if product_dim and obj.bin:
+                p_l, p_w, p_h = float(product_dim.length), float(product_dim.width), float(product_dim.height)
+                b_l, b_w, b_h = float(obj.bin.length), float(obj.bin.width), float(obj.bin.height)
+                if p_l > 0 and p_w > 0 and p_h > 0 and b_l > 0 and b_w > 0 and b_h > 0:
+                    return int((b_l // p_l) * (b_w // p_w) * (b_h // p_h))
+        except Exception:
+            pass
+        return 1
+
+    def get_utilization_score(self, obj):
+        if hasattr(obj, 'utilization_score') and obj.utilization_score is not None:
+            return obj.utilization_score
+        return 0.0
+
+    def get_placement_instruction(self, obj):
+        if hasattr(obj, 'placement_instructions') and obj.placement_instructions:
+            return obj.placement_instructions
+        try:
+            if hasattr(obj, 'placement_3d') and obj.placement_3d:
+                strategy = obj.placement_3d.placement_strategy
+                return f"Place product in bin {obj.bin.bin_code} using {strategy} strategy."
+        except Exception:
+            pass
+        return f"Place product in bin {obj.bin.bin_code}."
 

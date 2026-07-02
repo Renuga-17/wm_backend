@@ -214,9 +214,10 @@ class RAGSyncTestCase(TestCase):
         self.assertEqual(response.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
         self.assertIn("Failed to sync document", response.data['error'])
 
-    @patch('apps.inbound.tasks.sync_rag_task.delay')
-    def test_inbound_orchestrator_triggers_async_task(self, mock_delay):
-        """Test that InboundOrchestratorService queues the sync_rag_task Celery task asynchronously."""
+    @patch('apps.inbound.application.services.inbound_orchestrator_service.sync_document_to_rag')
+    def test_inbound_orchestrator_triggers_async_task(self, mock_sync):
+        """Test that InboundOrchestratorService triggers the RAG sync directly."""
+        mock_sync.return_value = {"success": True, "chunks_created": 2}
         ocr_doc = OCRDocument.objects.create(
             file_name='test.pdf',
             file_path='ocr_documents/test.pdf',
@@ -232,7 +233,7 @@ class RAGSyncTestCase(TestCase):
 
         self.assertIsNotNone(shipment)
         self.assertEqual(ocr_doc.processing_status, OCRDocument.ProcessingStatus.COMPLETED)
-        mock_delay.assert_called_once_with(str(ocr_doc.id))
+        mock_sync.assert_called_once_with(ocr_doc)
 
     @patch('apps.inbound.application.services.rag_service.requests.post')
     def test_rag_sync_failure_does_not_rollback_ingest(self, mock_post):

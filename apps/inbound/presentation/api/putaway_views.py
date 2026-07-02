@@ -139,32 +139,62 @@ class PutawayTaskViewSet(viewsets.ModelViewSet):
     def start_task(self, request, pk=None):
         """POST /api/inbound/putaway/{id}/start/"""
         task = self.get_object()
-        task.status = PutawayTask.PutawayStatus.IN_PROGRESS
-        task.save()
-        
-        # Update allocation status if available
-        if task.inbound_line:
-            alloc = BinAllocation.objects.filter(inbound_line=task.inbound_line).first()
-            if alloc:
-                alloc.storage_status = BinAllocation.StorageStatus.IN_PROGRESS
-                alloc.save()
-                
+
+        # State-machine guard: only move forward from ASSIGNED
+        allowed_from = [PutawayTask.PutawayStatus.ASSIGNED]
+        if task.status not in allowed_from:
+            return Response(
+                {"error": f"Cannot start task in status: {task.status}. Expected: ASSIGNED."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        with transaction.atomic():
+            task.status = PutawayTask.PutawayStatus.IN_PROGRESS
+            task.save()
+
+            # Update allocation status if available
+            if task.inbound_line:
+                alloc = BinAllocation.objects.filter(inbound_line=task.inbound_line).first()
+                if alloc:
+                    alloc.storage_status = BinAllocation.StorageStatus.IN_PROGRESS
+                    alloc.save()
+
         return Response(self._serialize_task(task), status=status.HTTP_200_OK)
 
     @action(detail=True, methods=['post'], url_path='picked')
     def picked_task(self, request, pk=None):
         """POST /api/inbound/putaway/{id}/picked/"""
         task = self.get_object()
-        task.status = PutawayTask.PutawayStatus.PICKED_FROM_RECEIVING
-        task.save()
+
+        # State-machine guard: only advance from IN_PROGRESS
+        if task.status not in [PutawayTask.PutawayStatus.IN_PROGRESS, PutawayTask.PutawayStatus.ASSIGNED]:
+            return Response(
+                {"error": f"Cannot mark as picked from status: {task.status}."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        with transaction.atomic():
+            task.status = PutawayTask.PutawayStatus.PICKED_FROM_RECEIVING
+            task.save()
+
         return Response(self._serialize_task(task), status=status.HTTP_200_OK)
 
     @action(detail=True, methods=['post'], url_path='reached')
     def reached_task(self, request, pk=None):
         """POST /api/inbound/putaway/{id}/reached/"""
         task = self.get_object()
-        task.status = PutawayTask.PutawayStatus.REACHED_BIN
-        task.save()
+
+        # State-machine guard: only advance from PICKED_FROM_RECEIVING
+        if task.status not in [PutawayTask.PutawayStatus.PICKED_FROM_RECEIVING, PutawayTask.PutawayStatus.IN_PROGRESS]:
+            return Response(
+                {"error": f"Cannot mark as reached from status: {task.status}."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        with transaction.atomic():
+            task.status = PutawayTask.PutawayStatus.REACHED_BIN
+            task.save()
+
         return Response(self._serialize_task(task), status=status.HTTP_200_OK)
 
     @action(detail=True, methods=['post', 'patch'], url_path='complete')
@@ -243,23 +273,35 @@ class PutawayTaskViewSet(viewsets.ModelViewSet):
     def report_issue(self, request, pk=None):
         """POST /api/inbound/putaway/{id}/issue/"""
         task = self.get_object()
+
+        # Guard: cannot report issue on a completed task
+        if task.status == PutawayTask.PutawayStatus.COMPLETED:
+            return Response(
+                {"error": "Cannot report an issue on a completed putaway task."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
         issue_type = request.data.get('issue_type') or request.data.get('issue')
         issue_desc = request.data.get('description') or request.data.get('notes')
 
-        task.status = PutawayTask.PutawayStatus.DELAYED
-        task.issue_type = issue_type or "Handling Issue"
-        task.issue_description = issue_desc or "No details provided"
-        task.save()
+        if not issue_type:
+            return Response({"error": "issue_type is required"}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Log movement as issue
-        StockMovement.objects.create(
-            product=task.product,
-            from_bin=None,
-            to_bin=task.destination_bin,
-            quantity=task.quantity,
-            movement_type='PUTAWAY_ISSUE_REPORTED',
-            operator=task.operator or request.user.username
-        )
+        with transaction.atomic():
+            task.status = PutawayTask.PutawayStatus.DELAYED
+            task.issue_type = issue_type
+            task.issue_description = issue_desc or "No details provided"
+            task.save()
+
+            # Log movement as issue atomically with the task status change
+            StockMovement.objects.create(
+                product=task.product,
+                from_bin=None,
+                to_bin=task.destination_bin,
+                quantity=task.quantity,
+                movement_type='PUTAWAY_ISSUE_REPORTED',
+                operator=task.operator or request.user.username
+            )
 
         return Response(self._serialize_task(task), status=status.HTTP_200_OK)
 

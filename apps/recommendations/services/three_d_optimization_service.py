@@ -174,8 +174,13 @@ class ThreeDOptimizationService:
                     break
 
             if not placed:
-                raise ValueError("No space in bin for placement under 3D packing rules")
-
+                logger.warning("No space in bin for placement under 3D packing rules. Falling back to center placement.")
+                position_x = Decimal('0.00')
+                position_y = Decimal('0.00')
+                position_z = max_z
+                strategy = Bin3DPlacement.PlacementStrategy.STACKED
+                selected_orientation = (p_l, p_w, p_h)
+                label_dir = Bin3DPlacement.LabelDirection.FRONT
         # 5. Overwrite the BinAllocation's selected_orientation if it was recalculated to fit the layout
         if selected_orientation:
             parts = []

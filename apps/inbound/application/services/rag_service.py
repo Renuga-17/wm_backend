@@ -44,16 +44,19 @@ def send_to_rag(
     endpoint = f"{base_url}/api/rag/ingest"
     timeout = getattr(settings, 'RAG_TIMEOUT', TIMEOUT_SECONDS)
     
+    logger.info("Sending POST request to RAG endpoint: %s with payload: %s", endpoint, payload)
+    
     try:
         response = requests.post(endpoint, json=payload, timeout=timeout)
         response.raise_for_status()
         data = response.json()
         chunks_created = data.get("chunks_created", 0)
         logger.info(
-            "RAG ingestion succeeded for OCR document %s (status %s, chunks %s)",
+            "RAG ingestion succeeded for OCR document %s (status %s, chunks %s). Response: %s",
             ocr_document_id,
             response.status_code,
             chunks_created,
+            data,
         )
         return {"success": True, "chunks_created": chunks_created}
     except requests.RequestException as exc:
@@ -64,12 +67,19 @@ def send_to_rag(
             except Exception:
                 error_msg = exc.response.text or error_msg
         logger.error(
-            "RAG ingestion failed for OCR document %s: %s", ocr_document_id, error_msg
+            "RAG ingestion failed at endpoint %s for OCR document %s. Response status: %s. Error: %s",
+            endpoint,
+            ocr_document_id,
+            exc.response.status_code if exc.response is not None else "N/A",
+            error_msg
         )
         return {"success": False, "error": error_msg}
     except Exception as exc:
         logger.error(
-            "RAG ingestion failed for OCR document %s: %s", ocr_document_id, exc
+            "RAG ingestion failed at endpoint %s for OCR document %s: %s",
+            endpoint,
+            ocr_document_id,
+            exc
         )
         return {"success": False, "error": str(exc)}
 
@@ -85,7 +95,11 @@ def sync_document_to_rag(ocr_document) -> dict:
     sku = None
     product_id = None
     category = None
-    warehouse_id = "WH001"
+    
+    from apps.warehouse.infrastructure.persistence.models import Warehouse
+    warehouse = Warehouse.objects.first()
+    warehouse_id = str(warehouse.id) if warehouse else "WH001"
+    
     zone = None
     rack = None
     shelf = None

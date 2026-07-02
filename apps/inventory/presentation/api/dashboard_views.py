@@ -1,6 +1,6 @@
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from apps.inventory.infrastructure.persistence.models import Dashboard, RobotTask, RouteOptimization
 from .serializers import DashboardSerializer, RobotTaskSerializer, RouteOptimizationSerializer
@@ -23,7 +23,7 @@ class AnalyticsViewSet(viewsets.ViewSet):
     ViewSet for fetching warehouse ClickHouse analytics and heatmaps.
     All endpoints accept warehouse_id, start_time, end_time query params.
     """
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
 
     # ------------------------------------------------------------------
     # Helper to extract common query params

@@ -55,7 +55,18 @@ class BinAllocationService:
         # 4. Orchestrate allocation selection
         bin_obj, orientation, score, reason = self.orchestrator.find_allocation(zone, product, product_dimension)
         if not bin_obj:
-            logger.error("BinAllocationService: Allocation failed for product %s in zone %s: %s", product.sku, zone.zone_name, reason)
+            logger.warning("BinAllocationService: Allocation failed for product %s in recommended zone %s. Trying other zones in group %s.", product.sku, zone.zone_name, zone_group.code)
+            from apps.warehouse.models import Zone
+            other_zones = Zone.objects.filter(zone_group=zone_group).exclude(id=zone.id)
+            for fallback_zone in other_zones:
+                bin_obj, orientation, score, reason = self.orchestrator.find_allocation(fallback_zone, product, product_dimension)
+                if bin_obj:
+                    zone = fallback_zone
+                    logger.info("BinAllocationService: Found fallback allocation in zone %s", zone.zone_name)
+                    break
+
+        if not bin_obj:
+            logger.error("BinAllocationService: Allocation failed for product %s in all zones of group %s: %s", product.sku, zone_group.code, reason)
             raise AllocationFailedError(reason)
 
         # 5. Persist the allocation
