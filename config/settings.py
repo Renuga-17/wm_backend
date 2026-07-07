@@ -216,6 +216,8 @@ AI_SERVICE_SETTINGS = {
     'API_KEY': os.getenv('AI_SERVICE_API_KEY', ''),
 }
 
+GEMINI_API_KEY = os.getenv('GEMINI_API_KEY', '')
+
 # OCR Microservice settings
 OCR_SERVICE_SETTINGS = {
     'BASE_URL': os.getenv('OCR_SERVICE_URL', 'http://localhost:8002'),

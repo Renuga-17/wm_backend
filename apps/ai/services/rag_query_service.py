@@ -86,30 +86,96 @@ class RAGQueryService:
         }
 
     def handle_operational_query(self, query: str) -> str:
-        """Simple heuristic router to answer live database queries."""
-        from apps.warehouse.infrastructure.persistence.models import ZoneGroup, Zone, Bin, Aisle
-        from apps.inventory.infrastructure.persistence.models import Product
+        """Dynamic Text-to-SQL router to answer live database queries using Gemini."""
+        from django.conf import settings
+        from django.db import connection
+        from google import genai
         
-        if "zone group" in query and ("count" in query or "total" in query):
-            count = ZoneGroup.objects.count()
-            return f"There are a total of {count} zone groups configured in the system."
+        api_key = getattr(settings, 'GEMINI_API_KEY', None)
+        if not api_key:
+            return "AI service is not properly configured (Missing API Key)."
+            
+        client = genai.Client(api_key=api_key)
+            
+        schema = """
+        Table users: user_id, username, full_name, email, role, is_active
+        Table zone_groups: id, code, name, description, zone_group_type
+        Table zones: id, zone_group_id, zone_name, zone_type
+        Table aisles: id, zone_id, code, name
+        Table racks: id, zone_id, aisle_id, rack_code
+        Table shelves: id, rack_id, shelf_number
+        Table bins: id, shelf_id, bin_code, is_occupied, current_capacity
+        Table products: id, category_id, sku, product_name, weight, is_fragile
+        Table inventory: id, product_id, total_quantity, reserved_quantity
+        Table stock_movements: id, product_id, from_bin_id, to_bin_id, quantity, movement_type
+        """
         
-        if "zone" in query and ("count" in query or "total" in query) and "group" not in query:
-            count = Zone.objects.count()
-            return f"There are a total of {count} zones currently configured."
+        # Pass 1: Text to SQL
+        prompt_1 = f"""
+        You are a Database Agent for a Warehouse Management System.
+        Given the following SQLite database schema:
+        {schema}
+        
+        Translate the following user question into a safe, read-only SQL SELECT statement.
+        Question: "{query}"
+        
+        Return ONLY the raw SQL string, nothing else. Do not wrap in markdown blocks.
+        """
+        
+        try:
+            resp1 = client.models.generate_content(
+                model='gemini-pro-latest',
+                contents=prompt_1,
+            )
             
-        if "available bin" in query or ("empty bin" in query):
-            count = Bin.objects.filter(is_occupied=False).count()
-            return f"There are {count} available bins in the warehouse."
+            sql_query = resp1.text.strip()
+            # Clean markdown if present
+            if sql_query.startswith("```sql"): sql_query = sql_query[6:]
+            if sql_query.startswith("```"): sql_query = sql_query[3:]
+            if sql_query.endswith("```"): sql_query = sql_query[:-3]
+            sql_query = sql_query.strip()
             
-        if "fragile" in query and "product" in query:
-            fragile_count = Product.objects.filter(is_fragile=True).count()
-            return f"I found {fragile_count} products marked as fragile in the database."
+            # Safety check
+            if not sql_query.upper().startswith("SELECT") or "DROP" in sql_query.upper() or "UPDATE" in sql_query.upper() or "DELETE" in sql_query.upper() or "INSERT" in sql_query.upper():
+                return "I can only answer questions that read data, not modify it."
+                
+            logger.info(f"Generated SQL: {sql_query}")
+                
+            # Execute SQL
+            with connection.cursor() as cursor:
+                cursor.execute(sql_query)
+                columns = [col[0] for col in cursor.description]
+                results = cursor.fetchmany(50)  # limit to 50 rows
+                
+                db_results = []
+                for row in results:
+                    db_results.append(dict(zip(columns, row)))
+                    
+            if not db_results:
+                return "The database does not contain the requested operational data or the result was empty."
+                
+            # Pass 2: Data to Text
+            prompt_2 = f"""
+            You are a helpful AI Warehouse Assistant.
+            The user asked: "{query}"
+            The database returned the following results:
+            {db_results}
             
-        if "sku100" in query or "where is sku" in query:
-            return "SKU100 is currently located in Zone A, Aisle 2, Rack 5, Bin 12. There are 45 units available."
+            Write a clear, concise, human-readable answer directly addressing the user's question based on these results.
+            """
             
-        return None
+            resp2 = client.models.generate_content(
+                model='gemini-pro-latest',
+                contents=prompt_2,
+            )
+            return resp2.text.strip()
+                
+        except Exception as e:
+            error_msg = str(e)
+            logger.error(f"Text-to-SQL Error: {error_msg}")
+            if "429" in error_msg or "Quota" in error_msg:
+                return "The AI assistant is currently experiencing high traffic and has reached its rate limit. Please try again in about a minute."
+            return "An error occurred while querying the live database."
 
     def resolve_sources(self, filters: dict) -> list:
         sources = []
@@ -131,14 +197,6 @@ class RAGQueryService:
             sources.append({
                 "document_id": str(doc.id),
                 "document_type": doc.document_type,
-                "sku": filters.get("sku") or "",
-            })
-
-        # Fallback if no sources found but filters were provided
-        if not sources and filters.get("document_type"):
-            sources.append({
-                "document_id": "DOC-AUTO-GEN",
-                "document_type": filters["document_type"],
                 "sku": filters.get("sku") or "",
             })
 
