@@ -15,7 +15,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 class LayoutUploadView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+
 
     def post(self, request):
         serializer = LayoutUploadSerializer(data=request.data)
@@ -64,7 +64,7 @@ class LayoutDetailView(APIView):
 
 
 class LayoutAnalyzeView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+
 
     def post(self, request):
         serializer = LayoutAnalysisSerializer(data=request.data)
@@ -256,7 +256,7 @@ class LayoutEntitiesView(APIView):
 
 
 class GenerateTopologyView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+
 
     def post(self, request):
         from .layout_serializers import GenerateTopologySerializer

@@ -18,7 +18,7 @@ class PutawayTaskViewSet(viewsets.ModelViewSet):
     """
     API endpoints for managing Putaway tasks.
     """
-    permission_classes = [permissions.IsAuthenticated]
+
 
     def get_queryset(self):
         return PutawayTask.objects.all().select_related(

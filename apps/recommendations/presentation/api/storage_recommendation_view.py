@@ -14,7 +14,7 @@ class StorageRecommendationView(APIView):
     """API endpoint to generate and retrieve storage recommendations.
     POST /api/recommendations/storage/
     """
-    permission_classes = [permissions.IsAuthenticated]
+
 
     def post(self, request, *args, **kwargs):
         logger.info("StorageRecommendationView: POST request received with data: %s", request.data)

@@ -94,6 +94,17 @@ wm_backend/
 - ClickHouse validation
 - Throughput, heatmap, route, telemetry analytics
 
+## 📚 Documentation Hub
+
+For a comprehensive understanding of the system, please refer to the following documentation files:
+
+- **[System Architecture](docs/system_architecture.md)**: High-level overview of how the Frontend, Backend, and RAG services interact.
+- **[API Contracts](docs/api_contracts.md)**: Detailed JSON payloads and endpoint definitions.
+- **[Postman Endpoints](postman_endpoints.md)**: List of Postman collections for local testing.
+- **[Digital Twin Documentation](document.md)**: Detailed status and endpoints related to the 3D Digital Twin and OCR integration.
+- **[Frontend System](../wm_frontend/README.md)**: Setup and architecture for the React interface.
+- **[RAG Service](../wm_rag/README.md)**: Setup and architecture for the FastAPI AI assistant.
+
 ---
 
 *Documentation updated to reflect latest project status.*

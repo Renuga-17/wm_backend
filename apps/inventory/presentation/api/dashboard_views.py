@@ -23,7 +23,7 @@ class AnalyticsViewSet(viewsets.ViewSet):
     ViewSet for fetching warehouse ClickHouse analytics and heatmaps.
     All endpoints accept warehouse_id, start_time, end_time query params.
     """
-    permission_classes = [IsAuthenticated]
+
 
     # ------------------------------------------------------------------
     # Helper to extract common query params

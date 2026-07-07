@@ -20,7 +20,7 @@ class OCRUploadView(APIView):
     Accepts a document file via multipart/form-data. Calculates hash to detect
     duplicates, creates OCRDocument record, and triggers OCR pipeline.
     """
-    permission_classes = [permissions.IsAuthenticated]
+
 
     def post(self, request, *args, **kwargs):
         logger.info("OCRUploadView: Upload request received.")
@@ -92,7 +92,7 @@ class OCRDocumentViewSet(viewsets.ReadOnlyModelViewSet):
     GET /api/ocr/documents/{id}/   - check document status & details
     """
     serializer_class = OCRDocumentSerializer
-    permission_classes = [permissions.IsAuthenticated]
+
 
     def get_queryset(self):
         queryset = OCRDocument.objects.all().order_by('-created_at', '-id')
@@ -301,7 +301,7 @@ class RAGRetryView(APIView):
     POST /api/rag/retry/{document_id}
     Retries RAG ingestion for a document. Does not re-run OCR.
     """
-    permission_classes = [permissions.IsAuthenticated]
+
 
     def post(self, request, document_id, *args, **kwargs):
         try:

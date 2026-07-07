@@ -13,7 +13,7 @@ class ThreeDPlacementView(APIView):
     POST /api/recommendations/3d-placement/
     Evaluates 3D placement positioning for a completed BinAllocation.
     """
-    permission_classes = [permissions.IsAuthenticated]
+
 
     def post(self, request, *args, **kwargs):
         logger.info("ThreeDPlacementView: POST request received with data: %s", request.data)

@@ -23,7 +23,7 @@ class BinAllocationCompleteView(APIView):
       "operator": "warehouse_operator_01"
     }
     """
-    permission_classes = [permissions.IsAuthenticated]
+
 
     def patch(self, request, pk=None):
         logger.info("BinAllocationCompleteView: Complete request received for ID %s", pk)

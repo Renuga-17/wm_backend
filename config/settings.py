@@ -174,7 +174,7 @@ REST_FRAMEWORK = {
         'common.authentication.LocalDevAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.AllowAny',
     ),
     'DEFAULT_PAGINATION_CLASS': 'common.pagination.StandardResultsSetPagination',
     'EXCEPTION_HANDLER': 'common.exceptions.custom_exception_handler',

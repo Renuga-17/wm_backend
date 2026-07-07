@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 
 
 class RAGQueryView(APIView):
-    permission_classes = [IsAuthenticated]
+
 
     def post(self, request):
         request_id = str(uuid.uuid4())

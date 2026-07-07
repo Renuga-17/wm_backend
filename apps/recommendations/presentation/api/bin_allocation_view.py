@@ -20,7 +20,7 @@ class BinAllocationView(APIView):
     """API endpoint to select and allocate a bin for a product.
     POST /api/recommendations/bin-allocation/
     """
-    permission_classes = [permissions.IsAuthenticated]
+
 
     def post(self, request, *args, **kwargs):
         logger.info("BinAllocationView: POST request received with data: %s", request.data)
