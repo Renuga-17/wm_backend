@@ -121,17 +121,16 @@ class InboundSerializer(serializers.ModelSerializer):
             else:
                 rep['status'] = instance.status
         else:
-            # Fallback placeholders if no line items exist yet
-            rep['sku'] = 'SKU-GENERIC'
-            rep['product_name'] = 'Generic Product'
-            rep['productName'] = 'Generic Product'
-            rep['product'] = 'Generic Product'
-            rep['quantity'] = 50
-            rep['verifiedQuantity'] = 50
-            rep['quantityReceived'] = 50
-            rep['weight'] = '1.0 kg'
-            rep['dimensions'] = '10x10x10 cm'
-            rep['binRecommendationStatus'] = 'WAITING_FOR_BIN_ASSIGNMENT'
+            rep['sku'] = None
+            rep['product_name'] = None
+            rep['productName'] = None
+            rep['product'] = None
+            rep['quantity'] = 0
+            rep['verifiedQuantity'] = 0
+            rep['quantityReceived'] = 0
+            rep['weight'] = None
+            rep['dimensions'] = None
+            rep['binRecommendationStatus'] = instance.status
             
         # Ensure camelCase support
         rep['shipmentCode'] = instance.shipment_code

@@ -27,7 +27,9 @@ class OCRClient:
             self.timeout = 60
 
     def extract_document(self, file_bytes: bytes, file_name: str, content_type: str = 'application/octet-stream') -> dict:
-        endpoint = f"{self.url}/api/v1/ocr/extract"
+        endpoint = f"{self.url}/extract/documents"
+        with open('ocr_debug.txt', 'w') as f:
+            f.write(f"self.url={self.url}\nendpoint={endpoint}\n")
         logger.info("[OCR PIPELINE] Using OCR Service URL: %s", self.url)
         logger.info("[OCR PIPELINE] OCR request started for file: %s (endpoint: %s)", file_name, endpoint)
 

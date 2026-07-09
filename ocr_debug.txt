@@ -1,0 +1,2 @@
+self.url=https://semisweet-craziness-dreamless.ngrok-free.dev
+endpoint=https://semisweet-craziness-dreamless.ngrok-free.dev/extract/documents

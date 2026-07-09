@@ -4,6 +4,7 @@ from .serializers import InboundSerializer
 
 class InboundViewSet(viewsets.ModelViewSet):
     serializer_class = InboundSerializer
+    pagination_class = None
 
     def get_queryset(self):
         return InboundShipment.objects.all().select_related(

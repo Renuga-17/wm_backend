@@ -182,37 +182,46 @@ class InboundOrchestratorService:
                         recommendation_status='WAITING_FOR_BIN_ASSIGNMENT'
                     )
 
-                    # Step C: Storage Recommendation
-                    rec_svc = StorageRecommendationService()
-                    rec_svc.generate_recommendation(product_obj.id)
+                    try:
+                        # Step C: Storage Recommendation
+                        rec_svc = StorageRecommendationService()
+                        rec_svc.generate_recommendation(product_obj.id)
 
-                    # Step D: Bin Allocation
-                    alloc_svc = BinAllocationService()
-                    allocation = alloc_svc.generate_bin_allocation(product_obj.id)
+                        # Step D: Bin Allocation
+                        alloc_svc = BinAllocationService()
+                        allocation = alloc_svc.generate_bin_allocation(product_obj.id)
 
-                    # Link BinAllocation back to inbound line & shipment
-                    allocation.inbound_line = shipment_line
-                    allocation.inbound_shipment = shipment
-                    allocation.save()
+                        # Link BinAllocation back to inbound line & shipment
+                        allocation.inbound_line = shipment_line
+                        allocation.inbound_shipment = shipment
+                        allocation.save()
 
-                    # Update shipment line recommendation status
-                    shipment_line.recommendation_status = 'RECOMMENDED'
-                    shipment_line.save()
-
-
-
+                        # Update shipment line recommendation status
+                        shipment_line.recommendation_status = 'RECOMMENDED'
+                        shipment_line.save()
+                    except Exception as e:
+                        logger.warning(f"Allocation failed for product {sku}: {e}")
+                        shipment_line.recommendation_status = 'WAITING_FOR_BIN_ASSIGNMENT'
+                        shipment_line.save()
+                        allocation = None
+                        
                     # Update metadata for RAG (first product info as representative)
                     if not rag_metadata["sku"]:
                         rag_metadata.update({
                             "sku": sku,
                             "product_id": str(product_obj.id),
                             "category": category_name,
-                            "warehouse_id": str(allocation.zone.warehouse_id),
-                            "zone": allocation.zone.zone_name,
-                            "rack": allocation.rack.rack_code,
-                            "shelf": str(allocation.shelf.shelf_number),
-                            "bin": allocation.bin.bin_code,
                         })
+                        if allocation:
+                            rag_metadata.update({
+                                "warehouse_id": str(allocation.zone.warehouse_id),
+                                "zone": allocation.zone.zone_name,
+                                "rack": allocation.rack.rack_code,
+                                "shelf": str(allocation.shelf.shelf_number),
+                                "bin": allocation.bin.bin_code,
+                            })
+
+
 
                 # Mark document as COMPLETED
                 ocr_document.processing_status = OCRDocument.ProcessingStatus.COMPLETED
